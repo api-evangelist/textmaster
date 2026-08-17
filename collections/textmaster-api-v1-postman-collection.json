@@ -1,0 +1,2299 @@
+{
+	"info": {
+		"_postman_id": "cefd6691-68a0-4e35-8bff-0041944a376f",
+		"name": "TextMaster API v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "v1",
+			"item": [
+				{
+					"name": "clients",
+					"item": [
+						{
+							"name": "projects",
+							"item": [
+								{
+									"name": "{project id}",
+									"item": [
+										{
+											"name": "documents",
+											"item": [
+												{
+													"name": "{document id}",
+													"item": [
+														{
+															"name": "support messages",
+															"item": [
+																{
+																	"name": "List Support Messages",
+																	"request": {
+																		"method": "GET",
+																		"header": [
+																			{
+																				"key": "Accept",
+																				"value": "application/json"
+																			}
+																		],
+																		"url": {
+																			"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id/support_messages?page=1",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"v1",
+																				"clients",
+																				"projects",
+																				":project_id",
+																				"documents",
+																				":document_id",
+																				"support_messages"
+																			],
+																			"query": [
+																				{
+																					"key": "page",
+																					"value": "1",
+																					"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+																				}
+																			],
+																			"variable": [
+																				{
+																					"key": "project_id",
+																					"value": "<string>",
+																					"description": "(Required) Project ID"
+																				},
+																				{
+																					"key": "document_id",
+																					"value": "<string>",
+																					"description": "(Required) Document ID"
+																				}
+																			]
+																		}
+																	},
+																	"response": []
+																},
+																{
+																	"name": "Create a Support Message",
+																	"request": {
+																		"method": "POST",
+																		"header": [
+																			{
+																				"key": "Content-Type",
+																				"value": "application/json"
+																			},
+																			{
+																				"key": "Accept",
+																				"value": "application/json"
+																			}
+																		],
+																		"body": {
+																			"mode": "raw",
+																			"raw": "{\n  \"support_message\": {\n    \"message\": \"<string>\"\n  },\n  \"revision_request\": \"<boolean>\"\n}",
+																			"options": {
+																				"raw": {
+																					"language": "json"
+																				}
+																			}
+																		},
+																		"url": {
+																			"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id/support_messages",
+																			"host": [
+																				"{{baseUrl}}"
+																			],
+																			"path": [
+																				"v1",
+																				"clients",
+																				"projects",
+																				":project_id",
+																				"documents",
+																				":document_id",
+																				"support_messages"
+																			],
+																			"variable": [
+																				{
+																					"key": "project_id",
+																					"value": "<string>",
+																					"description": "(Required) Project ID"
+																				},
+																				{
+																					"key": "document_id",
+																					"value": "<string>",
+																					"description": "(Required) Document ID"
+																				}
+																			]
+																		}
+																	},
+																	"response": []
+																}
+															]
+														},
+														{
+															"name": "Get a Document",
+															"request": {
+																"method": "GET",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"v1",
+																		"clients",
+																		"projects",
+																		":project_id",
+																		"documents",
+																		":document_id"
+																	],
+																	"variable": [
+																		{
+																			"key": "project_id",
+																			"value": "<string>",
+																			"description": "(Required) The Project ID."
+																		},
+																		{
+																			"key": "document_id",
+																			"value": "<string>",
+																			"description": "(Required) The Document ID."
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Update a Document",
+															"request": {
+																"method": "PUT",
+																"header": [
+																	{
+																		"key": "Content-Type",
+																		"value": "application/json"
+																	},
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n  \"document\": {\n    \"title\": \"<string>\",\n    \"type\": \"<string>\",\n    \"word_count\": \"<integer>\",\n    \"perform_word_count\": \"<boolean>\",\n    \"original_content\": \"<string>\",\n    \"markup_in_content\": \"<boolean>\",\n    \"remote_file_url\": \"<string>\",\n    \"remote_file_help_url\": \"<string>\",\n    \"instructions\": \"<string>\",\n    \"keyword_list\": \"<string>\",\n    \"keywords_repeat_count\": \"<integer>\",\n    \"callback\": {\n      \"in_creation\": {\n        \"url\": \"<string>\"\n      },\n      \"waiting_assignment\": {\n        \"url\": \"<string>\"\n      },\n      \"in_progress\": {\n        \"url\": \"<string>\"\n      },\n      \"incomplete\": {\n        \"url\": \"<string>\"\n      },\n      \"paused\": {\n        \"url\": \"<string>\"\n      },\n      \"quality_control\": {\n        \"url\": \"<string>\"\n      },\n      \"copyscape\": {\n        \"url\": \"<string>\"\n      },\n      \"counting_words\": {\n        \"url\": \"<string>\"\n      },\n      \"in_review\": {\n        \"url\": \"<string>\"\n      },\n      \"in_extra_review\": {\n        \"url\": \"<string>\"\n      },\n      \"completed\": {\n        \"url\": \"<string>\"\n      },\n      \"canceled\": {\n        \"url\": \"<string>\"\n      }\n    },\n    \"deliver_work_as_file\": \"<boolean>\"\n  }\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"v1",
+																		"clients",
+																		"projects",
+																		":project_id",
+																		"documents",
+																		":document_id"
+																	],
+																	"variable": [
+																		{
+																			"key": "project_id",
+																			"value": "<string>",
+																			"description": "(Required) The Project ID."
+																		},
+																		{
+																			"key": "document_id",
+																			"value": "<string>",
+																			"description": "(Required) The Document ID."
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Delete a Document",
+															"request": {
+																"method": "DELETE",
+																"header": [
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"url": {
+																	"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"v1",
+																		"clients",
+																		"projects",
+																		":project_id",
+																		"documents",
+																		":document_id"
+																	],
+																	"variable": [
+																		{
+																			"key": "project_id",
+																			"value": "<string>",
+																			"description": "(Required) The Project ID."
+																		},
+																		{
+																			"key": "document_id",
+																			"value": "<string>",
+																			"description": "(Required) The Document ID."
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Complete a Document",
+															"request": {
+																"method": "PUT",
+																"header": [
+																	{
+																		"key": "Content-Type",
+																		"value": "application/json"
+																	},
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n  \"satisfaction\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id/complete",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"v1",
+																		"clients",
+																		"projects",
+																		":project_id",
+																		"documents",
+																		":document_id",
+																		"complete"
+																	],
+																	"variable": [
+																		{
+																			"key": "project_id",
+																			"value": "<string>",
+																			"description": "(Required) The Project ID."
+																		},
+																		{
+																			"key": "document_id",
+																			"value": "<string>",
+																			"description": "(Required) The Document ID."
+																		}
+																	]
+																}
+															},
+															"response": []
+														},
+														{
+															"name": "Generate a Review URL",
+															"request": {
+																"method": "POST",
+																"header": [
+																	{
+																		"key": "Content-Type",
+																		"value": "application/json"
+																	},
+																	{
+																		"key": "Accept",
+																		"value": "application/json"
+																	}
+																],
+																"body": {
+																	"mode": "raw",
+																	"raw": "{\n  \"keys\": [\n    \"<string>\",\n    \"<string>\"\n  ]\n}",
+																	"options": {
+																		"raw": {
+																			"language": "json"
+																		}
+																	}
+																},
+																"url": {
+																	"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/:document_id/review_url",
+																	"host": [
+																		"{{baseUrl}}"
+																	],
+																	"path": [
+																		"v1",
+																		"clients",
+																		"projects",
+																		":project_id",
+																		"documents",
+																		":document_id",
+																		"review_url"
+																	],
+																	"variable": [
+																		{
+																			"key": "project_id",
+																			"value": "<string>",
+																			"description": "(Required) The Project ID."
+																		},
+																		{
+																			"key": "document_id",
+																			"value": "<string>",
+																			"description": "(Required) The Document ID."
+																		}
+																	]
+																}
+															},
+															"response": []
+														}
+													]
+												},
+												{
+													"name": "List Documents",
+													"request": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents?page=1",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v1",
+																"clients",
+																"projects",
+																":project_id",
+																"documents"
+															],
+															"query": [
+																{
+																	"key": "page",
+																	"value": "1",
+																	"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+																}
+															],
+															"variable": [
+																{
+																	"key": "project_id",
+																	"value": "<string>",
+																	"description": "(Required) The Project ID."
+																}
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Create a Document",
+													"request": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"document\": {\n    \"title\": \"<string>\",\n    \"type\": \"<string>\",\n    \"word_count\": \"<integer>\",\n    \"word_count_rule\": \"<integer>\",\n    \"perform_word_count\": \"<boolean>\",\n    \"original_content\": \"<string>\",\n    \"markup_in_content\": \"<boolean>\",\n    \"remote_file_url\": \"<string>\",\n    \"remote_file_help_url\": \"<string>\",\n    \"instructions\": \"<string>\",\n    \"keyword_list\": \"<string>\",\n    \"keywords_repeat_count\": \"<integer>\",\n    \"callback\": {\n      \"in_creation\": {\n        \"url\": \"<string>\"\n      },\n      \"waiting_assignment\": {\n        \"url\": \"<string>\"\n      },\n      \"in_progress\": {\n        \"url\": \"<string>\"\n      },\n      \"incomplete\": {\n        \"url\": \"<string>\"\n      },\n      \"paused\": {\n        \"url\": \"<string>\"\n      },\n      \"quality_control\": {\n        \"url\": \"<string>\"\n      },\n      \"copyscape\": {\n        \"url\": \"<string>\"\n      },\n      \"counting_words\": {\n        \"url\": \"<string>\"\n      },\n      \"in_review\": {\n        \"url\": \"<string>\"\n      },\n      \"in_extra_review\": {\n        \"url\": \"<string>\"\n      },\n      \"completed\": {\n        \"url\": \"<string>\"\n      },\n      \"canceled\": {\n        \"url\": \"<string>\"\n      }\n    },\n    \"deliver_work_as_file\": \"<boolean>\"\n  }\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v1",
+																"clients",
+																"projects",
+																":project_id",
+																"documents"
+															],
+															"variable": [
+																{
+																	"key": "project_id",
+																	"value": "<string>",
+																	"description": "(Required) The Project ID."
+																}
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Filter Documents",
+													"request": {
+														"method": "GET",
+														"header": [
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"url": {
+															"raw": "{{baseUrl}}/v1/clients/projects/:project_id/documents/filter?page=1&where={\"status\": \"in_progress\"}&order=-created_at",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v1",
+																"clients",
+																"projects",
+																":project_id",
+																"documents",
+																"filter"
+															],
+															"query": [
+																{
+																	"key": "page",
+																	"value": "1",
+																	"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+																},
+																{
+																	"key": "where",
+																	"value": "{\"status\": \"in_progress\"}",
+																	"description": "URL encoded JSON selector composed of one or several criteria."
+																},
+																{
+																	"key": "order",
+																	"value": "-created_at",
+																	"description": "Comma separated order list"
+																}
+															],
+															"variable": [
+																{
+																	"key": "project_id",
+																	"value": "<string>",
+																	"description": "(Required) The Project ID."
+																}
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "batch/documents",
+											"item": [
+												{
+													"name": "Create multiple Documents",
+													"request": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"documents\": [\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"word_count\": \"<integer>\",\n      \"word_count_rule\": \"<integer>\",\n      \"perform_word_count\": \"<boolean>\",\n      \"original_content\": \"<string>\",\n      \"markup_in_content\": \"<boolean>\",\n      \"remote_file_url\": \"<string>\",\n      \"remote_file_help_url\": \"<string>\",\n      \"instructions\": \"<string>\",\n      \"keyword_list\": \"<string>\",\n      \"keywords_repeat_count\": \"<integer>\",\n      \"callback\": {\n        \"in_creation\": {\n          \"url\": \"<string>\"\n        },\n        \"waiting_assignment\": {\n          \"url\": \"<string>\"\n        },\n        \"in_progress\": {\n          \"url\": \"<string>\"\n        },\n        \"incomplete\": {\n          \"url\": \"<string>\"\n        },\n        \"paused\": {\n          \"url\": \"<string>\"\n        },\n        \"quality_control\": {\n          \"url\": \"<string>\"\n        },\n        \"copyscape\": {\n          \"url\": \"<string>\"\n        },\n        \"counting_words\": {\n          \"url\": \"<string>\"\n        },\n        \"in_review\": {\n          \"url\": \"<string>\"\n        },\n        \"in_extra_review\": {\n          \"url\": \"<string>\"\n        },\n        \"completed\": {\n          \"url\": \"<string>\"\n        },\n        \"canceled\": {\n          \"url\": \"<string>\"\n        }\n      },\n      \"deliver_work_as_file\": \"<boolean>\"\n    },\n    {\n      \"title\": \"<string>\",\n      \"type\": \"<string>\",\n      \"word_count\": \"<integer>\",\n      \"word_count_rule\": \"<integer>\",\n      \"perform_word_count\": \"<boolean>\",\n      \"original_content\": \"<string>\",\n      \"markup_in_content\": \"<boolean>\",\n      \"remote_file_url\": \"<string>\",\n      \"remote_file_help_url\": \"<string>\",\n      \"instructions\": \"<string>\",\n      \"keyword_list\": \"<string>\",\n      \"keywords_repeat_count\": \"<integer>\",\n      \"callback\": {\n        \"in_creation\": {\n          \"url\": \"<string>\"\n        },\n        \"waiting_assignment\": {\n          \"url\": \"<string>\"\n        },\n        \"in_progress\": {\n          \"url\": \"<string>\"\n        },\n        \"incomplete\": {\n          \"url\": \"<string>\"\n        },\n        \"paused\": {\n          \"url\": \"<string>\"\n        },\n        \"quality_control\": {\n          \"url\": \"<string>\"\n        },\n        \"copyscape\": {\n          \"url\": \"<string>\"\n        },\n        \"counting_words\": {\n          \"url\": \"<string>\"\n        },\n        \"in_review\": {\n          \"url\": \"<string>\"\n        },\n        \"in_extra_review\": {\n          \"url\": \"<string>\"\n        },\n        \"completed\": {\n          \"url\": \"<string>\"\n        },\n        \"canceled\": {\n          \"url\": \"<string>\"\n        }\n      },\n      \"deliver_work_as_file\": \"<boolean>\"\n    }\n  ]\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v1/clients/projects/:project_id/batch/documents",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v1",
+																"clients",
+																"projects",
+																":project_id",
+																"batch",
+																"documents"
+															],
+															"variable": [
+																{
+																	"key": "project_id",
+																	"value": "<string>",
+																	"description": "(Required) The Project ID."
+																}
+															]
+														}
+													},
+													"response": []
+												},
+												{
+													"name": "Complete multiple Documents",
+													"request": {
+														"method": "POST",
+														"header": [
+															{
+																"key": "Content-Type",
+																"value": "application/json"
+															},
+															{
+																"key": "Accept",
+																"value": "application/json"
+															}
+														],
+														"body": {
+															"mode": "raw",
+															"raw": "{\n  \"documents\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"satisfaction\": \"<string>\",\n  \"message\": \"<string>\"\n}",
+															"options": {
+																"raw": {
+																	"language": "json"
+																}
+															}
+														},
+														"url": {
+															"raw": "{{baseUrl}}/v1/clients/projects/:project_id/batch/documents/complete",
+															"host": [
+																"{{baseUrl}}"
+															],
+															"path": [
+																"v1",
+																"clients",
+																"projects",
+																":project_id",
+																"batch",
+																"documents",
+																"complete"
+															],
+															"variable": [
+																{
+																	"key": "project_id",
+																	"value": "<string>",
+																	"description": "(Required) The Project ID."
+																}
+															]
+														}
+													},
+													"response": []
+												}
+											]
+										},
+										{
+											"name": "Get a Project",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Update a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"project\": {\n    \"author_should_use_rich_text\": \"<boolean>\",\n    \"auto_launch\": \"<boolean>\",\n    \"category\": \"<string>\",\n    \"custom_data\": \"<object>\",\n    \"deadline\": \"<string>\",\n    \"glossaries\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"grammatical_person\": \"<string>\",\n    \"language_from\": \"<string>\",\n    \"language_to\": \"<string>\",\n    \"name\": \"<string>\",\n    \"options\": {\n      \"expertise\": \"<string>\",\n      \"language_level\": \"<string>\",\n      \"quality\": \"<boolean>\",\n      \"priority\": \"<boolean>\",\n      \"specific_attachment\": \"<boolean>\",\n      \"uniq_author\": \"<boolean>\",\n      \"translation_memory\": \"<boolean>\",\n      \"translation_diff\": \"<boolean>\"\n    },\n    \"project_briefing\": \"<string>\",\n    \"project_briefing_is_rich\": \"<boolean>\",\n    \"target_reader_groups\": \"<string>\",\n    \"textmasters\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"vocabulary_type\": \"<string>\"\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Get all My Authors who can do a given Project",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/my_authors?status=my_textmaster&page=1",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"my_authors"
+													],
+													"query": [
+														{
+															"key": "status",
+															"value": "my_textmaster",
+															"description": "The category of authors to list (lists all by default).\n\nProssible values:\n\n* my_textmaster\n* blacklisted\n* uncategorized\n"
+														},
+														{
+															"key": "page",
+															"value": "1",
+															"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+														}
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Activate Translation Memory options on a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"project\": {\n    \"options\": {\n      \"post_editing_machine_translation\": \"<boolean>\",\n      \"translation_memory\": \"<boolean>\",\n      \"translation_diff\": \"<boolean>\"\n    }\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/activate_tm_options",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"activate_tm_options"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Archive a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/archive",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"archive"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Launch a Project asynchronously",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/async_launch",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"async_launch"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Cancels a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/cancel",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"cancel"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Duplicate a Project",
+											"request": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/duplicate",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"duplicate"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Finalize a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/finalize",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"finalize"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Launch a Project synchronously",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/launch",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"launch"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Pause a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/pause",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"pause"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Resume a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/resume",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"resume"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Unarchive a Project",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/projects/:project_id/unarchive",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"projects",
+														":project_id",
+														"unarchive"
+													],
+													"variable": [
+														{
+															"key": "project_id",
+															"value": "<string>",
+															"description": "(Required) The Project ID."
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "List Projects",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/projects?page=1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"projects"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1",
+													"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create a Project",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"project\": {\n    \"activity_name\": \"<string>\",\n    \"category\": \"<string>\",\n    \"language_from\": \"<string>\",\n    \"name\": \"<string>\",\n    \"options\": {\n      \"language_level\": \"<string>\",\n      \"expertise\": \"<string>\",\n      \"quality\": \"<boolean>\",\n      \"priority\": \"<boolean>\",\n      \"specific_attachment\": \"<boolean>\",\n      \"uniq_author\": \"<boolean>\",\n      \"translation_memory\": \"<boolean>\",\n      \"translation_diff\": \"<boolean>\"\n    },\n    \"project_briefing\": \"<string>\",\n    \"api_template_id\": \"<string>\",\n    \"author_should_use_rich_text\": \"<boolean>\",\n    \"auto_launch\": \"<boolean>\",\n    \"custom_data\": \"<object>\",\n    \"deadline\": \"<string>\",\n    \"documents\": [\n      {\n        \"language_from\": \"<string>\",\n        \"language_to\": \"<string>\",\n        \"language_from_code\": \"<string>\",\n        \"language_to_code\": \"<string>\",\n        \"status\": \"<string>\",\n        \"skip_copyscape\": \"<boolean>\",\n        \"title\": \"<string>\",\n        \"instructions\": \"<string>\",\n        \"word_count\": \"<integer>\",\n        \"word_count_rule\": \"<integer>\",\n        \"keywords_repeat_count\": \"<integer>\",\n        \"deliver_work_as_file\": \"<boolean>\",\n        \"custom_data\": \"<object>\",\n        \"plagiarism_analysis\": \"<object>\",\n        \"written_words\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"id\": \"<string>\",\n        \"project_id\": \"<string>\",\n        \"callback\": {\n          \"canceled\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"completed\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"copyscape\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"counting_words\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"in_progress\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"in_review\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"incomplete\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"paused\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"quality_control\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"waiting_assignment\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          }\n        },\n        \"reference\": \"<string>\",\n        \"ctype\": \"<string>\",\n        \"keyword_list\": \"<string>\",\n        \"satisfaction\": \"<integer>\",\n        \"completion\": \"<integer>\",\n        \"can_post_message_to_author\": \"<boolean>\",\n        \"author_work\": \"<object>\",\n        \"author_id\": \"<string>\",\n        \"author_rating\": \"<integer>\",\n        \"original_content\": \"<string>\",\n        \"created_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        },\n        \"updated_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        },\n        \"completed_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        }\n      },\n      {\n        \"language_from\": \"<string>\",\n        \"language_to\": \"<string>\",\n        \"language_from_code\": \"<string>\",\n        \"language_to_code\": \"<string>\",\n        \"status\": \"<string>\",\n        \"skip_copyscape\": \"<boolean>\",\n        \"title\": \"<string>\",\n        \"instructions\": \"<string>\",\n        \"word_count\": \"<integer>\",\n        \"word_count_rule\": \"<integer>\",\n        \"keywords_repeat_count\": \"<integer>\",\n        \"deliver_work_as_file\": \"<boolean>\",\n        \"custom_data\": \"<object>\",\n        \"plagiarism_analysis\": \"<object>\",\n        \"written_words\": \"<integer>\",\n        \"type\": \"<string>\",\n        \"id\": \"<string>\",\n        \"project_id\": \"<string>\",\n        \"callback\": {\n          \"canceled\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"completed\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"copyscape\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"counting_words\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"in_progress\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"in_review\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"incomplete\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"paused\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"quality_control\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          },\n          \"waiting_assignment\": {\n            \"url\": \"<string>\",\n            \"format\": \"<string>\"\n          }\n        },\n        \"reference\": \"<string>\",\n        \"ctype\": \"<string>\",\n        \"keyword_list\": \"<string>\",\n        \"satisfaction\": \"<integer>\",\n        \"completion\": \"<integer>\",\n        \"can_post_message_to_author\": \"<boolean>\",\n        \"author_work\": \"<object>\",\n        \"author_id\": \"<string>\",\n        \"author_rating\": \"<integer>\",\n        \"original_content\": \"<string>\",\n        \"created_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        },\n        \"updated_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        },\n        \"completed_at\": {\n          \"day\": \"<integer>\",\n          \"month\": \"<integer>\",\n          \"year\": \"<integer>\",\n          \"full\": \"<string>\"\n        }\n      }\n    ],\n    \"glossaries\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"grammatical_person\": \"<string>\",\n    \"language_to\": \"<string>\",\n    \"project_briefing_is_rich\": \"<boolean>\",\n    \"target_reader_groups\": \"<string>\",\n    \"textmasters\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"vocabulary_type\": \"<string>\",\n    \"work_template\": {}\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/projects",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"projects"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Filter Projects",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/projects/filter?where={\"status\": \"in_progress\"}&order=-created_at&page=1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"projects",
+												"filter"
+											],
+											"query": [
+												{
+													"key": "where",
+													"value": "{\"status\": \"in_progress\"}",
+													"description": "URL encoded JSON selector composed of one or several criteria."
+												},
+												{
+													"key": "order",
+													"value": "-created_at",
+													"description": "Comma separated order list"
+												},
+												{
+													"key": "page",
+													"value": "1",
+													"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get a quotation",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/projects/quotation?project[activity_name]=translation&project[language_from]=fr-fr&project[language_to]=en-us&project[options][expertise]=596da0f84d69930001dbe277&project[options][language_level]=enterprise&project[options][quality]=true&project[options][priority]=true&project[options][specific_attachment]=false&project[total_word_count]=100",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"projects",
+												"quotation"
+											],
+											"query": [
+												{
+													"key": "project[activity_name]",
+													"value": "translation",
+													"description": "(required) Project type"
+												},
+												{
+													"key": "project[language_from]",
+													"value": "fr-fr",
+													"description": "(Required) (required) Bigram representing a language (ex: en-us). Full list available via API call."
+												},
+												{
+													"key": "project[language_to]",
+													"value": "en-us",
+													"description": "(required for translation projects) Bigram representing a language (ex: en-us). Full list available via API call."
+												},
+												{
+													"key": "project[options][expertise]",
+													"value": "596da0f84d69930001dbe277"
+												},
+												{
+													"key": "project[options][language_level]",
+													"value": "enterprise",
+													"description": "(Required) "
+												},
+												{
+													"key": "project[options][quality]",
+													"value": "true"
+												},
+												{
+													"key": "project[options][priority]",
+													"value": "true"
+												},
+												{
+													"key": "project[options][specific_attachment]",
+													"value": "false"
+												},
+												{
+													"key": "project[total_word_count]",
+													"value": "100",
+													"description": "(Required) (required) Number of words to quote"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "my authors",
+							"item": [
+								{
+									"name": "{author id}",
+									"item": [
+										{
+											"name": "Retrieve a single My Author",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/my_authors/:author_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"my_authors",
+														":author_id"
+													],
+													"variable": [
+														{
+															"key": "author_id",
+															"value": "<string>",
+															"description": "(Required) (required) ID of the Author"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Update My Author",
+											"request": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Content-Type",
+														"value": "application/json"
+													},
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\n  \"my_author\": {\n    \"status\": \"<string>\",\n    \"description\": \"<string>\"\n  }\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{baseUrl}}/v1/clients/my_authors/:author_id",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"clients",
+														"my_authors",
+														":author_id"
+													],
+													"variable": [
+														{
+															"key": "author_id",
+															"value": "<string>",
+															"description": "(Required) (required) ID of the Author"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "Get My Authors",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/my_authors?status=my_textmaster&page=1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"my_authors"
+											],
+											"query": [
+												{
+													"key": "status",
+													"value": "my_textmaster",
+													"description": "The category of authors to list (lists all by default).\n\nProssible values:\n\n* my_textmaster\n* blacklisted\n* uncategorized\n"
+												},
+												{
+													"key": "page",
+													"value": "1",
+													"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Add a My Author",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"my_author\": {\n    \"author_id\": \"<string>\",\n    \"status\": \"<string>\",\n    \"description\": \"<string>\"\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/my_authors",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"my_authors"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "users",
+							"item": [
+								{
+									"name": "Retrieve my information",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/users/me",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"users",
+												"me"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Update my callback information",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Content-Type",
+												"value": "application/json"
+											},
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n  \"user\": {\n    \"callback\": {\n      \"waiting_assignment\": {\n        \"url\": \"<string>\",\n        \"format\": \"<string>\"\n      },\n      \"completed\": {\n        \"url\": \"<string>\",\n        \"format\": \"<string>\"\n      }\n    }\n  }\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/users/:user_id",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"users",
+												":user_id"
+											],
+											"variable": [
+												{
+													"key": "user_id",
+													"value": "<string>",
+													"description": "(Required) Your own User ID"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							],
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"type": "text/javascript",
+										"exec": [
+											""
+										]
+									}
+								}
+							]
+						},
+						{
+							"name": "work templates",
+							"item": [
+								{
+									"name": "List Work Templates",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/work_templates?page=1",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"work_templates"
+											],
+											"query": [
+												{
+													"key": "page",
+													"value": "1",
+													"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Retrieve a Work Templates",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/clients/work_templates/:work_template_name",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"clients",
+												"work_templates",
+												":work_template_name"
+											],
+											"variable": [
+												{
+													"key": "work_template_name",
+													"value": "Default",
+													"description": "(Required) The Work Template name"
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "List Abilities",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/abilities?page=1&activity=translation&locale=en-EU",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"abilities"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										},
+										{
+											"key": "activity",
+											"value": "translation",
+											"description": "(Required) (required) Filters abilities on a specific activity.\n\nPossible values:\n\n* translation\n* copywriting\n* proofreading\n"
+										},
+										{
+											"key": "locale",
+											"value": "en-EU",
+											"description": "Locale used to display the pricing (defaults to en-EU).\n\nPossible values:\n\n* en-EU: pricing in EURO\n* en-GB: pricing in GBP\n* en-US: pricing in USD\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List API Templates",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/api_templates?page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"api_templates"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List all potential authors for a project",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/authors?page=1&project[activity_name]=translation&project[language_from]=fr-fr&project[language_to]=en-us&project[options][expertise]=596da0f84d69930001dbe277&project[options][language_level]=enterprise",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"authors"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										},
+										{
+											"key": "project[activity_name]",
+											"value": "translation",
+											"description": "Type of project to filter on.\n\nPossible values:\n\n* translation\n* copywriting\n* proofreading\n"
+										},
+										{
+											"key": "project[language_from]",
+											"value": "fr-fr",
+											"description": "Source language for translation projects (ex: fr-FR)."
+										},
+										{
+											"key": "project[language_to]",
+											"value": "en-us",
+											"description": "Target language (ex: en-US)"
+										},
+										{
+											"key": "project[options][expertise]",
+											"value": "596da0f84d69930001dbe277",
+											"description": "An Expertise or Sub-Expertise ID (See List Expertises for more info)"
+										},
+										{
+											"key": "project[options][language_level]",
+											"value": "enterprise",
+											"description": "An Expertise or Sub-Expertise ID (See List Expertises for more info)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Glossaries",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/glossaries?page=1&filter=all",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"glossaries"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										},
+										{
+											"key": "filter",
+											"value": "all",
+											"description": "Possible values:\n\n* all: list both shared and owned glossaries (default).\n* share: shared glossaries only.\n* owned: owned glossaries only.\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Invoices",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/invoices?page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"invoices"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Negotiated Contracts",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/negotiated_contracts?page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"negotiated_contracts"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Receipts",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/receipts?page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"receipts"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										}
+									]
+								},
+								"description": "List available receipts."
+							},
+							"response": []
+						},
+						{
+							"name": "List Transactions",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/transactions?page=1",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"transactions"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1",
+											"description": "Search results are limited to 100 items. Specify page number to read more than the first page."
+										},
+										{
+											"key": "types[]",
+											"value": "<string>",
+											"description": "Possible values:\n\n* Transaction::CreditPurchase::RedeemingAPromoCode\n* Transaction::ProjectSpending::LaunchingAProject\n* Transaction::ProjectSpending::CancelingAProject\n* Transaction::CreditPurchase::BuyingACreditBundle\n* Transaction::CreditPayment::ModeratingAnApplication\n* Transaction::CreditPayment::CompletingAJob\n* Transaction::CashWithdrawal::WithdrawingMoney\n* Transaction::CreditPayment::EarningFromReferredAuthor\n* Transaction::CreditPurchase::EarningFromReferredClient\n* Transaction::ProjectSpending::RepoDocWithCanceledProject\n* Transaction::CreditPayment::FinancialCompensation\n* Transaction::CreditPurchase::ExpiringCredits\n* Transaction::CreditPayment::ExpiringWallet\n* Transaction::ProjectSpending::AdminProjectRefund\n* Transaction::ProjectSpending::AdminProjectLevy\n* Transaction::CreditExchange::GivenToSubordinate\n* Transaction::CreditExchange::GivenByManager\n* Transaction::CreditPayment::AdminRefund\n* Transaction::CreditPurchase::AdminLevy\n* Transaction::ProjectSpending::EarningFromAProject\n* Transaction::CreditPurchase::Rollback\n* Transaction::CashWithdrawal::BundleCancellation\n",
+											"disabled": true
+										}
+									]
+								},
+								"description": "🔐 This endpoint requires one of the following scopes:\n\n* transaction:manage\n* transaction:read\n* transaction:write\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Upload Properties",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "file_name",
+											"value": "hello.txt",
+											"description": "(Required) File name for the uploaded file"
+										},
+										{
+											"key": "hashed_payload",
+											"value": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+											"description": "(Required) SHA256 digest of the file content"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseUrl}}/v1/clients/upload_properties",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"clients",
+										"upload_properties"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "public",
+					"item": [
+						{
+							"name": "expertises",
+							"item": [
+								{
+									"name": "{expertise id}/sub expertises",
+									"item": [
+										{
+											"name": "List Sub-Expertises",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/public/expertises/:expertise_id/sub_expertises?locale=en-EU",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"public",
+														"expertises",
+														":expertise_id",
+														"sub_expertises"
+													],
+													"query": [
+														{
+															"key": "locale",
+															"value": "en-EU",
+															"description": "Locale used to translate the Sub-Expertises name (en-EU by default)"
+														}
+													],
+													"variable": [
+														{
+															"key": "expertise_id",
+															"value": "596da0f84d69930001dbe277",
+															"description": "(Required) (required) The parent Expertise ID"
+														}
+													]
+												}
+											},
+											"response": []
+										},
+										{
+											"name": "Retrieve a single Sub-Expertise",
+											"request": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json"
+													}
+												],
+												"url": {
+													"raw": "{{baseUrl}}/v1/public/expertises/:expertise_id/sub_expertises/:sub_expertise_id?locale=en-EU",
+													"host": [
+														"{{baseUrl}}"
+													],
+													"path": [
+														"v1",
+														"public",
+														"expertises",
+														":expertise_id",
+														"sub_expertises",
+														":sub_expertise_id"
+													],
+													"query": [
+														{
+															"key": "locale",
+															"value": "en-EU",
+															"description": "Locale used to translate the Sub-Expertise name (en-EU by default)"
+														}
+													],
+													"variable": [
+														{
+															"key": "expertise_id",
+															"value": "596da0f84d69930001dbe277",
+															"description": "(Required) (required) The parent Expertise ID"
+														},
+														{
+															"key": "sub_expertise_id",
+															"value": "596da0f84d69930001dbe289",
+															"description": "(Required) (required) The Sub-Expertise ID"
+														}
+													]
+												}
+											},
+											"response": []
+										}
+									]
+								},
+								{
+									"name": "List Expertises",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json"
+											}
+										],
+										"url": {
+											"raw": "{{baseUrl}}/v1/public/expertises?locale=en-EU&activity=translation",
+											"host": [
+												"{{baseUrl}}"
+											],
+											"path": [
+												"v1",
+												"public",
+												"expertises"
+											],
+											"query": [
+												{
+													"key": "locale",
+													"value": "en-EU",
+													"description": "Locale used to translate the expertises name (en-EU by default)"
+												},
+												{
+													"key": "activity",
+													"value": "translation"
+												},
+												{
+													"key": "filter",
+													"value": "<string>",
+													"description": "(Required) (required) Type of abilities to list.\n\nPossible values:\n\n* professional\n* interest\n",
+													"disabled": true
+												}
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "List Categories",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/public/categories?locale=en-EU",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"public",
+										"categories"
+									],
+									"query": [
+										{
+											"key": "locale",
+											"value": "en-EU",
+											"description": "(Required) Locale name. Full list available via the List Locales endpoint."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Countries",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/public/countries?locale=en-EU",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"public",
+										"countries"
+									],
+									"query": [
+										{
+											"key": "locale",
+											"value": "en-EU",
+											"description": "(Required) Locale name. Full list available via the List Locales endpoint."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Languages",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/public/languages?locale=en-EU",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"public",
+										"languages"
+									],
+									"query": [
+										{
+											"key": "locale",
+											"value": "en-EU",
+											"description": "(Required) Locale name. Full list available via the List Locales endpoint."
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Locales",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/v1/public/locales",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"v1",
+										"public",
+										"locales"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "clientSecret",
+				"value": "{{clientSecret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{clientId}}",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{baseUrl}}/oauth/token",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "{{baseUrl}}/oauth/authorize",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "{{callbackUrl}}",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "discussion:manage discussion:read discussion:write glossary:manage glossary:read glossary:write preferred_author:manage preferred_author:read preferred_author:write project:launch project:manage project:quote project:read project:write public transaction:manage transaction:read transaction:write user:email user:manage user:read user:write",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "useBrowser",
+				"value": false,
+				"type": "boolean"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "state",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "tokenName",
+				"value": "Bearer",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

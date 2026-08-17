@@ -1,0 +1,93 @@
+generated: '2026-08-17'
+method: generated
+source: >-
+  openapi/textmaster-api-v1-openapi.yml + https://developer.textmaster.com/ (quick-start,
+  authentication, OAuth apps, scopes, webhooks and events, integrator best practices,
+  resources-in-the-rest-api)
+checked: '2026-08-17'
+searched_first: >-
+  No provider-published Agent Skills, AGENTS.md or skill files exist. Probed
+  https://developer.textmaster.com/llms.txt (200) — its complete 58-page index contains no agent,
+  skill or MCP page — and github.com/textmaster (no AGENTS.md in the org's public repos observed).
+  These four skills are therefore GENERATED from the published OpenAPI and developer portal.
+operation_identifier_caveat: >-
+  IMPORTANT: TextMaster's OpenAPI declares ZERO operationIds across all 54 operations. Every step in
+  every skill below is therefore grounded in a verified METHOD + PATH taken verbatim from the spec's
+  `paths` object, not in an operationId. Each path in these skills was checked to exist in
+  openapi/textmaster-api-v1-openapi.yml. Nothing was invented. If TextMaster later publishes
+  operationIds, these skills should be rewritten to reference them.
+skills:
+- file: textmaster-authenticate-oauth-app.md
+  name: Authenticate against the TextMaster API
+  description: >-
+    Register an OAuth App, run the authorization-code flow, request the right scopes, and verify the
+    token — plus the legacy signature strategy for test scripts.
+  api: openapi/textmaster-api-v1-openapi.yml
+  operations:
+  - 'GET /ping'
+  - 'GET /test'
+  - 'GET /v1/clients/users/me'
+  scopes: ['user:read', 'user:email']
+- file: textmaster-quote-and-order-translation.md
+  name: Quote and order a translation project
+  description: >-
+    The marquee flow. Price work without committing, create a project, batch-attach documents,
+    finalize, then launch and debit the credit wallet — with the spend guardrails this API needs
+    because it has no idempotency key.
+  api: openapi/textmaster-api-v1-openapi.yml
+  operations:
+  - 'GET /v1/public/languages'
+  - 'GET /v1/public/expertises'
+  - 'GET /v1/clients/projects/quotation'
+  - 'POST /v1/clients/projects'
+  - 'POST /v1/clients/projects/{project_id}/batch/documents'
+  - 'PUT /v1/clients/projects/{project_id}/finalize'
+  - 'POST /v1/clients/projects/{project_id}/async_launch'
+  - 'GET /v1/clients/projects/{project_id}'
+  scopes: ['project:quote', 'project:write', 'project:launch']
+  consequence: physical
+  human_in_the_loop: recommended
+- file: textmaster-subscribe-to-project-events.md
+  name: Subscribe to TextMaster project and document events
+  description: >-
+    Register webhook callbacks at account, project or document level; handle the 19 documented
+    events correctly given at-least-once, unordered delivery and no signature header.
+  api: openapi/textmaster-api-v1-openapi.yml
+  operations:
+  - 'GET /v1/clients/users/me'
+  - 'PUT /v1/clients/users/{user_id}'
+  - 'POST /v1/clients/projects'
+  - 'POST /v1/clients/projects/{project_id}/documents'
+  scopes: ['user:write', 'project:write']
+- file: textmaster-collect-completed-translations.md
+  name: Collect completed translations and reconcile spend
+  description: >-
+    Retrieve finished content, confirm document completion, use MongoDB-style filters to find work
+    needing attention, and reconcile transactions against launched projects.
+  api: openapi/textmaster-api-v1-openapi.yml
+  operations:
+  - 'GET /v1/clients/projects/{project_id}/documents'
+  - 'GET /v1/clients/projects/{project_id}/documents/{document_id}'
+  - 'GET /v1/clients/projects/{project_id}/documents/filter'
+  - 'PUT /v1/clients/projects/{project_id}/documents/{document_id}/complete'
+  - 'POST /v1/clients/projects/{project_id}/documents/{document_id}/review_url'
+  - 'GET /v1/clients/transactions'
+  - 'GET /v1/clients/invoices'
+  scopes: ['project:read', 'project:write', 'transaction:read']
+shared_rules:
+  base_url: https://api.textmaster.com
+  sandbox_base_url: https://api.textmasterstaging.com
+  auth_header: 'Authorization: Bearer <ACCESS_TOKEN>'
+  content_type: application/json
+  timeout_seconds: 30
+  pagination: 'page (1-based) + per_page (max 100, not honoured everywhere)'
+  no_idempotency_key: true
+  no_rate_limit_published: true
+  error_envelope: '{"errors": {"<field>|base": ["message"]}}'
+  request_id_header: X-Request-Id
+  see:
+  - conventions/textmaster-conventions.yml
+  - errors/textmaster-problem-types.yml
+  - scopes/textmaster-scopes.yml
+  - asyncapi/textmaster-event-surface.yml
+  - sandbox/textmaster-sandbox.yml

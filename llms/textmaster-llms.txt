@@ -1,0 +1,77 @@
+# TextMaster's Developer Documentation
+
+## TextMaster's Developer Documentation
+
+- [Welcome!](https://developer.textmaster.com/welcome.md): Here you'll find all the documentation you need to get up and running with the TextMaster API.
+- [Quick Start](https://developer.textmaster.com/quick-start.md): Learn the foundations for using the REST API, starting with authentication and some endpoint examples.
+- [Postman](https://developer.textmaster.com/quick-start/postman.md): Use Postman to simplify the process of testing and interacting with TextMaster's API
+- [OpenAPI](https://developer.textmaster.com/quick-start/openapi.md): The TextMaster REST API is fully described in an OpenAPI 3.0 compliant document.
+- [Resources in the REST API](https://developer.textmaster.com/overview/resources-in-the-rest-api.md): Learn how to naviguate the resources provided by the TextMaster API.
+- [Authentication](https://developer.textmaster.com/overview/authentication.md): Learn how to authenticate through TextMaster API.
+- [Troubleshooting](https://developer.textmaster.com/overview/troubleshooting.md): Learn how to resolve the most common problems people encounter in the REST API.
+- [Filters](https://developer.textmaster.com/overview/filters.md): Learn how to use filters to query specific resources.
+- [Workflow](https://developer.textmaster.com/overview/workflow.md): Learn what are projects and document and how they flows into TextMaster architecture.
+- [File uploads](https://developer.textmaster.com/overview/file-uploads.md): Learn how to upload files using the TextMaster REST API
+- [Loop](https://developer.textmaster.com/overview/loop.md): Learn how to use Loop to create projects by sending a simple email.
+- [Integrator best practices](https://developer.textmaster.com/guides/integrator-best-practices.md): Learn how to build app that reliably interacts with the TextMaster API and provides the best experience for you users.
+- [About OAuth Apps](https://developer.textmaster.com/apps/about-oauth-apps.md): Learn how to build integrations with the TextMaster API.
+- [Building OAuth Apps](https://developer.textmaster.com/apps/building-oauth-apps.md)
+- [Creating an OAuth App](https://developer.textmaster.com/apps/building-oauth-apps/creating-an-oauth-app.md): Learn how to create an OAuth App from TextMaster.
+- [Authorizing OAuth Apps](https://developer.textmaster.com/apps/building-oauth-apps/authorizing-oauth-apps.md): Learn how to enable other users to authorize your OAuth App.
+- [Scopes for OAuth Apps](https://developer.textmaster.com/apps/building-oauth-apps/scopes-for-oauth-apps.md): Scopes let you specify exactly what type of access you need. Scopes limit access for OAuth tokens. They do not grant any additional permission beyond that which the user already has.
+- [Managing OAuth Apps](https://developer.textmaster.com/apps/managing-oauth-apps.md): Learn about how OAuth scopes work and let you choose what type of access you need.
+- [Modifying an OAuth App](https://developer.textmaster.com/apps/managing-oauth-apps/modifying-an-oauth-app.md): Learn how to make changes to your OAuth App.
+- [Deleting an OAuth App](https://developer.textmaster.com/apps/managing-oauth-apps/deleting-an-oauth-app.md): Learn how to delete OAuth Apps when you no longer use them.
+- [Webhooks](https://developer.textmaster.com/webhooks-and-events/webhooks.md): Learn the basics of how webhooks work to help you build and set up integrations.
+- [Creating webhooks](https://developer.textmaster.com/webhooks-and-events/webhooks/creating-webhooks.md): Learn to build a webhook, choosing the events your webhook will listen for on TextMaster and how to set up a server to receive and manage the webhook payload.
+- [Configuring your server for webhooks](https://developer.textmaster.com/webhooks-and-events/webhooks/configuring-your-server-for-webhooks.md): Learn how to set up a server to manage incoming webhook payloads.
+- [Securing webhooks](https://developer.textmaster.com/webhooks-and-events/webhooks/securing-webhooks.md): Ensure your server is only receiving the expected TextMaster requests for security reasons.
+- [Troubleshooting webhooks](https://developer.textmaster.com/webhooks-and-events/webhooks/troubleshooting-webhooks.md): Learn how to review your webhook deliveries on TextMaster, including the HTTP request and response.
+- [Events](https://developer.textmaster.com/webhooks-and-events/events.md): Learn what are events and how you can subscribe to them to build and set up integrations.
+- [Akeneo](https://developer.textmaster.com/integrations/akeneo.md): Learn how our Akeneo integration works
+- [Getting Started](https://developer.textmaster.com/integrations/akeneo/getting-started.md): Learn how as an administrator of your Akeneo instance you can integrate with TextMaster
+- [Configuration](https://developer.textmaster.com/integrations/akeneo/configuration.md): Learn how to configure your Akeneo instance to send products for translation on TextMaster
+- [Usage](https://developer.textmaster.com/integrations/akeneo/usage.md): Learn how to send products for translation to TextMaster from your Akeneo instance.
+- [Monitoring](https://developer.textmaster.com/integrations/akeneo/monitoring.md): Learn how to monitor your translation projects sent to TextMaster.
+- [Troubleshooting](https://developer.textmaster.com/integrations/akeneo/troubleshooting.md): Learn how to resolve the most common problems people encounter with the Akeneo integration.
+- [Salesforce Commerce Cloud](https://developer.textmaster.com/integrations/salesforce-commerce-cloud.md): Learn how our SFCC integration works
+- [Getting Started](https://developer.textmaster.com/integrations/salesforce-commerce-cloud/getting-started.md): Learn how as an administrator of your SFCC instance you can integrate with TextMaster
+- [Configuration](https://developer.textmaster.com/integrations/salesforce-commerce-cloud/configuration.md): Learn how to configure your SFCC instance to send products for translation on TextMaster
+- [Usage](https://developer.textmaster.com/integrations/salesforce-commerce-cloud/usage.md): Learn how to send products for translation to TextMaster from your SFCC instance.
+- [Monitoring](https://developer.textmaster.com/integrations/salesforce-commerce-cloud/monitoring.md): Learn how to monitor your translation projects sent to TextMaster.
+- [Troubleshooting](https://developer.textmaster.com/integrations/salesforce-commerce-cloud/troubleshooting.md)
+- [Abilities](https://developer.textmaster.com/reference/abilities.md)
+- [Authors](https://developer.textmaster.com/reference/authors.md)
+- [Documents](https://developer.textmaster.com/reference/documents.md)
+- [Categories](https://developer.textmaster.com/reference/categories.md)
+- [Countries](https://developer.textmaster.com/reference/countries.md)
+- [Expertises](https://developer.textmaster.com/reference/expertises.md)
+- [Glossaries](https://developer.textmaster.com/reference/glossaries.md)
+- [Languages](https://developer.textmaster.com/reference/languages.md)
+- [Levels](https://developer.textmaster.com/reference/levels.md)
+- [Locales](https://developer.textmaster.com/reference/locales.md)
+- [Preferred Authors](https://developer.textmaster.com/reference/preferred-authors.md)
+- [Projects](https://developer.textmaster.com/reference/projects.md)
+- [Project Templates](https://developer.textmaster.com/reference/project-templates.md)
+- [Negotiated Contracts](https://developer.textmaster.com/reference/negotiated-contracts.md)
+- [Support Messages](https://developer.textmaster.com/reference/support-messages.md)
+- [Transactions](https://developer.textmaster.com/reference/transactions.md)
+- [Uploads](https://developer.textmaster.com/reference/uploads.md)
+- [Users](https://developer.textmaster.com/reference/users.md)
+- [Work Templates](https://developer.textmaster.com/reference/work-templates.md)
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://developer.textmaster.com/welcome.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

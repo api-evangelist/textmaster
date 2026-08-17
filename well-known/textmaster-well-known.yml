@@ -1,0 +1,139 @@
+generated: '2026-08-17'
+method: probed
+source: live probes of /.well-known/ on every TextMaster host
+checked: '2026-08-17'
+summary: >-
+  A complete negative result on RFC 8615. TextMaster serves NOTHING at /.well-known/ on any host:
+  no security.txt, no OIDC discovery, no OAuth authorization-server or protected-resource metadata,
+  no api-catalog, no ai-plugin.json and no A2A agent card. 32 probes across four hosts, zero
+  documents. Recorded because an absence is data — and because the API is genuinely OAuth 2.0, so
+  the missing RFC 8414 metadata is a real, fixable gap rather than an inapplicable check.
+pointer_basis: >-
+  NO `WellKnown` pointer and NO `SecurityTxt` pointer are emitted in apis.yml. Every path 404s or
+  403s; there is no served document to point at. Do not add either pointer in a later round on the
+  strength of this file existing — this file documents an absence.
+  ONE pointer IS earned from this probe: `ContentSignal`, on the strength of the Content-Signal
+  declaration in the developer portal's robots.txt (see content_signals below). That is a real,
+  provider-published consent declaration; it just does not live under /.well-known/.
+hosts:
+- host: https://api.textmaster.com
+  role: API host (OpenAPI servers[0], apis.yml baseURL)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  response_note: >-
+    All eight return the API's standard JSON 404 guard
+    ({"errors":{"base":["The URL you're requesting doesn't exist within the api..."]}}), which is a
+    genuine 404 and NOT an SPA catch-all. This host cannot produce a false positive on this probe.
+- host: https://www.textmaster.com
+  role: marketing / brand host
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/oauth-protected-resource, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/ai-plugin.json, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+  response_note: >-
+    Uniform 403 with a 146-byte HTML body on every path. The static transition site denies the whole
+    /.well-known/ prefix rather than 404ing it. Treated as a miss.
+- host: https://fr.textmaster.com
+  role: French brand host (the original apis.yml Website value)
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/oauth-protected-resource, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+  - {path: /.well-known/ai-plugin.json, status: 403}
+  - {path: /.well-known/agent-card.json, status: 403}
+  - {path: /.well-known/agent.json, status: 403}
+- host: https://docs.textmaster.com
+  role: client documentation (GitBook, third-party operated)
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+  response_note: >-
+    404 status with a ~172KB GitBook HTML not-found page. Correctly a miss: the status line is 404,
+    so this is not the SPA-200 false positive pattern.
+security_txt:
+  present: false
+  note: >-
+    RFC 9116 is unimplemented on every host. This is a notable omission specifically because
+    TextMaster DOES run a real bug bounty program with a dedicated bounty@textmaster.com address and
+    a published policy — a security.txt would cost nothing and would make the program discoverable
+    by machine. See security/textmaster-vulnerability-disclosure.yml for what is published instead.
+oauth_metadata:
+  present: false
+  note: >-
+    The API is a real OAuth 2.0 authorization-code provider (authorize + token + refresh endpoints,
+    22 scopes) but publishes no RFC 8414 authorization-server metadata and no RFC 9728
+    protected-resource metadata. A client cannot discover the endpoints or the scope list
+    programmatically; both must be read out of the human documentation or the OpenAPI.
+  endpoints_that_would_be_advertised:
+    authorization_endpoint: https://api.textmaster.com/oauth/authorize
+    token_endpoint: https://api.textmaster.com/oauth/token
+    scopes_supported_count: 22
+    see: scopes/textmaster-scopes.yml
+agent_card:
+  present: false
+  probed_paths: ['/.well-known/agent-card.json', '/.well-known/agent.json']
+  hosts_probed: [api.textmaster.com, www.textmaster.com, fr.textmaster.com, docs.textmaster.com]
+  note: >-
+    No A2A agent card on any host at either the canonical or the legacy path. Per the pipeline
+    contract this artifact is SEARCH-ONLY, so no a2a/ directory is created, no stub is written and
+    no `AgentCard` pointer is emitted.
+content_signals:
+  present: true
+  method: probed
+  location: robots.txt (not /.well-known/)
+  hosts:
+  - host: https://developer.textmaster.com
+    url: https://developer.textmaster.com/robots.txt
+    status: 200
+    directive: 'Content-Signal: ai-train=yes, search=yes, ai-input=yes'
+    scope: 'User-agent: *'
+    note: >-
+      An explicit, machine-readable consent declaration: TextMaster permits AI training, search
+      indexing and AI input (RAG/grounding) on its developer documentation. Published by GitBook's
+      hosting but served under TextMaster's own host and domain.
+  - host: https://www.textmaster.com
+    url: https://www.textmaster.com/robots.txt
+    status: 200
+    directive: null
+    ai_crawler_posture: >-
+      No Content-Signal header, but an unusually explicit hand-written allowlist: GPTBot,
+      ChatGPT-User, OAI-SearchBot, ClaudeBot, Claude-Web, anthropic-ai, PerplexityBot,
+      Perplexity-User, Google-Extended, Applebot, Applebot-Extended, Bingbot, DuckDuckBot, CCBot,
+      Meta-ExternalAgent, Bytespider, cohere-ai, MistralAI-User and YouBot are each individually
+      `Allow: /`, under the comment "AI crawlers — explicitly allowed for AIO discoverability".
+      Disallow list is empty.
+    note: >-
+      A deliberate, documented pro-agent posture on the brand host. Worth recording: this provider
+      opted IN to agent access on purpose rather than by omission.
+  - host: https://api.textmaster.com
+    url: https://api.textmaster.com/robots.txt
+    status: not-probed
+    note: Not probed; the API host serves JSON and has no crawlable surface.
+llms_txt:
+  present: true
+  note: >-
+    Two provider-published llms.txt documents were found — one per GitBook space. Harvested to
+    llms/. See llms/textmaster-llms.txt.
+  hosts:
+  - {url: 'https://developer.textmaster.com/llms.txt', status: 200, bytes: 8795, pages_indexed: 58}
+  - {url: 'https://docs.textmaster.com/client/llms.txt', status: 200, bytes: 5354, pages_indexed: 21}

@@ -1,0 +1,222 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://status.textmaster.com/ + https://developer.textmaster.com/overview/resources-in-the-rest-api
+  + https://developer.textmaster.com/overview/loop + https://www.textmaster.com/
+  + openapi/textmaster-api-v1-openapi.yml
+checked: '2026-08-17'
+summary: >-
+  TextMaster is mid-transition into Acolad Group, and the lifecycle picture is genuinely split: the
+  RUNTIME is healthy and monitored (a live status page tracking ten hosts, valid certs, an API
+  answering /ping in 18ms), while the CORPORATE and LEGAL surfaces are being wound down (the
+  marketing site is now a one-page Acolad transition landing page, and the application's own
+  terms-of-use and privacy links 301 to that landing page). Both facts are recorded here because
+  either one alone would misrepresent the provider.
+versioning:
+  scheme: uri-path
+  current: v1
+  explicit_request_required: true
+  docs: https://developer.textmaster.com/overview/resources-in-the-rest-api
+  notes: >-
+    Single live major version. No v2 exists — https://api.textmaster.com/api-docs/v2/clients/specs.yaml
+    returns 404. No date-based or header-based version negotiation.
+  probed:
+  - url: https://api.textmaster.com/api-docs/v1/clients/specs.yaml
+    status: 200
+    checked: '2026-08-17'
+  - url: https://api.textmaster.com/api-docs/v2/clients/specs.yaml
+    status: 404
+    checked: '2026-08-17'
+status_page:
+  url: https://status.textmaster.com/
+  title: TextMaster Services Status
+  machine_readable_api: false
+  method: probed
+  probed_status: 200
+  checked: '2026-08-17'
+  monitored_hosts:
+  - host: www.textmaster.com
+    interval: 30 mins
+    observed_state: 200 OK
+  - host: app.textmaster.com
+    interval: 30 secs
+    observed_state: 200 OK
+  - host: api.textmaster.com
+    interval: 30 secs
+    observed_state: 200 OK
+  - host: catify.textmaster.com
+    interval: 2 mins
+    observed_state: 200 OK
+  - host: glossary.textmaster.com
+    interval: 5 mins
+    observed_state: 200 OK
+  - host: translation-memory.textmaster.com
+    interval: 2 mins
+    observed_state: 200 OK
+  - host: machine-translation.textmaster.com
+    interval: 2 mins
+    observed_state: 200 OK
+  - host: payment-gateway.textmaster.com
+    interval: 2 mins
+    observed_state: 200 OK
+  - host: option-presets.textmaster.com
+    interval: 2 mins
+    observed_state: 200 OK
+  - host: akeneo.textmaster.com
+    interval: 10 mins
+    observed_state: 200 OK
+  notes: >-
+    This is a substantive status page, not a badge: it exposes per-host check intervals, TLS
+    certificate validity windows and issuers, and domain-expiry dates. The API host is on the
+    tightest 30-second cadence alongside the application. The host list is also the most complete
+    public map of TextMaster's service decomposition — a glossary service, a translation-memory
+    service, a machine-translation service, a payment gateway, an option-presets service, a
+    content-analysis service (catify) and a dedicated Akeneo connector host. All ten were green at
+    the time of probe.
+  intermittency_note: >-
+    One of four probes of https://status.textmaster.com/ during this run returned HTTP 521
+    (Cloudflare: origin unreachable); the other three returned 200. Recorded for honesty — the
+    status page itself is not perfectly available. The bug-bounty policy lists
+    status.textmaster.com as "Operated by a third party" and out of scope.
+deprecation:
+  policy_documented: false
+  policy_url: null
+  sunset_header: false
+  deprecation_header: false
+  probed_headers_on:
+  - url: https://api.textmaster.com/ping
+    status: 200
+    deprecation_header_present: false
+    sunset_header_present: false
+    checked: '2026-08-17'
+  pointer_decision: >-
+    NO `Deprecation` pointer is emitted in apis.yml. TextMaster publishes individual deprecation
+    NOTICES (below) but no deprecation POLICY: there is no stated notice period, no sunset date, no
+    RFC 8594 Sunset/Deprecation header support, and no deprecations index. The operational
+    `deprecation_policy` check must read a genuine zero here rather than be credited from the
+    notices.
+  documented_deprecations:
+  - feature: Loop
+    kind: product feature (email-to-project intake)
+    status: deprecated
+    sunset_date: null
+    quote: >-
+      "Loop is deprecated and will be removed in the future. Use the REST API instead. The
+      following documentation is for clients already using this feature."
+    source: https://developer.textmaster.com/overview/loop
+    note: >-
+      An explicit deprecation with a stated migration path (the REST API) but no date. The docs
+      page is retained for existing users, which is good practice.
+  - feature: 'query parameter `locale` on GET /v1/clients/projects/quotation'
+    kind: API parameter
+    status: deprecated
+    sunset_date: null
+    quote: '[DEPRECATED] Locale used to display the pricing (defaults to en-EU).'
+    source: openapi/textmaster-api-v1-openapi.yml
+  deprecated_operations: []
+  deprecated_operations_note: >-
+    No operation in the spec carries `deprecated: true`. The only spec-level deprecation is the
+    parameter description above, which is prose rather than the machine-readable `deprecated` flag —
+    a generated client will not surface it.
+  redirect_as_deprecation_signal:
+    quote: >-
+      "If you receive a redirect, it's best to update your code to follow the new URI, in case
+      you're requesting a deprecated path that we might remove."
+    source: https://developer.textmaster.com/guides/integrator-best-practices
+    note: >-
+      TextMaster's actual removal mechanism appears to be 301-then-remove rather than
+      Deprecation/Sunset headers.
+changelog:
+  published: false
+  probed:
+  - url: https://developer.textmaster.com/llms.txt
+    status: 200
+    checked: '2026-08-17'
+    finding: >-
+      The developer portal's own machine-readable index lists all 58 pages. None is a changelog,
+      release-notes or what's-new page.
+  note: >-
+    No dated API changelog exists on any TextMaster surface. No `ChangeLog` pointer is emitted and
+    no changelog/ artifact is written — there is nothing to capture. The nearest available change
+    evidence is package release dates (see packages/textmaster-packages.yml): the Magento 2 module
+    shipped 1.0.6 on 2025-02-17 and the PHP API client v1.2.0 on 2024-02-14.
+sla:
+  documented: false
+  uptime_target: null
+  note: No public SLA or uptime commitment was located on any TextMaster host.
+roadmap:
+  published: false
+  probed:
+  - url: https://www.textmaster.com/sitemap.xml
+    status: 200
+    checked: '2026-08-17'
+    finding: >-
+      The production sitemap contains exactly three URLs (the en/fr/es homepages). There is no
+      roadmap, pricing, blog, terms or privacy page left on the marketing site.
+  note: No `Roadmap` pointer is emitted.
+corporate_status:
+  parent: Acolad Group
+  relationship_quote: >-
+    "TextMaster is part of Acolad — a global leader in content solutions and language services."
+    "(c) 2026 Acolad Group. TextMaster is an Acolad company."
+  transition_announced: true
+  transition_headline: 'TextMaster has joined Acolad — Meet Lia, the platform for all your translation needs.'
+  successor_product: 'Lia (https://www.acolad.com/en/lia)'
+  source: https://www.textmaster.com/
+  checked: '2026-08-17'
+  platform_continuity_quote: >-
+    "Is my TextMaster account still active? Yes. You can continue to sign in and manage your
+    projects at app.textmaster.com. We'll notify you directly of any future changes that affect
+    your account." / "Existing projects and pricing remain unchanged."
+  api_continuity_assessment: >-
+    No end-of-life date has been announced for the TextMaster API. Evidence that it remains in
+    service on 2026-08-17: the OpenAPI is served live from two hosts, /ping answers 200 in 18ms,
+    the developer portal is complete and was reachable in full, the status page monitors ten
+    production hosts at 30s–10min intervals, and TLS certificates were reissued on 2026-08-11.
+    Evidence of wind-down risk: the customer-facing brand site is a single transition page with a
+    2026-05-25 lastmod, all commercial and legal pages have been 301'd away, and every call to
+    action routes to Acolad. Treat the API as live-but-sunsetting and re-check on the next round.
+legal_link_rot:
+  finding: >-
+    https://app.textmaster.com/sign_up still links "terms of use" and "privacy policy" to
+    https://www.textmaster.com/terms-of-use and /privacy-policy. Both now return HTTP 301 to
+    https://www.textmaster.com/ — the Acolad transition landing page. A user signing up today
+    cannot read the terms they are agreeing to at the URL the form points to.
+  probed:
+  - url: https://www.textmaster.com/terms-of-use
+    status: 301
+    redirects_to: https://www.textmaster.com/
+    checked: '2026-08-17'
+  - url: https://www.textmaster.com/privacy-policy
+    status: 301
+    redirects_to: https://www.textmaster.com/
+    checked: '2026-08-17'
+  pointer_decision: >-
+    NO `TermsOfService` pointer is emitted — TextMaster no longer publishes a resolvable terms
+    document, and crediting a 301-to-marketing-page would be soft-404 false credit. A
+    `PrivacyPolicy` pointer IS emitted, at
+    https://www.acolad.com/en/legal-notices/website-privacy-policy (HTTP 200), because that is the
+    document TextMaster's own site footer links as its privacy policy.
+  parent_legal_surface:
+  - url: https://www.acolad.com/en/legal-notices
+    status: 200
+    label: Legal Notices (linked from the TextMaster footer)
+  - url: https://www.acolad.com/en/legal-notices/website-privacy-policy
+    status: 200
+    label: Website Privacy Policy (linked from the TextMaster footer)
+  - url: https://www.acolad.com/en/legal-notices/website-terms
+    status: 200
+    label: Website Terms (Acolad's own site terms; governs acolad.com, not the TextMaster platform)
+data_retention:
+- surface: temporary upload storage
+  retention_days: 60
+  quote: >-
+    "TextMaster uses a temporary storage to store your files until they are linked to a document.
+    They will be automatically deleted after a period of 60 days from this temporary storage
+    location."
+  source: https://developer.textmaster.com/overview/file-uploads
+- surface: webhook delivery log
+  retention_days: null
+  quote: 'TextMaster keeps a log of each webhook delivery for some period of time.'
+  source: https://developer.textmaster.com/webhooks-and-events/webhooks/troubleshooting-webhooks
+  note: Period unquantified.

@@ -1,0 +1,115 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://www.textmaster.com/ + https://www.textmaster.com/sitemap.xml +
+  https://docs.textmaster.com/client/account-management/funding-your-account-and-managing-credits +
+  openapi/textmaster-api-v1-openapi.yml
+checked: '2026-08-17'
+plan_count: 0
+prices_published: false
+currency: null
+billing_period: null
+summary: >-
+  TextMaster publishes NO plans and NO prices. There are no tiers, no per-word rate card, no
+  self-serve price list and no enterprise price on any TextMaster host as of 2026-08-17. The
+  commercial model is not subscription tiers at all: it is a PREPAID CREDIT WALLET plus per-project
+  quotation. A client buys credit bundles, then each project is priced at launch time by the API
+  itself and debited from the balance. This is a genuine zero on `plan_count`, and it is a zero for
+  two compounding reasons — the model was never tier-based, and the marketing site that once
+  carried the per-word rate card has been reduced to a three-URL Acolad transition page.
+plans: []
+pricing_pages_probed:
+- url: https://www.textmaster.com/sitemap.xml
+  status: 200
+  finding: >-
+    Contains exactly three URLs — the en, fr and es homepages (lastmod 2026-05-25). No /pricing,
+    /tarifs, /precios, /plans, /rates or /quote page exists in the published sitemap.
+  checked: '2026-08-17'
+- url: https://www.textmaster.com/pricing
+  status: 301
+  redirects_to: https://www.textmaster.com/
+  finding: Soft-404 to the transition landing page. Recorded as a miss, not a hit.
+  checked: '2026-08-17'
+commercial_model:
+  kind: prepaid-credits-plus-per-project-quotation
+  currency_handling: >-
+    Multi-currency. GET /v1/clients/projects/quotation takes a `currency_code` query parameter, and
+    the deprecated `locale` parameter defaulted pricing display to en-EU, so the platform's native
+    presentation is European.
+  credits:
+    description: >-
+      "Credits act as the currency within the platform, allowing you to pay for services such as
+      translations, copywriting, and other tasks."
+    purchase_units: >-
+      Pre-set credit bundles "ranging from small amounts for individual projects to larger bundles
+      for ongoing or multiple projects", plus an optional custom amount.
+    bundle_prices_published: false
+    bundle_prices_note: >-
+      The bundles and their prices are only visible inside the authenticated application. The
+      public docs describe the purchase flow without naming a single figure.
+    payment_methods: [credit card, PayPal, wire transfer]
+    payment_processor: Adyen (named in the published subprocessor register)
+    promo_codes: true
+    wire_transfer_note: >-
+      "Wire transfers can take a few days to confirm. Your account will be credited once the
+      transaction is verified."
+    source: >-
+      https://docs.textmaster.com/client/account-management/funding-your-account-and-managing-credits
+  quotation:
+    machine_readable: true
+    operation: GET /v1/clients/projects/quotation
+    scope_required: ['project:quote', 'project:manage', 'project:read', 'project:write']
+    inputs:
+    - project[activity_name]
+    - project[language_from]
+    - project[language_to]
+    - project[options][expertise]
+    - project[options][language_level]
+    - project[options][quality]
+    - project[options][priority]
+    - project[options][specific_attachment]
+    - project[total_word_count]
+    - currency_code
+    significance: >-
+      This is the important commercial finding. TextMaster does not publish a price list because the
+      price is an API CALL. Cost is a function of activity (translation / copywriting /
+      proofreading), language pair, expertise, language level, quality tier, priority and word
+      count. Any integrator — or agent — can obtain an exact, binding-shaped quote programmatically
+      before committing money, which is a better contract than a static rate card. It is also why a
+      plan_count of 0 is not a coverage failure here.
+    cost_mutation_events:
+    - project_tm_completed
+    - project_tm_diff_completed
+    cost_mutation_note: >-
+      Translation-memory analysis RE-PRICES a project after creation and the docs say the cost "has
+      been updated accordingly". An agent must re-read the project cost after these events and
+      before launching, not cache the original quote.
+  spend_controls:
+    scope_gate: project:launch
+    scope_gate_note: >-
+      "Grants access to launch projects and debit the client's account." Launch/finalize/async_launch
+      are the only money-moving operations and they sit behind one dedicated scope, which is a clean
+      separation — an integration can be granted project:write and quote work all day without being
+      able to spend.
+    auto_launch_default: false
+    insufficient_funds_signal: project_not_launched
+    insufficient_funds_note: >-
+      With `auto_launch: true`, a project that cannot be paid for fires `project_not_launched`,
+      "often due to the client account not having enough credits on its wallet." That is the
+      overdraft signal, delivered by webhook.
+  billing_artifacts_api:
+  - GET /v1/clients/transactions
+  - GET /v1/clients/invoices
+  - GET /v1/clients/receipts
+  - GET /v1/clients/negotiated_contracts
+  billing_artifacts_note: >-
+    Transactions, invoices and receipts are all readable over the API under the `transaction:*`
+    scopes, and Negotiated Contracts is a first-class endpoint — direct evidence that enterprise
+    pricing is individually negotiated rather than published.
+transition_context:
+  note: >-
+    The homepage FAQ states "Existing projects and pricing remain unchanged" for current customers,
+    while every new-business call to action routes to Acolad's quote form
+    (https://www.acolad.com/en/services/translation/estimate) or to Lia. New pricing for this
+    service is now transacted through Acolad, off TextMaster's own surface.
+  checked: '2026-08-17'

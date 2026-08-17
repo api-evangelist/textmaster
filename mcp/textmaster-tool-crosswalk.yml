@@ -1,0 +1,243 @@
+generated: '2026-08-17'
+method: derived
+source: >-
+  mcp/textmaster-mcp.yml (derived candidate tool set) x openapi/textmaster-api-v1-openapi.yml
+  (54 operations)
+checked: '2026-08-17'
+summary: >-
+  A one-sided crosswalk. TextMaster has an OpenAPI but NO MCP server and NO GraphQL, so there is no
+  published tool list to bind — every row below binds a DERIVED candidate tool to a real operation,
+  and the value of the artifact is the rest_only[] section: the 42 published operations that no
+  agent-facing tool would cover, grouped by capability. Confidence is high on every binding because
+  both sides were authored here from the same spec; that is a statement about internal consistency,
+  not about a provider claim.
+surfaces:
+  openapi:
+    file: openapi/textmaster-api-v1-openapi.yml
+    live_url: https://api.textmaster.com/api-docs/v1/clients/specs.yaml
+    mirror_url: https://app.textmaster.com/api-docs/v1/clients/specs.yaml
+    version: 3.0.3
+    operations: 54
+    paths: 46
+    gated: false
+    gated_note: >-
+      The spec itself is anonymous and public. The operations it describes are OAuth-gated except
+      /ping, /test, /v1/public/* and POST /v1/clients/upload_properties.
+    operationIds_present: false
+    operationIds_note: >-
+      ZERO of 54 operations declare an operationId. Bindings below therefore use METHOD + path as the
+      operation key. This is the crosswalk's central caveat and a concrete defect an integrator or
+      the provider can act on.
+  graphql:
+    endpoint: null
+    probed: {url: 'https://api.textmaster.com/graphql', status: 404, checked: '2026-08-17'}
+    note: No GraphQL surface exists.
+  mcp:
+    url: null
+    tools_list_probed: false
+    tools_list_probed_note: >-
+      Not probed because no endpoint exists to probe. mcp.textmaster.com does not resolve;
+      api.textmaster.com/mcp returns 404.
+    status: 'derived candidate only — see mcp/textmaster-mcp.yml deployment.mode: none'
+  webhooks:
+    file: asyncapi/textmaster-event-surface.yml
+    events: 19
+    note: >-
+      The event surface is the third projection of this data core and it is NOT reachable as a tool
+      at all — an agent subscribes by writing callback URLs through the REST surface
+      (set_user_callbacks) and then receives pushes out-of-band. Recorded here so the divergence is
+      not silently dropped.
+coverage:
+  tools_named: 12
+  tools_bound: 12
+  tools_unbound: 0
+  mcp_only: 0
+  rest_operations_total: 54
+  rest_operations_with_a_tool: 12
+  rest_operations_without_a_tool: 42
+  rest_coverage_percent: 22
+crosswalk:
+- tool: list_languages
+  category: reference
+  rest: ['GET /v1/public/languages']
+  binding: rest
+  confidence: high
+- tool: list_expertises
+  category: reference
+  rest: ['GET /v1/public/expertises']
+  binding: rest
+  confidence: high
+  note: >-
+    Fans out in practice: an agent choosing an expertise usually also needs
+    GET /v1/public/expertises/{expertise_id}/sub_expertises.
+- tool: get_quotation
+  category: pricing
+  rest: ['GET /v1/clients/projects/quotation']
+  binding: rest
+  confidence: high
+  input_note: >-
+    Inherits 9 query parameters from the spec including the bracketed nested form
+    project[options][expertise], project[options][language_level], project[options][quality],
+    project[options][priority] and project[total_word_count].
+- tool: create_project
+  category: ordering
+  rest: ['POST /v1/clients/projects']
+  binding: rest
+  confidence: high
+  input_note: >-
+    The largest requestBody in the spec. Includes the project-level `callback` map (7 events), the
+    `auto_launch` flag and the full options tree.
+- tool: add_documents_batch
+  category: ordering
+  rest: ['POST /v1/clients/projects/{project_id}/batch/documents']
+  binding: rest
+  confidence: high
+  note: >-
+    Deliberately bound to the BATCH operation rather than the single-document
+    POST /v1/clients/projects/{project_id}/documents, because the provider's best-practices guide
+    directs integrators to batch.
+- tool: get_upload_properties
+  category: ordering
+  rest: ['POST /v1/clients/upload_properties']
+  binding: rest
+  confidence: high
+  note: >-
+    Step 1 of a two-step flow. Step 2 is a direct upload to the returned signed target, which is NOT
+    an operation in this spec — so the tool alone cannot complete a file upload.
+- tool: finalize_project
+  category: ordering
+  rest: ['PUT /v1/clients/projects/{project_id}/finalize']
+  binding: rest
+  confidence: high
+- tool: launch_project_async
+  category: ordering
+  rest: ['POST /v1/clients/projects/{project_id}/async_launch']
+  binding: rest
+  confidence: high
+  note: >-
+    A synchronous sibling exists (PUT /v1/clients/projects/{project_id}/launch) and is intentionally
+    NOT bound: it risks the 30-second timeout on any real project, and the provider tells integrators
+    to prefer async. Listed under rest_only[].
+- tool: get_project
+  category: monitoring
+  rest: ['GET /v1/clients/projects/{project_id}']
+  binding: rest
+  confidence: high
+- tool: filter_projects
+  category: monitoring
+  rest: ['GET /v1/clients/projects/filter']
+  binding: rest
+  confidence: high
+  note: >-
+    Bound to /filter rather than the plain list because the selector grammar is what makes this
+    useful to an agent. The plain GET /v1/clients/projects is in rest_only[].
+- tool: get_document
+  category: delivery
+  rest: ['GET /v1/clients/projects/{project_id}/documents/{document_id}']
+  binding: rest
+  confidence: high
+- tool: set_user_callbacks
+  category: events
+  rest: ['PUT /v1/clients/users/{user_id}']
+  binding: rest
+  confidence: high
+  note: >-
+    The operation is summarised in the spec as "Update my callback information" — it is the webhook
+    subscription API and nothing else.
+mcp_only: []
+mcp_only_note: >-
+  Empty by construction: there is no MCP server, so no tool can exist without a REST backing. If
+  TextMaster ever ships one, the likely mcp_only candidates are composites — "order a translation"
+  spanning create_project + batch documents + finalize + launch, and "collect finished content"
+  spanning the document read plus a fetch of the author_work URL (which is not an operation in the
+  spec).
+rest_only:
+- capability: project lifecycle control
+  operations:
+  - 'GET /v1/clients/projects'
+  - 'PUT /v1/clients/projects/{project_id}'
+  - 'PUT /v1/clients/projects/{project_id}/launch'
+  - 'PUT /v1/clients/projects/{project_id}/cancel'
+  - 'PUT /v1/clients/projects/{project_id}/pause'
+  - 'PUT /v1/clients/projects/{project_id}/resume'
+  - 'PUT /v1/clients/projects/{project_id}/archive'
+  - 'PUT /v1/clients/projects/{project_id}/unarchive'
+  - 'POST /v1/clients/projects/{project_id}/duplicate'
+  - 'PUT /v1/clients/projects/{project_id}/activate_tm_options'
+  reason: >-
+    State-machine transitions. Real and useful, but each one changes the status of paid work in
+    flight, so a candidate tool set should not expose them until the human-in-the-loop story is
+    settled. `duplicate` is additionally hazardous without an idempotency key.
+- capability: document management
+  operations:
+  - 'GET /v1/clients/projects/{project_id}/documents'
+  - 'POST /v1/clients/projects/{project_id}/documents'
+  - 'GET /v1/clients/projects/{project_id}/documents/filter'
+  - 'PUT /v1/clients/projects/{project_id}/documents/{document_id}'
+  - 'DELETE /v1/clients/projects/{project_id}/documents/{document_id}'
+  - 'PUT /v1/clients/projects/{project_id}/documents/{document_id}/complete'
+  - 'POST /v1/clients/projects/{project_id}/batch/documents/complete'
+  - 'POST /v1/clients/projects/{project_id}/documents/{document_id}/review_url'
+  reason: >-
+    Covered in the candidate set only by the batch create and the single read. `review_url` mints a
+    shareable human review link, which is a genuinely agent-relevant capability worth adding later.
+- capability: author / talent selection
+  operations:
+  - 'GET /v1/clients/authors'
+  - 'GET /v1/clients/my_authors'
+  - 'POST /v1/clients/my_authors'
+  - 'GET /v1/clients/my_authors/{author_id}'
+  - 'PUT /v1/clients/my_authors/{author_id}'
+  - 'GET /v1/clients/projects/{project_id}/my_authors'
+  - 'GET /v1/clients/abilities'
+  reason: >-
+    Curating preferred/blacklisted human translators. Deliberately excluded from the candidate tool
+    set: this is a judgement about named people, guarded by its own scope family
+    (preferred_author:*), and it is the surface where automated action is least appropriate.
+- capability: financial records
+  operations:
+  - 'GET /v1/clients/transactions'
+  - 'GET /v1/clients/invoices'
+  - 'GET /v1/clients/receipts'
+  - 'GET /v1/clients/negotiated_contracts'
+  reason: >-
+    Read-only accounting under transaction:* scopes. Safe to expose, omitted only to keep the
+    candidate set focused on the ordering workflow.
+- capability: templates and reuse
+  operations:
+  - 'GET /v1/clients/api_templates'
+  - 'GET /v1/clients/api_templates/filter'
+  - 'GET /v1/clients/work_templates'
+  - 'GET /v1/clients/work_templates/{work_template_name}'
+  - 'GET /v1/clients/glossaries'
+  reason: >-
+    Templates and glossaries are how a repeat customer enforces consistency, and an agent that
+    ignored them would produce off-brand work. Strong candidates for a v2 tool set.
+- capability: collaboration
+  operations:
+  - 'GET /v1/clients/projects/{project_id}/documents/{document_id}/support_messages'
+  - 'POST /v1/clients/projects/{project_id}/documents/{document_id}/support_messages'
+  reason: >-
+    Human-to-human thread with the assigned author, under discussion:* scopes. Agent-writable in
+    principle; excluded because the counterparty is a person expecting a person.
+- capability: reference vocabulary
+  operations:
+  - 'GET /v1/public/categories'
+  - 'GET /v1/public/countries'
+  - 'GET /v1/public/locales'
+  - 'GET /v1/public/expertises/{expertise_id}/sub_expertises'
+  - 'GET /v1/public/expertises/{expertise_id}/sub_expertises/{sub_expertise_id}'
+  reason: >-
+    Unauthenticated lookups. Partially covered (languages, expertises). The rest are cheap additions.
+- capability: identity
+  operations:
+  - 'GET /v1/clients/users/me'
+  reason: >-
+    Whoami. Every agent implementation needs it first (it is also how you obtain the user_id required
+    by set_user_callbacks) — an omission in the candidate set worth fixing.
+divergence_summary: >-
+  The three surfaces do not agree, and the gap is asymmetric. REST is complete (54 operations). The
+  webhook surface exposes 19 events that REST cannot deliver — a status change is only observable in
+  real time by push, and there is no events-poll endpoint. MCP does not exist. So the union of
+  TextMaster's agent-reachable capability today is: everything in REST, reachable only by writing
+  your own client, with the real-time layer available only if you also operate an HTTPS receiver.

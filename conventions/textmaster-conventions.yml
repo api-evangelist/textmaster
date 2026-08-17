@@ -1,0 +1,225 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://developer.textmaster.com/overview/resources-in-the-rest-api +
+  https://developer.textmaster.com/overview/filters +
+  https://developer.textmaster.com/overview/troubleshooting +
+  https://developer.textmaster.com/guides/integrator-best-practices +
+  openapi/textmaster-api-v1-openapi.yml
+checked: '2026-08-17'
+summary: >-
+  Cross-cutting request/response semantics for the TextMaster API v1, captured from the developer
+  portal and corroborated against the 54-operation OpenAPI and a live unauthenticated probe of
+  api.textmaster.com/ping. TextMaster documents its conventions unusually thoroughly for a
+  provider of its size — versioning, verbs, redirects, pagination, a MongoDB-style filter grammar,
+  a request-id header and a hard 30-second server timeout are all written down. Idempotency is the
+  one notable absence: there is NO request idempotency key anywhere on the write surface.
+transport:
+  scheme: https-only
+  base_url: https://api.textmaster.com/
+  content_type: application/json
+  request_body_note: >-
+    For POST/PATCH/PUT/DELETE, parameters not in the URL are JSON-encoded with
+    `Content-Type: application/json`. One operation (POST /v1/clients/upload_properties) also
+    accepts application/x-www-form-urlencoded.
+  timestamps: ISO 8601 (YYYY-MM-DDTHH:MM:SSZ)
+versioning:
+  scheme: uri-path
+  current: v1
+  explicit_request_required: true
+  notes: >-
+    "The current version of our API is v1. You must explicitly request this version by appending
+    the version number at the end of the URL." Two path families exist under v1:
+    /v1/clients/* (authenticated client surface) and /v1/public/* (unauthenticated reference data).
+  see: lifecycle/textmaster-lifecycle.yml
+authentication:
+  styles: [oauth2_bearer, custom_signature_headers]
+  recommended: oauth2_bearer
+  see: authentication/textmaster-authentication.yml
+idempotency:
+  request_idempotency_supported: false
+  header: null
+  spec_matches_for_idempoten: 0
+  notes: >-
+    A full-text scan of the 246KB OpenAPI returns ZERO matches for "idempoten", and no page of the
+    developer portal documents a request idempotency key. The write surface includes
+    non-idempotent POSTs that spend money or create duplicates — POST /v1/clients/projects,
+    POST /v1/clients/projects/{project_id}/documents, the batch document create, and
+    POST /v1/clients/projects/{project_id}/duplicate. PUT .../launch and .../finalize debit the
+    client's credit wallet.
+  where_idempotency_IS_discussed: >-
+    TextMaster documents idempotency as an obligation on the CONSUMER's webhook receiver, not as a
+    guarantee on its own API: "Your server implementation should be idempotent... We guarantee
+    delivery of webhook at least once but webhooks can be delivered more than once." That is the
+    opposite direction of the API-side idempotency-key contract.
+  pointer_decision: >-
+    NO `Idempotency` pointer is emitted in apis.yml. The agent-readiness idempotency dimension is
+    a genuine zero for this provider, not a missing pointer. Do not add one in a later round on
+    the strength of the webhook-consumer language above.
+  agent_risk: >-
+    A client that times out on PUT /v1/clients/projects/{id}/launch has no safe replay primitive
+    and cannot distinguish "not launched" from "launched, response lost" without a follow-up GET.
+    The provider's own mitigation is event-driven: subscribe to `project_in_progress` and, per the
+    events documentation, "launch process can safely be retried if this event is not received in
+    a reasonable time (more than 30 minutes)". That is a 30-minute reconciliation window, not an
+    idempotency key.
+pagination:
+  style: page-number
+  params:
+  - name: page
+    default: 1
+    note: 1-based; omitting it returns the first page.
+  - name: per_page
+    default: 100
+    max: 100
+    note: >-
+      "For some resources, you can also set a custom page size up to 100... Note that for
+      technical reasons, not all endpoints will honour this parameter."
+  default_page_size: 100
+  response_envelope_fields: []
+  response_envelope_note: >-
+    No documented next/prev cursor, total-count or Link header. A client detects the last page by
+    receiving a short page. The troubleshooting page names this as the single most common
+    integrator mistake ("Not all results returned... you're probably only seeing the first page").
+  example: 'curl https://api.textmaster.com/v1/clients/projects?page=2&per_page=100'
+filtering:
+  style: mongo-style-json-selectors
+  endpoints_note: >-
+    Four operations expose a dedicated /filter sub-resource — projects, documents, api_templates,
+    and (per the reference) the same grammar across filterable collections.
+  params:
+  - name: where
+    format: URL-encoded JSON query selector document
+  - name: order
+    format: comma-separated field list; a `-` prefix sorts descending
+    example: status,-created_at
+  operators: ['$gt', '$gte', '$lt', '$lte', '$in', '$nin', '$ne', '$or', '$regex']
+  regex_flavor: PCRE
+  regex_flags: [i, m, x]
+  unsupported_selector_behavior: 422
+  example: >-
+    curl -G --data-urlencode 'where={"status":{"$in":["in_progress","completed"]}}'
+    --data-urlencode 'order=-created_at'
+    https://api.textmaster.com/v1/clients/projects/filter
+  note: >-
+    This is a genuinely expressive query surface — a client can push $or/$regex/$gt predicates
+    server-side instead of paging and filtering locally. It also leaks the MongoDB Atlas backing
+    store named in the provider's own subprocessor register.
+field_expansion:
+  supported: false
+  notes: >-
+    No sparse-fieldset or expansion parameter is documented. Related resources are reached by
+    following URLs the API returns (e.g. the `author_work` key on a document carries a URL to the
+    finished content). The best-practices guide is explicit that clients must NOT construct or
+    parse those URLs themselves.
+metadata:
+  supported: true
+  fields:
+  - name: reference
+    scope: document
+    note: Client-supplied reference string.
+  - name: external_id
+    scope: project
+    note: Nullable client-owned correlation id on the Project schema.
+  - name: multi_project_id
+    scope: project
+request_tracing:
+  supported: true
+  method: probed
+  headers:
+  - name: X-Request-Id
+    note: >-
+      Documented in the schema example and CONFIRMED on a live unauthenticated response
+      (x-request-id: af794acc-3c14-4487-a32b-ec38b32b0a76 on GET /ping, 2026-08-17). This is the
+      identifier to quote to support@textmaster.com.
+  - name: X-Runtime
+    note: 'Server processing time in seconds. Observed live (x-runtime: 0.018245).'
+  - name: X-TextMaster-Event
+    direction: outbound-webhook
+    note: >-
+      Sent by TextMaster ON webhook deliveries so the receiver can branch on event type without
+      parsing the payload. Named in the integrator best-practices guide.
+  observed_other:
+  - x-envoy-upstream-service-time
+  - x-color
+  - tm-canary
+  observed_other_note: >-
+    api.textmaster.com sits behind Cloudflare in front of an Envoy mesh; a `tm-canary=off` cookie
+    and `x-color: blue` indicate blue/green canary routing. Undocumented; recorded from live
+    observation only, do not depend on them.
+error_envelope:
+  primary_shape: '{"errors": {"<field or ''base''>": ["message", ...]}}'
+  oauth_shape: '{"error": "...", "error_description": "...", "state": "..."}'
+  rfc9457: false
+  rfc9457_note: >-
+    No application/problem+json anywhere in the spec. Errors are a bespoke field-keyed envelope
+    with a `base` key for non-field errors.
+  see: errors/textmaster-problem-types.yml
+rate_limit_signaling:
+  documented: false
+  headers: []
+  observed_headers: []
+  observed_note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After header appeared on a live 200 from
+    api.textmaster.com/ping (2026-08-17). No 429 is declared on any of the 54 operations.
+  what_is_documented_instead: >-
+    TextMaster publishes hard SIZE and TIME limits rather than request-rate limits: a 30-second
+    server-side connection timeout, a 99,999-document cap per project, and "divide and conquer"
+    batching guidance. The docs refer to "API limits" in prose without quantifying a rate.
+  see: rate-limits/textmaster-rate-limits.yml
+timeouts:
+  server_side_seconds: 30
+  behavior: >-
+    "If TextMaster takes more than 30 seconds to process an API request, TextMaster will terminate
+    the request and you will receive a timeout response. Make sure to use async endpoints when
+    available to overcome this issue."
+  async_escape_hatches:
+  - POST /v1/clients/projects/{project_id}/async_launch
+  - POST /v1/clients/projects/{project_id}/batch/documents
+  - POST /v1/clients/projects/{project_id}/batch/documents/complete
+  webhook_receiver_seconds: 30
+http_verbs:
+  GET: Used for retrieving resources.
+  POST: Used for creating resources.
+  PUT: Used for replacing resources or collections.
+  DELETE: Used for deleting resources.
+  PATCH_note: >-
+    Named in the request-body documentation but no operation in the spec uses PATCH.
+redirects:
+  policy: Clients should assume any request may result in a redirection and should follow it.
+  codes:
+  - code: 301
+    meaning: Permanent; all future requests should go to the Location URI.
+  - code: 302
+    meaning: Temporary; repeat verbatim to Location but keep using the original URI.
+  - code: 307
+    meaning: Temporary; as 302.
+  guidance: >-
+    "If you receive a redirect, it's best to update your code to follow the new URI, in case
+    you're requesting a deprecated path that we might remove."
+async_and_events:
+  preference: webhooks-over-polling
+  guidance: >-
+    "Always prefer using webhooks over HTTP polling for reliability." The provider explicitly
+    recommends receiving content by webhook rather than requesting documents, to avoid hitting
+    API limits on large payloads.
+  see: asyncapi/textmaster-event-surface.yml
+content_delivery:
+  preference: file-url-over-inline-text
+  guidance: >-
+    "Whenever possible, you should prefer sending your content as a file URL to prevent potential
+    performance issues with large content." Client-hosted URLs are copied onto TextMaster's
+    storage; alternatively the Uploads endpoint issues signed upload properties. Files in the
+    temporary upload store are auto-deleted after 60 days if never linked to a document.
+  see: sandbox/textmaster-sandbox.yml
+abuse_policy: >-
+  "Intentionally ignoring repeated validation errors may result in the suspension of your app for
+  abuse." This is the closest thing TextMaster publishes to a rate-limit enforcement statement.
+cross_links:
+  authentication: authentication/textmaster-authentication.yml
+  scopes: scopes/textmaster-scopes.yml
+  errors: errors/textmaster-problem-types.yml
+  lifecycle: lifecycle/textmaster-lifecycle.yml
+  rate_limits: rate-limits/textmaster-rate-limits.yml
+  events: asyncapi/textmaster-event-surface.yml
+  data_model: data-model/textmaster-data-model.yml

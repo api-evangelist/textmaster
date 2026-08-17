@@ -1,0 +1,286 @@
+generated: '2026-08-17'
+method: derived
+source: openapi/textmaster-api-v1-openapi.yml
+docs: https://developer.textmaster.com/overview/workflow
+checked: '2026-08-17'
+summary: >-
+  26 component schemas, of which 21 are real entities and 5 are utility wrappers (Date, DateOrNull,
+  ObjectOrNull, CallbackUrl, LanguageLevel). The model has a single spine — a UserInfo owns Projects,
+  a Project owns Documents, a Document is worked by an Author — with three satellite clusters hanging
+  off it: reference vocabulary (Language, Locale, Country, Category, Expertise, Ability), reuse
+  (WorkTemplate, ApiTemplate, Glossary), and money (Transaction, Invoice, Receipt,
+  NegotiatedContract). Relationships are expressed almost entirely by opaque string id FIELDS rather
+  than by `$ref` between entities: only 6 of 21 entities reference another entity schema at all, and
+  four of those six references are to the Date wrapper. An ERD must therefore be read off the
+  id-field naming convention, not off the reference graph.
+id_format:
+  kind: 24-character lowercase hexadecimal (MongoDB ObjectId)
+  examples:
+  - 61698af48b81926d91c0f3d1
+  - 5f7dcc7d8b819239aff5af7c
+  - 5f7dcc3c8b819239aff5a391
+  source: >-
+    Documented examples across https://developer.textmaster.com/quick-start and the resources page.
+    Corroborated architecturally: the provider's own subprocessor register names MongoDB Atlas as
+    "the main database service hosting user profiles, translation projects, and essential application
+    data".
+  prefixes: false
+  prefixes_note: >-
+    NO type prefixes. Unlike Stripe (cus_/in_/ch_) every id in TextMaster is an undifferentiated
+    24-hex string, so an id carries no self-describing type. An agent holding a bare id cannot tell a
+    project_id from a document_id from an author_id without tracking provenance itself. Worth calling
+    out: it is the main ergonomic hazard in this model.
+core_entities:
+- entity: UserInfo
+  role: The authenticated client identity and the account-level webhook subscription holder.
+  properties: 7
+  id_fields: [id]
+  operations:
+  - 'GET /v1/clients/users/me'
+  - 'PUT /v1/clients/users/{user_id}'
+  scopes: ['user:read', 'user:write', 'user:manage', 'user:email']
+  note: >-
+    Carries a `callback` object (CallbackUrl per event), which makes the user record the global
+    subscription surface. There is no separate webhook entity.
+- entity: Project
+  role: >-
+    The commercial and linguistic container. Holds language pair, activity, category, briefing,
+    options, templates, cost, progress and callbacks. The unit that is quoted, finalized, launched
+    and paid for.
+  properties: 42
+  id_fields: [id, external_id, multi_project_id, project_template_id, api_template_id]
+  refs: [CallbackUrl, WorkTemplate, Date, DateOrNull]
+  operations: 16
+  scopes: ['project:read', 'project:write', 'project:manage', 'project:launch', 'project:quote']
+  lifecycle_states_observed:
+  - in_creation
+  - in_progress
+  - in_review
+  - finalized
+  - paused
+  - canceled
+  - archived
+  timestamps: [created_at, updated_at, launched_at, completed_at]
+  note: >-
+    The widest entity in the model (42 properties). `external_id` is the client's own correlation
+    field and the right place to carry an idempotency-ish key of your own, given the API provides
+    none. `multi_project_id` groups projects submitted together.
+- entity: Document
+  role: The content to be worked on. Attached to a project; carries its own status and callbacks.
+  properties: 32
+  id_fields: [id, project_id, author_id]
+  refs: [CallbackUrl, Date, DateOrNull]
+  operations: 10
+  scopes: ['project:read', 'project:write', 'project:manage']
+  lifecycle_states_observed:
+  - in_creation
+  - counting_words
+  - waiting_assignment
+  - in_progress
+  - in_review
+  - in_extra_review
+  - quality_control
+  - copyscape
+  - completed
+  - incomplete
+  - paused
+  - canceled
+  timestamps: [created_at, updated_at, completed_at]
+  content_access:
+    field: author_work
+    type: 'oneOf: object | string'
+    note: >-
+      The finished translation. When it is a string it is a URL to the content. The best-practices
+      guide is explicit that clients must NOT parse or construct these URLs — follow what the API
+      returns. This is the delivery mechanism for completed work.
+  note: >-
+    Also carries `completion` (number), `progress`, `written_words`, `satisfaction`, `keyword_list`,
+    `reference` (client-supplied) and `can_post_message_to_author`.
+- entity: Quotation
+  role: A priced, uncommitted projection of a Project.
+  properties: 42
+  id_fields: [id, external_id, multi_project_id, project_template_id, api_template_id]
+  refs: [CallbackUrl, ObjectOrNull, DateOrNull]
+  operations: ['GET /v1/clients/projects/quotation']
+  scopes: ['project:quote']
+  note: >-
+    Structurally a Project with every timestamp nullable and work_template loosened to ObjectOrNull.
+    That is the model telling you what a quotation IS: a project that does not exist yet. Confirms the
+    quote/commit split is real rather than a separate pricing subsystem.
+- entity: PotentialAuthor
+  role: An author eligible to work on a given project.
+  properties: 2
+  id_fields: [id]
+  operations: ['GET /v1/clients/authors', 'GET /v1/clients/projects/{project_id}/my_authors']
+- entity: MyAuthor
+  role: >-
+    The client's relationship with a specific author — preferred, blacklisted or uncategorized — plus
+    a free-text description.
+  properties: 10
+  id_fields: [id, author_id]
+  refs: [Date]
+  operations: 5
+  scopes: ['preferred_author:read', 'preferred_author:write', 'preferred_author:manage']
+  status_enum: [preferred, blacklisted, uncategorized]
+  status_enum_source: >-
+    Read from the 422 validation example in the spec ("must be one of: preferred, blacklisted,
+    uncategorized"), not from an enum declaration — the property is typed as a bare string.
+  note: >-
+    A join entity: it models the CLIENT-to-AUTHOR relationship, distinct from the author themselves
+    (PotentialAuthor) and from their capabilities (Ability).
+- entity: Ability
+  role: An author capability record, filterable by activity.
+  properties: 5
+  id_fields: [id]
+  operations: ['GET /v1/clients/abilities']
+- entity: SupportMessage
+  role: A message on a document's support thread between client and assigned author.
+  properties: 7
+  id_fields: [author_id]
+  refs: [Date]
+  operations: 2
+  scopes: ['discussion:read', 'discussion:write', 'discussion:manage']
+  note: >-
+    Has no `id` property of its own in the schema, and is addressed only through its parent document's
+    path. Messages are effectively append-only from the API's point of view.
+- entity: Glossary
+  role: Client terminology set enforced across projects.
+  properties: 9
+  id_fields: [id, user_id]
+  operations: ['GET /v1/clients/glossaries']
+  scopes: ['glossary:read', 'glossary:write', 'glossary:manage']
+  note: >-
+    Read-only over the API despite the existence of glossary:write and glossary:manage scopes — the
+    scopes exist for an application capability the v1 API does not expose. Creation and editing happen
+    in the web application (see
+    https://docs.textmaster.com/client/advanced-features/creating-and-managing-glossaries). A real
+    scope-to-operation asymmetry. Has a dedicated production host, glossary.textmaster.com.
+- entity: WorkTemplate
+  role: A reusable definition of the work to be performed.
+  properties: 4
+  operations:
+  - 'GET /v1/clients/work_templates'
+  - 'GET /v1/clients/work_templates/{work_template_name}'
+  addressing: by name, not by id
+  addressing_note: >-
+    The only entity in the model retrieved by a human-readable name rather than a 24-hex id.
+- entity: ApiTemplate
+  role: A reusable project configuration addressable by the API.
+  properties: 16
+  id_fields: [id]
+  refs: [Date]
+  operations: ['GET /v1/clients/api_templates', 'GET /v1/clients/api_templates/filter']
+  scopes: ['project:read', 'project:write', 'project:manage']
+- entity: Transaction
+  role: A movement against the prepaid credit wallet.
+  properties: 8
+  refs: [Date]
+  operations: ['GET /v1/clients/transactions']
+  scopes: ['transaction:read', 'transaction:manage', 'transaction:write']
+- entity: Invoice
+  role: An issued invoice.
+  properties: 5
+  refs: [Date]
+  operations: ['GET /v1/clients/invoices']
+  scopes: ['transaction:read', 'transaction:manage', 'transaction:write']
+- entity: Receipt
+  role: A payment receipt.
+  properties: 4
+  refs: [Date]
+  operations: ['GET /v1/clients/receipts']
+  scopes: ['transaction:read', 'transaction:manage', 'transaction:write']
+- entity: NegotiatedContract
+  role: Individually negotiated commercial terms for an account.
+  properties: 4
+  id_fields: [id]
+  operations: ['GET /v1/clients/negotiated_contracts']
+  note: >-
+    Unauthenticated by scope in the spec (no security[] scopes listed) yet clearly account-specific.
+    Its existence is the API-visible proof that enterprise pricing is bespoke — see
+    plans/textmaster-plans-pricing.yml.
+- entity: UploadProperties
+  role: Signed properties for pushing a file into the temporary upload store.
+  properties: 2
+  operations: ['POST /v1/clients/upload_properties']
+  note: >-
+    Step 1 of 2; step 2 (the actual PUT to the signed target) is not an operation in this spec.
+    Unlinked files are deleted after 60 days.
+reference_entities:
+- {entity: Language, properties: 2, operations: ['GET /v1/public/languages'], authenticated: false}
+- {entity: Locale, properties: 3, operations: ['GET /v1/public/locales'], authenticated: false}
+- {entity: Country, properties: 2, operations: ['GET /v1/public/countries'], authenticated: false}
+- entity: Category
+  properties: 2
+  operations: ['GET /v1/public/categories']
+  authenticated: false
+  enum: [C001, C002, C003, C004, C005, C006, C007, C008, C009, C010]
+  note: >-
+    The only genuinely closed enum declared in the spec — ten coded content categories. Everything
+    else that behaves like an enum (statuses, activities, author relationship states) is typed as a
+    bare string with the permitted values buried in a description or a 422 example.
+- entity: Expertise
+  properties: 10
+  operations:
+  - 'GET /v1/public/expertises'
+  - 'GET /v1/public/expertises/{expertise_id}/sub_expertises'
+  - 'GET /v1/public/expertises/{expertise_id}/sub_expertises/{sub_expertise_id}'
+  authenticated: false
+  self_hierarchy: true
+  note: Two-level taxonomy (expertise -> sub-expertise). Drives both author matching and price.
+- {entity: LanguageLevel, properties: 1, operations: [], note: 'Value object referenced by project options (e.g. premium).'}
+utility_schemas:
+- {schema: Date, role: 'ISO 8601 timestamp wrapper', referenced_by: 9}
+- {schema: DateOrNull, role: 'nullable timestamp wrapper', referenced_by: 3}
+- {schema: ObjectOrNull, role: 'empty placeholder used where Quotation loosens a Project field'}
+- {schema: CallbackUrl, role: '{url, format} webhook destination', referenced_by: 5}
+relationships:
+- {from: UserInfo, to: Project, kind: has_many, via: 'account scope (implicit — no user_id on Project)', confidence: high}
+- {from: UserInfo, to: Glossary, kind: has_many, via: user_id, confidence: high}
+- {from: UserInfo, to: CallbackUrl, kind: has_many, via: 'callback.<event>', confidence: high}
+- {from: Project, to: Document, kind: has_many, via: 'path nesting + Document.project_id', confidence: high}
+- {from: Document, to: Project, kind: belongs_to, via: project_id, confidence: high}
+- {from: Project, to: WorkTemplate, kind: has_one, via: '$ref work_template', confidence: high}
+- {from: Project, to: ApiTemplate, kind: has_one, via: api_template_id, confidence: high}
+- {from: Project, to: Project, kind: has_one, via: project_template_id, confidence: medium, note: 'A project created from a template project.'}
+- {from: Project, to: Project, kind: has_many, via: multi_project_id, confidence: medium, note: 'Sibling grouping for projects submitted together.'}
+- {from: Project, to: CallbackUrl, kind: has_many, via: 'callback.<project_event>', confidence: high}
+- {from: Document, to: CallbackUrl, kind: has_many, via: 'callback.<document_event>', confidence: high}
+- {from: Document, to: PotentialAuthor, kind: has_one, via: author_id, confidence: high, note: 'The author who claimed the document.'}
+- {from: Document, to: SupportMessage, kind: has_many, via: 'path nesting', confidence: high}
+- {from: SupportMessage, to: PotentialAuthor, kind: has_one, via: author_id, confidence: high}
+- {from: MyAuthor, to: PotentialAuthor, kind: has_one, via: author_id, confidence: high}
+- {from: MyAuthor, to: UserInfo, kind: belongs_to, via: 'account scope', confidence: high}
+- {from: PotentialAuthor, to: Ability, kind: has_many, via: 'activity filter on /abilities', confidence: medium}
+- {from: Project, to: Expertise, kind: has_one, via: 'project[options][expertise]', confidence: high}
+- {from: Project, to: Category, kind: has_one, via: 'category code', confidence: high}
+- {from: Project, to: Language, kind: has_one, via: language_from_code, confidence: high}
+- {from: Project, to: Language, kind: has_one, via: language_to_code, confidence: high}
+- {from: Project, to: LanguageLevel, kind: has_one, via: 'project[options][language_level]', confidence: high}
+- {from: Expertise, to: Expertise, kind: has_many, via: 'sub_expertises path', confidence: high}
+- {from: Quotation, to: Project, kind: projection_of, via: 'identical property set, nullable timestamps', confidence: high}
+- {from: Project, to: Transaction, kind: has_many, via: 'wallet debit on launch (not modelled by a foreign key)', confidence: medium}
+- {from: Transaction, to: Invoice, kind: related, via: 'not modelled in the spec', confidence: low}
+- {from: Transaction, to: Receipt, kind: related, via: 'not modelled in the spec', confidence: low}
+modelling_gaps:
+- >-
+  No foreign key ties financial records to the work that generated them. Transaction, Invoice and
+  Receipt carry no project_id or document_id in their schemas, so an integrator cannot join spend back
+  to a project from the API alone — the reconciliation has to be done on timestamps and amounts.
+  This is the most consequential gap in the model for anyone automating cost attribution.
+- >-
+  Status vocabularies are not declared as enums. Project and Document statuses, activity names and
+  the MyAuthor relationship states are all bare strings; the permitted values live in prose
+  descriptions, filter examples and one 422 validation example. A generated client gets no type
+  safety on the fields that drive the entire workflow. The 19 documented webhook event names are the
+  best available authority for the status vocabulary — see asyncapi/textmaster-event-surface.yml.
+- >-
+  Glossary, and the whole glossary:write / glossary:manage scope pair, exist without any write
+  operation in v1. Scope surface and operation surface disagree.
+- >-
+  SupportMessage has no id, so an individual message cannot be addressed, edited or deduplicated.
+- >-
+  No entity carries an `object` or `type` discriminator field, and ids have no prefixes, so a
+  polymorphic response cannot be type-switched.
+render:
+  subway: null
+  note: No subway/ visual exists for this provider yet.

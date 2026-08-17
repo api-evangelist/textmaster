@@ -1,0 +1,240 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  openapi/textmaster-api-v1-openapi.yml + https://developer.textmaster.com/ +
+  https://docs.textmaster.com/client/policies/subprocessors +
+  https://github.com/textmaster/bugbounty/blob/main/SECURITY.md
+checked: '2026-08-17'
+summary: >-
+  TextMaster conforms to the general-purpose web/API standards it depends on (OpenAPI 3.0.3,
+  OAuth 2.0 authorization code, ISO 8601, ISO language/locale coding, HTTP semantics) and to none of
+  the sector-specific regimes. It publishes a GDPR-style subprocessor register with named data
+  locations, and a CVSS 3.0-scored security program — but NO third-party certification of any kind:
+  no SOC 2, no ISO 27001, no PCI DSS, no HIPAA, no FedRAMP, no CSA STAR. Notably it does NOT
+  implement the modern discovery and error standards a 2026 API is expected to carry: no RFC 9457
+  problem details, no RFC 8414/9728 OAuth metadata, no RFC 9116 security.txt, no RFC 8594 Sunset
+  headers, no RateLimit header fields, and no AsyncAPI for a webhook surface that plainly warrants
+  one.
+standards:
+- id: openapi-3.0
+  conforms: true
+  version: 3.0.3
+  evidence: >-
+    Provider-published, self-describing document at
+    https://api.textmaster.com/api-docs/v1/clients/specs.yaml (and the identical byte-for-byte copy
+    at https://app.textmaster.com/api-docs/v1/clients/specs.yaml). 46 paths, 54 operations,
+    26 component schemas, 1 securityScheme. The docs name the standard explicitly: "TextMaster has
+    made its REST API publicly available as an OpenAPI 3.0 compliant document."
+  quality_notes: >-
+    Every operation has a summary and a tag; all 54 declare a 200. But ZERO operations declare an
+    `operationId`, which is a real conformance weakness — generated clients get synthesised method
+    names, Arazzo workflows cannot reference steps by id, and MCP tool bindings must be expressed as
+    method+path. Also missing: no top-level `tags[]` declarations with descriptions, no `info.contact`,
+    no `info.description`, no `info.license`, no `info.termsOfService`.
+- id: openapi-3.1-webhooks
+  conforms: false
+  evidence: >-
+    The document is 3.0.3, so the top-level `webhooks` object is unavailable, and it also does not
+    use operation-level `callbacks`. TextMaster's 19-event webhook surface is modelled only as
+    ordinary schema properties named `callback`. See asyncapi/textmaster-event-surface.yml.
+- id: oauth2
+  conforms: true
+  evidence: >-
+    securitySchemes.oauth2 with the authorizationCode flow, authorizationUrl
+    https://api.textmaster.com/oauth/authorize, tokenUrl and refreshUrl
+    https://api.textmaster.com/oauth/token, and 22 documented scopes. Registrable OAuth Apps with
+    client_id/client_secret/redirect_uri, refresh tokens, and user-revocable, user-editable grants.
+- id: rfc6749-error-responses
+  conforms: true
+  evidence: >-
+    Token and auth failures use the RFC 6749 §5.2 envelope {"error", "error_description"} with the
+    registered slugs invalid_client, invalid_grant and invalid_token.
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: false
+  evidence: '/.well-known/oauth-authorization-server returns 404 on every host (32 probes).'
+  gap_note: >-
+    A real gap, not an inapplicable check: this IS an OAuth 2.0 authorization server. Clients cannot
+    discover its endpoints or scope list programmatically.
+- id: rfc9728-oauth-protected-resource-metadata
+  conforms: false
+  evidence: '/.well-known/oauth-protected-resource returns 404 on every host.'
+- id: oidc
+  conforms: false
+  evidence: >-
+    No /.well-known/openid-configuration, no openIdConnect securityScheme, no id_token. The docs do
+    describe using an OAuth App as an identity provider ("enabling a Login with TextMaster"), but
+    that is plain OAuth 2.0 delegation, not OpenID Connect. Note that the END-USER application
+    supports Google and Microsoft SSO for its own logins (see
+    https://docs.textmaster.com/client/account-management/managing-single-sign-on-sso) — a consumer
+    of OIDC, not a provider of it.
+- id: pkce
+  conforms: unknown
+  evidence: >-
+    Not documented and not declarable in OpenAPI 3.0. The published Postman collection configures
+    plain authorization-code with clientId/clientSecret and does not set a code challenge, which
+    suggests PKCE is not required. Recorded as unknown rather than guessed.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json anywhere in the spec. Errors use a bespoke field-keyed envelope
+    {"errors": {"<field>|base": ["message"]}} with no type URI, title, detail or instance, and no
+    machine-stable error codes on the API layer. See errors/textmaster-problem-types.yml.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: 'No /.well-known/security.txt on any of four hosts (404 on api and docs, 403 on www and fr).'
+  gap_note: >-
+    Aggravated by the fact that a full bug bounty program with a dedicated bounty@textmaster.com
+    address DOES exist. See security/textmaster-vulnerability-disclosure.yml.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: >-
+    No Sunset or Deprecation header observed on a live 200 from api.textmaster.com/ping, and no
+    deprecation policy is published. Individual deprecation notices exist in prose (the Loop feature,
+    one query parameter) but carry no dates. See lifecycle/textmaster-lifecycle.yml.
+- id: ietf-ratelimit-headers
+  conforms: false
+  evidence: >-
+    No RateLimit-* or X-RateLimit-* headers on a live response, no 429 declared on any of 54
+    operations, and no published rate limit. See rate-limits/textmaster-rate-limits.yml.
+- id: rfc8615-well-known-uris
+  conforms: false
+  evidence: 'Nothing is served under /.well-known/ on any host. See well-known/textmaster-well-known.yml.'
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document exists (api.textmaster.com/asyncapi.yaml -> 404; the developer portal's
+    58-page llms.txt index contains no event-spec page), despite a documented 19-event webhook
+    surface with published retry and delivery semantics. This is the single highest-value
+    machine-readability gap in TextMaster's contract.
+- id: json-api
+  conforms: false
+  evidence: >-
+    Plain JSON resources with a bespoke error envelope; no `data`/`included`/`links` document
+    structure, no application/vnd.api+json. (Note the GitHub org carries a fork of the
+    `jsonapi-resources` Ruby gem, but the public v1 API does not expose a JSON:API surface.)
+- id: odata
+  conforms: false
+  evidence: >-
+    No $metadata, no OData query options. The /filter endpoints use a MongoDB-style JSON selector
+    grammar ($gt/$gte/$lt/$lte/$in/$nin/$ne/$or/$regex) instead — expressive, but a bespoke
+    vocabulary rather than a standard one.
+- id: iso8601
+  conforms: true
+  evidence: >-
+    "All timestamps return an ISO 8601 format: YYYY-MM-DDTHH:MM:SSZ." A `Date` component schema is
+    referenced by created_at/updated_at across the model.
+  caveat: >-
+    The legacy signature auth strategy uses a NON-ISO date format in its `Date` header
+    (YYYY-MM-DD HH:MM:SS, space-separated, no Z), which is an internal inconsistency worth knowing.
+- id: iso639-language-codes
+  conforms: likely
+  evidence: >-
+    GET /v1/public/languages and /v1/public/locales publish the controlled vocabulary, and filter
+    fields are named language_from_code / language_to_code with values like "en" and "fr". The
+    quotation surface takes `locale` values in the form en-EU. The docs do not name ISO 639/3166
+    explicitly, so this is recorded as `likely` from observed shape rather than asserted.
+- id: rfc2616-http-semantics
+  conforms: true
+  evidence: >-
+    Verb semantics (GET/POST/PUT/DELETE), redirect handling (301/302/307 with Location) and the
+    400/404/405/406/422 client-error family are all documented explicitly, citing the HTTP 1.1
+    specification by reference.
+- id: cvss-3.0
+  conforms: true
+  evidence: >-
+    The bug bounty program scores every report with CVSS 3.0 (Base, Temporal and Environmental) and
+    publishes the reward formula and the score-to-bounty table.
+  source: https://github.com/textmaster/bugbounty/blob/main/SECURITY.md
+- id: gdpr
+  conforms: partial
+  evidence: >-
+    A published subprocessor register (17 named subprocessors, each with its processing role and
+    data location) is a GDPR Article 28 transparency artifact, and the privacy policy TextMaster's
+    own footer links is live at
+    https://www.acolad.com/en/legal-notices/website-privacy-policy (HTTP 200). Data residency is
+    predominantly Europe.
+  caveat: >-
+    Recorded as PARTIAL, not conforming. There is no DPA template, no SCC reference, no DPO contact
+    and no data-processing-agreement page on any TextMaster host, and TextMaster's own
+    /privacy-policy URL — still linked from the live signup form — 301s to the marketing landing
+    page. Three subprocessors process in the United States (OpenAI, Sentry, Zendesk) and one is
+    global (Cloudflare, Google Translate) without a stated transfer mechanism.
+  source: https://docs.textmaster.com/client/policies/subprocessors
+- id: soc2
+  conforms: false
+  evidence: 'No SOC 2 report, attestation or mention found on any TextMaster host.'
+- id: iso27001
+  conforms: false
+  evidence: 'No ISO 27001 certification claim found on any TextMaster host.'
+- id: pci-dss
+  conforms: not-applicable
+  evidence: >-
+    Card data is handled by Adyen, a PCI-certified processor named in the subprocessor register;
+    payment-gateway.textmaster.com is a monitored internal service. TextMaster makes no PCI claim of
+    its own and, as a merchant rather than a payments API, would not be expected to.
+- id: hipaa
+  conforms: not-applicable
+- id: fedramp
+  conforms: not-applicable
+- id: fhir
+  conforms: not-applicable
+- id: psd2
+  conforms: not-applicable
+- id: scim
+  conforms: false
+  evidence: >-
+    No /Users or /Groups SCIM 2.0 surface. The API's Users resource is a single-subject
+    /v1/clients/users/me plus a self-update, not a provisioning API. Organisations and credit
+    sharing exist as application features with no provisioning contract.
+- id: idempotency-key
+  conforms: false
+  evidence: >-
+    Zero matches for "idempoten" in the 246KB spec and no idempotency-key header documented on any
+    portal page. See conventions/textmaster-conventions.yml for the full finding and the
+    30-minute event-based reconciliation pattern TextMaster offers instead.
+compliance_disclosures:
+  trust_center:
+    present: false
+    probed:
+    - {url: 'https://trust.textmaster.com/', status: 'no DNS / no connection', checked: '2026-08-17'}
+    - {url: 'https://security.textmaster.com/', status: 'no DNS / no connection', checked: '2026-08-17'}
+    - {url: 'https://www.textmaster.com/trust', status: 301, redirects_to: 'https://www.textmaster.com/', checked: '2026-08-17'}
+    - {url: 'https://www.textmaster.com/compliance', status: 301, redirects_to: 'https://www.textmaster.com/', checked: '2026-08-17'}
+    note: >-
+      No trust centre exists. NO `TrustCenter` pointer is emitted. A security/textmaster-trust-center.yml
+      artifact is deliberately NOT written — there is no verified hit to record.
+  subprocessor_register:
+    present: true
+    url: https://docs.textmaster.com/client/policies/subprocessors
+    status: 200
+    checked: '2026-08-17'
+    subprocessor_count: 17
+    pointer_basis: >-
+      This is the document the `Compliance` pointer in apis.yml points at. It is a real,
+      provider-published, dated-by-docs compliance disclosure — but it is a data-protection
+      transparency register, NOT a certification. Read alongside the soc2/iso27001 entries above,
+      which are both false.
+    subprocessors:
+    - {name: Adyen, role: payment processing, location: Europe}
+    - {name: AWS S3, role: object storage for files and translations, location: Europe}
+    - {name: CloudAMQP, role: managed RabbitMQ message bus, location: Europe}
+    - {name: Cloudflare, role: proxy, DDoS protection, TLS, location: 'Global (Multiple Regions)'}
+    - {name: Copyscape, role: plagiarism detection, location: Europe}
+    - {name: Datadog, role: log and performance monitoring, location: Europe}
+    - {name: DeepL, role: machine translation, location: Europe}
+    - {name: Elastic, role: hosted Elasticsearch for glossaries and metadata, location: Europe}
+    - {name: GCP Cloud Storage, role: object storage, location: Europe}
+    - {name: Google Translate, role: machine translation, location: 'Global (Multiple Regions)'}
+    - {name: Linear, role: development issue tracking, location: Europe}
+    - {name: Microsoft Azure, role: VMs running Elasticsearch, location: Europe}
+    - {name: MongoDB Atlas, role: primary database (users, projects, application data), location: Europe}
+    - {name: OpenAI, role: AI models for copywriting and translation, location: United States}
+    - {name: Salesforce, role: business development CRM, location: Europe}
+    - {name: Sentry, role: error tracking, location: United States}
+    - {name: Zendesk, role: support ticketing, location: United States}
+    architectural_disclosure_note: >-
+      This register doubles as the most detailed public description of TextMaster's architecture:
+      MongoDB Atlas as the primary store (which explains the MongoDB-style /filter grammar),
+      RabbitMQ as the message bus (which explains the async launch and webhook fan-out), Elasticsearch
+      for glossary search, and three machine-translation/AI engines — DeepL, Google Translate and
+      OpenAI — behind the human translation workflow.

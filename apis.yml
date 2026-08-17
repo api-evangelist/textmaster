@@ -1,19 +1,103 @@
 aid: textmaster
 name: TextMaster
-description: 'TextMaster is a company surfaced as a portfolio company of serena and added to the API Evangelist
-  network as a stub for enrichment. Sector: saas. This profile is a lead awaiting the enrichment pipeline.'
+description: >-
+  TextMaster is a French professional translation, proofreading and copywriting platform that
+  sells human-and-machine language work as an API-first service in 50+ languages. Clients create
+  Projects, attach Documents (plain text or file URLs), request a quotation, launch against a
+  prepaid credit wallet, and receive finished content back through status-change webhooks. The
+  platform exposes a documented OpenAPI 3.0.3 REST API at api.textmaster.com covering projects,
+  documents, glossaries, expertises, preferred authors, work/API templates, transactions,
+  invoices and receipts, secured by OAuth 2.0 authorization-code apps with 22 granular scopes
+  plus a legacy signature strategy. It ships first-party Akeneo, Magento 2, Salesforce Commerce
+  Cloud and Hybris connectors and a PHP API client. TextMaster is now part of Acolad Group; the
+  marketing site is a transition landing page pointing at Acolad's Lia platform, while the
+  application, the API and the developer portal remain live and in service.
+image: https://www.textmaster.com/assets/textmaster-logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/textmaster/refs/heads/main/apis.yml
 x-type: company
 x-source: serena-portfolio
-x-tier: stub
-x-tier-reason: portfolio-lead
-specificationVersion: '0.20'
+specificationVersion: '0.21'
 created: '2026-08-17'
 modified: '2026-08-17'
 tags:
 - Company
-- Saas
-apis: []
+- Translation
+- Localization
+- Language Services
+- Copywriting
+- Proofreading
+- Machine Translation
+- Content Production
+- Translation Memory
+- Glossary
+- Ecommerce Localization
+- Product Information Management
+- Webhooks
+- OAuth2
+- SaaS
+apis:
+- name: TextMaster API v1
+  description: >-
+    OpenAPI 3.0.3-described REST API for ordering and managing translation, proofreading and
+    copywriting work. 54 operations across Projects (create, quote, finalize, launch sync/async,
+    pause, resume, cancel, archive, duplicate, translation-memory options), Documents (single and
+    batch create/complete, review URLs, support messages), My Authors, Glossaries, Work and API
+    Templates, Abilities, Negotiated Contracts, Transactions, Invoices, Receipts, Uploads and
+    Users, plus an unauthenticated public reference surface for categories, countries,
+    expertises, languages and locales. Authenticated with OAuth 2.0 bearer tokens (22 scopes) or
+    the legacy Apikey/Date/Signature header strategy. Asynchronous progress is delivered by
+    status-change callbacks (webhooks) rather than polling.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Translation
+  - Localization
+  - Copywriting
+  - Proofreading
+  - Machine Translation
+  - Translation Memory
+  - Glossary
+  - Webhooks
+  - OAuth2
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-api-v1-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/textmaster-api-v1-openapi-original.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: MCPServer
+    url: mcp/textmaster-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+  - type: Overlay
+    url: overlays/textmaster-api-v1-overlay.yaml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -21,4 +105,57 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://fr.textmaster.com/
+  url: https://www.textmaster.com/
+- type: DeveloperPortal
+  url: https://developer.textmaster.com/
+- type: Documentation
+  url: https://developer.textmaster.com/
+- type: APIReference
+  url: https://developer.textmaster.com/reference/abilities
+- type: GettingStarted
+  url: https://developer.textmaster.com/quick-start
+- type: HelpCenter
+  url: https://docs.textmaster.com/client
+- type: Support
+  url: mailto:support@textmaster.com
+- type: SignUp
+  url: https://app.textmaster.com/sign_up
+- type: Login
+  url: https://app.textmaster.com/sign_in
+- type: GitHubOrganization
+  url: https://github.com/textmaster
+- type: PrivacyPolicy
+  url: https://www.acolad.com/en/legal-notices/website-privacy-policy
+- type: StatusPage
+  url: https://status.textmaster.com/
+- type: Lifecycle
+  url: lifecycle/textmaster-lifecycle.yml
+- type: Security
+  url: https://github.com/textmaster/bugbounty/blob/main/SECURITY.md
+- type: VulnerabilityDisclosure
+  url: security/textmaster-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/textmaster-domain-security.yml
+- type: Compliance
+  url: https://docs.textmaster.com/client/policies/subprocessors
+- type: Conformance
+  url: conformance/textmaster-conformance.yml
+- type: Packages
+  url: packages/textmaster-packages.yml
+- type: SDKs
+  url: packages/textmaster-packages.yml
+- type: LLMsTxt
+  url: llms/textmaster-llms.txt
+- type: ContentSignal
+  url: https://developer.textmaster.com/robots.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Plans
+  url: plans/textmaster-plans-pricing.yml
+- type: Integrations
+  url: https://docs.textmaster.com/client/integrations/pre-built-integrations
+x-enrichment:
+  date: '2026-08-17'
+  status: enriched
+  artifacts_added: 29
+  pass: local-v1

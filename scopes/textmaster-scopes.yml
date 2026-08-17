@@ -1,0 +1,140 @@
+generated: '2026-08-17'
+method: searched
+source: openapi/textmaster-api-v1-openapi.yml
+docs: https://developer.textmaster.com/apps/building-oauth-apps/scopes-for-oauth-apps
+corroboration: collections/textmaster-api-v1-postman-collection.json
+checked: '2026-08-17'
+summary: >-
+  22 OAuth scopes in the union of three provider sources. The spec's securityScheme flow map
+  declares only 3 (the preferred_author family); operation `security[]` requirements reference 21;
+  the published scopes documentation tables 20 with descriptions — adding `public`, which no
+  operation names because it is the default scope granted when none is requested. TextMaster's own
+  Postman collection requests all 22 in one string, which is the authoritative full list.
+scope_count: 22
+naming_convention: >-
+  resource:verb, where verb is one of read / write / manage / plus two resource-specific
+  capability scopes on projects (launch, quote). `resource:manage` is a shorthand granting every
+  permission on that resource.
+schemes:
+- name: oauth2
+  source: openapi/textmaster-api-v1-openapi.yml
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api.textmaster.com/oauth/authorize
+    authorizationUrl_docs: https://app.textmaster.com/oauth/authorize
+    tokenUrl: https://api.textmaster.com/oauth/token
+    refreshUrl: https://api.textmaster.com/oauth/token
+  description: OAuth2 Bearer token authentication
+  scope_delimiter: space (URL-encoded as %20 in the authorize redirect)
+scopes:
+- scope: public
+  description: >-
+    Grants read-only access to public information (such as, but not limited to, available
+    languages, options, pricing, expertises). This is the default scope if none is provided.
+  spec_declared: false
+  docs_declared: true
+  operation_count: 0
+  operation_note: >-
+    No operation names it in `security[]`; the /v1/public/* endpoints carry no security
+    requirement at all. Documented as the implicit default.
+  sources:
+  - https://developer.textmaster.com/apps/building-oauth-apps/scopes-for-oauth-apps
+  - collections/textmaster-api-v1-postman-collection.json
+- scope: user:manage
+  description: Grants full access to user's profile info only (includes `user:email`).
+  includes: [user:email]
+  operation_count: 2
+- scope: user:read
+  description: Grants read-only access to user's profile info.
+  operation_count: 1
+- scope: user:write
+  description: Grants read/write access to user's profile info.
+  operation_count: 2
+- scope: user:email
+  description: Grants read-only access to user's private email address.
+  operation_count: 1
+- scope: glossary:manage
+  description: Grants full access to glossaries (includes the ones shared from organization).
+  operation_count: 1
+- scope: glossary:read
+  description: Grants read-only access to glossaries (includes the ones shared from organization).
+  operation_count: 1
+- scope: glossary:write
+  description: Grants read/write access to glossaries (includes the ones shared from organization).
+  operation_count: 1
+- scope: project:manage
+  description: >-
+    Grants full access to projects, documents and templates (includes `project:launch` and
+    `project:quote`).
+  includes: [project:launch, project:quote]
+  operation_count: 28
+- scope: project:read
+  description: Grants read-only access to projects, documents and templates.
+  operation_count: 9
+- scope: project:write
+  description: Grants read/write access to projects, documents and templates.
+  operation_count: 25
+- scope: project:launch
+  description: Grants access to launch projects and debit the client's account.
+  operation_count: 3
+  spend_authority: true
+  spend_note: >-
+    The one scope that moves money. It authorizes launch/finalize/async_launch, which debit the
+    client's prepaid credit wallet. An agent granted project:launch can spend the account balance.
+- scope: project:quote
+  description: Grants access to request project quotations.
+  operation_count: 1
+- scope: discussion:manage
+  description: Grants full access to team discussions.
+  operation_count: 2
+- scope: discussion:read
+  description: Grants read-only access to team discussions.
+  operation_count: 1
+- scope: discussion:write
+  description: Grants read/write access to team discussions.
+  operation_count: 2
+- scope: transaction:read
+  description: Grants read-only access to financial transactions.
+  operation_count: 3
+- scope: transaction:manage
+  description: >-
+    Full access to financial transactions. Referenced by the transactions, invoices and receipts
+    operations and requested by TextMaster's own Postman collection, but ABSENT from the published
+    scopes table.
+  docs_declared: false
+  operation_count: 3
+- scope: transaction:write
+  description: >-
+    Write access to financial transactions. Referenced by operation `security[]` and the Postman
+    collection, but ABSENT from the published scopes table.
+  docs_declared: false
+  operation_count: 3
+- scope: preferred_author:manage
+  description: Grants full access to client's preferred authors.
+  spec_description: Allow read & write access to My Authors
+  flows: [authorizationCode]
+  operation_count: 5
+- scope: preferred_author:read
+  description: Grants read-only access to client's preferred authors.
+  spec_description: Allow read access to My Authors
+  flows: [authorizationCode]
+  operation_count: 3
+- scope: preferred_author:write
+  description: Grants write access to client's preferred authors.
+  spec_description: Allow write access to My Authors
+  flows: [authorizationCode]
+  operation_count: 5
+gaps:
+  spec_omits:
+  - public
+  docs_omits:
+  - transaction:manage
+  - transaction:write
+  note: >-
+    Neither the spec nor the docs is complete on its own. Three scopes are recoverable only from
+    the union, which is why this artifact is searched rather than derived.
+consent_model: >-
+  Requested scopes are shown to the user on the authorization form. Users can grant less than was
+  requested and can edit token scopes after the flow completes, so applications must read the
+  granted `scope` attribute on the token and degrade gracefully. Applications may re-run the flow
+  to request additional permissions, which the user may deny.

@@ -1,0 +1,153 @@
+generated: '2026-08-17'
+method: derived
+status: candidate
+source: openapi/textmaster-api-v1-openapi.yml
+searched: >-
+  npm registry search (no @textmaster/* or textmaster-mcp package), the developer portal's complete
+  58-page llms.txt index (no MCP, agent or tool page), and live probes of the obvious endpoints.
+checked: '2026-08-17'
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: searched
+  note: >-
+    NOBODY SHIPS AN MCP SERVER FOR TEXTMASTER — not the provider, not a third party. There is no
+    remote endpoint and no stdio package. The tools below are a DERIVED CANDIDATE set computed from
+    the published OpenAPI so the surface is legible to agents; they are not callable as MCP today.
+    Do not read `tools[]` as a live capability list and do not invent an endpoint URL in a later
+    round.
+probed:
+- {url: 'https://mcp.textmaster.com/mcp', status: 'no DNS / no connection', checked: '2026-08-17'}
+- {url: 'https://api.textmaster.com/mcp', status: 404, checked: '2026-08-17'}
+- {url: 'https://developer.textmaster.com/llms.txt', status: 200, finding: 'complete page index, zero MCP/agent pages', checked: '2026-08-17'}
+- {url: 'https://registry.npmjs.org/-/v1/search?text=textmaster', status: 200, finding: '4 results, none an MCP server', checked: '2026-08-17'}
+agent_readiness_context: >-
+  Worth stating plainly, because it is the interesting finding: TextMaster has no MCP server but is
+  otherwise unusually well set up to have one. It publishes a complete OpenAPI, a scope model with a
+  single money-moving scope (project:launch) that maps cleanly onto a human-in-the-loop boundary, a
+  separate sandbox host, an llms.txt on both documentation spaces, a Content-Signal declaration
+  permitting ai-input, and a robots.txt that individually allowlists nineteen AI crawlers "for AIO
+  discoverability". The provider has opted into agent consumption at the content layer without
+  shipping an agent-callable surface at the API layer.
+server:
+  name: textmaster
+  transport: null
+  url: null
+tool_count: 12
+tool_count_note: >-
+  Curated down from 54 operations to the 12 that constitute the real ordering workflow plus the
+  reference lookups an agent needs to fill a request. The full operation inventory is in the
+  OpenAPI; the crosswalk in mcp/textmaster-tool-crosswalk.yml records which operations are
+  deliberately NOT surfaced and why.
+tools:
+- name: list_languages
+  category: reference
+  description: List the language codes TextMaster can translate from and to.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/public/languages'
+  auth_required: false
+  consequence: read
+- name: list_expertises
+  category: reference
+  description: >-
+    List subject-matter expertises (and sub-expertises) available for a project, which drive both
+    author matching and price.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/public/expertises'
+  auth_required: false
+  consequence: read
+- name: get_quotation
+  category: pricing
+  description: >-
+    Price work before committing money. Takes activity, language pair, expertise, language level,
+    quality, priority and total word count; returns the cost in a requested currency.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/projects/quotation'
+  scopes: ['project:quote']
+  consequence: read
+  note: The natural first tool for any agent — a dry run that cannot spend.
+- name: create_project
+  category: ordering
+  description: >-
+    Create a project (the container holding language pair, category, briefing, options and
+    callbacks). Does not spend money; auto_launch defaults to false.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#POST /v1/clients/projects'
+  scopes: ['project:write', 'project:manage']
+  consequence: write
+- name: add_documents_batch
+  category: ordering
+  description: >-
+    Attach multiple documents to a project in one call. The provider's recommended path — batches of
+    ~10 or fewer to stay inside the 30-second timeout.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#POST /v1/clients/projects/{project_id}/batch/documents'
+  scopes: ['project:write', 'project:manage']
+  consequence: write
+- name: get_upload_properties
+  category: ordering
+  description: >-
+    Obtain signed upload properties so a file can be pushed to TextMaster's temporary store and
+    referenced by a document instead of sending inline text.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#POST /v1/clients/upload_properties'
+  auth_required: false
+  consequence: write
+- name: finalize_project
+  category: ordering
+  description: >-
+    Finalize a project — all documents attached, translation-memory analysis run. Precedes launch.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#PUT /v1/clients/projects/{project_id}/finalize'
+  scopes: ['project:launch', 'project:manage']
+  consequence: write
+- name: launch_project_async
+  category: ordering
+  description: >-
+    Launch a project asynchronously, publishing it to authors and DEBITING the client's credit
+    wallet.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#POST /v1/clients/projects/{project_id}/async_launch'
+  scopes: ['project:launch', 'project:manage']
+  consequence: physical
+  human_in_the_loop: recommended
+  spend_note: >-
+    THE money-moving tool. It has no idempotency key, so a retried call after a timeout is not
+    provably safe; the documented reconciliation is to wait for the `project_in_progress` event and
+    only retry if it has not arrived within 30 minutes.
+- name: get_project
+  category: monitoring
+  description: Read a project's status, cost, progress and document counts.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/projects/{project_id}'
+  scopes: ['project:read', 'project:manage']
+  consequence: read
+- name: filter_projects
+  category: monitoring
+  description: >-
+    Query projects with MongoDB-style selectors ($gt/$in/$or/$regex ...) and an order clause, instead
+    of paging the full list.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/projects/filter'
+  scopes: ['project:read', 'project:manage']
+  consequence: read
+- name: get_document
+  category: delivery
+  description: >-
+    Read a document, including the `author_work` URL that carries the finished content. Note the
+    provider prefers you receive this by webhook rather than polling.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/projects/{project_id}/documents/{document_id}'
+  scopes: ['project:read', 'project:manage']
+  consequence: read
+- name: set_user_callbacks
+  category: events
+  description: >-
+    Register global webhook callback URLs on the account so status changes are pushed rather than
+    polled.
+  source_operation: 'openapi/textmaster-api-v1-openapi.yml#PUT /v1/clients/users/{user_id}'
+  scopes: ['user:write', 'user:manage']
+  consequence: write
+  note: >-
+    The subscription primitive. See asyncapi/textmaster-event-surface.yml for the 19 event names.
+derivation_caveats:
+- >-
+  The spec declares ZERO operationIds across all 54 operations, so every `source_operation` above is
+  expressed as METHOD + path rather than as an id. Any future MCP implementation or Arazzo workflow
+  for this provider inherits that problem: there is no stable identifier to bind to.
+- >-
+  Tool input schemas would be inherited from each operation's `parameters` + `requestBody` in the
+  spec, which are complete and typed. The project create body in particular is deeply nested
+  (project[options][...]), so a real server should flatten it.

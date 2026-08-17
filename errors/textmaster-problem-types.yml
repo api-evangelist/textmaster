@@ -1,0 +1,164 @@
+generated: '2026-08-17'
+method: searched
+source: openapi/textmaster-api-v1-openapi.yml
+docs: >-
+  https://developer.textmaster.com/overview/resources-in-the-rest-api +
+  https://developer.textmaster.com/overview/troubleshooting
+checked: '2026-08-17'
+format: bespoke-field-keyed
+rfc9457: false
+rfc9457_note: >-
+  TextMaster does NOT implement RFC 9457 / RFC 7807 problem details. No response in the
+  54-operation spec declares application/problem+json, and no error carries a `type` URI, `title`
+  or `instance`. Errors use a bespoke envelope, described below, in two distinct shapes depending
+  on whether the failure is in the OAuth layer or the API layer.
+envelopes:
+- id: api-errors
+  shape: '{"errors": {"<field>|base": ["human message", ...]}}'
+  applies_to: 400, 404, 405, 406, 422 and unrecognised paths
+  keying: >-
+    Object keyed by the offending request field; non-field / whole-request failures use the
+    reserved key `base`. Values are arrays of human-readable strings — not codes. There is no
+    machine-stable error code anywhere in this envelope, which is the single biggest gap in the
+    error contract: a client must string-match to branch.
+  examples:
+  - '{"errors":{"base":["Invalid Request."]}}'
+  - '{"errors":{"base":["Method Not Allowed."]}}'
+  - '{"errors":{"base":["Unacceptable Request."]}}'
+  - '{"errors":{"base":["Error: Object could not be changed."]}}'
+  - '{"errors":{"base":["Resource not found."]}}'
+  - '{"errors":{"author_id":["must be filled"],"status":["must be one of: preferred, blacklisted, uncategorized"]}}'
+- id: oauth-errors
+  shape: '{"error": "...", "error_description": "...", "state": "..."}'
+  applies_to: 401, 403 on API calls; and the token endpoint
+  keying: >-
+    RFC 6749 §5.2 style. `error` is a machine-stable slug (invalid_token, invalid_client,
+    invalid_grant), which makes the OAuth layer easier to branch on than the API layer.
+  examples:
+  - '{"error":"invalid_token","error_description":"The access token is invalid","state":"unauthorizez"}'
+  - '{"error":"invalid_client","error_description":"Client authentication failed due to unknown client, no client authentication included, or unsupported authentication method."}'
+  - '{"error":"invalid_grant","error_description":"The provided authorization grant is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client."}'
+spec_status_distribution:
+  '200': 53
+  '401': 46
+  '403': 40
+  '422': 5
+  '404': 4
+  note: >-
+    Derived by walking every operation's `responses` map. Note what is NOT declared anywhere in
+    the spec: no 429 (no rate-limit response is modelled), no 5xx, no 400/405/406 — the last three
+    are documented in prose on the developer portal but absent from the machine-readable contract.
+    An agent generating a client from the spec alone would not handle them.
+problems:
+- status: 400
+  title: Bad Request
+  key: base
+  message: Invalid Request.
+  cause: Sending invalid JSON.
+  remediation: Validate the JSON body before sending; check Content-Type is application/json.
+  spec_declared: false
+  source: https://developer.textmaster.com/overview/resources-in-the-rest-api
+- status: 401
+  title: Unauthorized
+  code: invalid_token
+  message: The access token is invalid
+  cause: >-
+    Missing, malformed, expired or revoked OAuth2 bearer token; or an invalid/expired Signature
+    triple (the signature is only valid for 5 minutes).
+  remediation: >-
+    Refresh the access token using the refresh token at
+    https://api.textmaster.com/oauth/token; or recompute the signature against a fresh UTC Date.
+  spec_declared: true
+  declared_on_operations: 46
+  source_operation: openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/abilities
+- status: 403
+  title: Forbidden
+  code: invalid_token
+  message: The access token is invalid
+  cause: >-
+    Token authenticated but lacks the scope the operation requires. The 40 operations declaring a
+    403 are exactly the scope-gated ones.
+  remediation: >-
+    Re-run the authorization flow requesting the scope named in the operation's `security[]`
+    block; see scopes/textmaster-scopes.yml. Remember the user may have granted fewer scopes than
+    requested, so read the token's granted `scope` attribute.
+  spec_declared: true
+  declared_on_operations: 40
+- status: 404
+  title: Not Found
+  key: base
+  message: Resource not found.
+  cause: Unknown resource id, or a path outside the API.
+  remediation: >-
+    Verify the project_id / document_id / author_id. A path outside the versioned surface returns
+    a distinct guard message rather than the standard envelope (see unversioned_path_guard below).
+  spec_declared: true
+  declared_on_operations: 4
+  source_operation: openapi/textmaster-api-v1-openapi.yml#GET /v1/clients/my_authors/{author_id}
+- status: 405
+  title: Method Not Allowed
+  key: base
+  message: Method Not Allowed.
+  cause: Sending an unsupported HTTP verb for the resource.
+  remediation: 'Use only GET / POST / PUT / DELETE as documented per resource.'
+  spec_declared: false
+  source: https://developer.textmaster.com/overview/resources-in-the-rest-api
+- status: 406
+  title: Not Acceptable
+  key: base
+  message: Unacceptable Request.
+  cause: Sending or requesting an unsupported format.
+  remediation: Send and accept application/json.
+  spec_declared: false
+  source: https://developer.textmaster.com/overview/resources-in-the-rest-api
+- status: 422
+  title: Unprocessable Entity
+  key: '<field name> (or base)'
+  message: 'Field-keyed validation messages, e.g. "must be filled", "must be one of: ..."'
+  cause: >-
+    Invalid data on a write; OR an unsupported query selector passed to a /filter endpoint
+    ("Unsupported query selectors will result in a 422 HTTP response").
+  remediation: >-
+    Read the per-field message arrays. For /filter, restrict `where` to the documented operator
+    set ($gt $gte $lt $lte $in $nin $ne $or $regex).
+  spec_declared: true
+  declared_on_operations: 5
+  source_operation: openapi/textmaster-api-v1-openapi.yml#POST /v1/clients/my_authors
+- status: timeout
+  title: Request terminated after 30 seconds
+  cause: >-
+    "If TextMaster takes more than 30 seconds to process an API request, TextMaster will terminate
+    the request." Typically triggered by oversized document batches or large inline text.
+  remediation: >-
+    Use the async endpoints (async_launch, batch/documents), split batches smaller, and send
+    content as file URLs instead of inline plain text.
+  spec_declared: false
+  source: https://developer.textmaster.com/overview/troubleshooting
+unversioned_path_guard:
+  method: probed
+  probed: '2026-08-17'
+  status: 404
+  body: >-
+    {"errors":{"base":["The URL you're requesting doesn't exist within the api. Make sure your URL
+    begins with \"https://api.textmaster.com/version_name\""]}}
+  note: >-
+    Observed on GET https://api.textmaster.com/v1 and several other non-routes. A helpful,
+    self-describing 404 — and a genuine negative-probe control: this host does NOT soft-200
+    unknown paths, so the /api-docs 200 that yielded the spec is a real document.
+error_code_registry:
+  published: false
+  note: >-
+    TextMaster publishes no numeric or symbolic error-code registry for the API layer (contrast
+    the OAuth layer, which inherits RFC 6749 slugs). There is therefore no
+    errors/textmaster-error-codes.yml to harvest. Branching must be on HTTP status plus the field
+    key in the `errors` object.
+retry_guidance:
+  from_docs:
+  - >-
+    "Rather than ignore repeated 4xx and 5xx status codes, you should ensure that you're correctly
+    interacting with the API... Intentionally ignoring repeated validation errors may result in
+    the suspension of your app for abuse."
+  - >-
+    Launch retry is event-gated, not error-gated: retry the launch only if `project_in_progress`
+    has not arrived within ~30 minutes.
+  see: conventions/textmaster-conventions.yml

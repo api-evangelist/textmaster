@@ -1,0 +1,257 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://developer.textmaster.com/webhooks-and-events/events +
+  https://developer.textmaster.com/webhooks-and-events/webhooks +
+  https://developer.textmaster.com/webhooks-and-events/webhooks/creating-webhooks +
+  https://developer.textmaster.com/webhooks-and-events/webhooks/securing-webhooks +
+  https://developer.textmaster.com/webhooks-and-events/webhooks/troubleshooting-webhooks +
+  https://developer.textmaster.com/guides/integrator-best-practices +
+  openapi/textmaster-api-v1-openapi.yml
+checked: '2026-08-17'
+spec_type: none
+summary: >-
+  TextMaster ships a real, customer-registerable webhook surface — 19 named events across Projects
+  and Documents, registered through the REST API itself, with a published retry budget, delivery
+  semantics, an event-type request header and a documented securing pattern. It publishes NO
+  AsyncAPI document. This artifact is therefore the webhook catalogue, and the apis.yml pointer is
+  `Webhooks`, not `AsyncAPI`.
+asyncapi:
+  present: false
+  probed:
+  - url: https://api.textmaster.com/asyncapi.yaml
+    status: 404
+    checked: '2026-08-17'
+  - url: https://developer.textmaster.com/llms.txt
+    status: 200
+    checked: '2026-08-17'
+    finding: >-
+      The portal's complete 58-page index contains no AsyncAPI, event-catalog spec, or streaming
+      page. The event contract is prose + the callback objects inside the OpenAPI.
+  note: >-
+    No AsyncAPI is published anywhere. Not fabricated. No `AsyncAPI` pointer is emitted; the
+    asyncapi scoring family stays out of this provider's denominator on spec-shape checks while the
+    `Webhooks` signal is genuinely earned.
+webhooks:
+  customer_registerable: true
+  registration_mechanism: >-
+    Webhooks are not a separate resource. They are registered as `callback` objects on the REST
+    write surface, at three levels of scope, each keyed by event name with a `{ "url": "..." }`
+    value.
+  registration_levels:
+  - level: user (global)
+    operation: PUT /v1/clients/users/{user_id}
+    scope_required: ['user:manage', 'user:write']
+    body_path: user.callback.<event>.url
+    events_available_in_spec: [waiting_assignment, completed]
+    note: >-
+      The spec models only two events at user level, but the creating-webhooks tutorial registers
+      `word_count_finished` here, so the spec's user-level callback map is narrower than the real
+      surface. Treat the documented event list as authoritative.
+    example: |
+      curl "https://api.textmaster.com/v1/clients/users/USER_ID" \
+        -X PUT \
+        -H "Authorization: Bearer ACCESS_TOKEN" \
+        -H "Content-Type: application/json" \
+        -d '{"user":{"callback":{"word_count_finished":{"url":"https://example.com/payload"}}}}'
+  - level: project
+    operation: POST /v1/clients/projects (and PUT /v1/clients/projects/{project_id})
+    scope_required: ['project:manage', 'project:write']
+    body_path: project.callback.<event>.url
+    description_in_spec: List of callbacks to be called upon Project status changes.
+  - level: document
+    operation: >-
+      POST /v1/clients/projects/{project_id}/documents (and the batch create, and
+      PUT .../documents/{document_id})
+    scope_required: ['project:manage', 'project:write']
+    body_path: document.callback.<event>.url
+    description_in_spec: List of callbacks to be called upon Document status changes.
+  openapi_webhooks_block: false
+  openapi_callbacks_keyword: false
+  openapi_representation_note: >-
+    The OpenAPI does NOT use the 3.1 top-level `webhooks` object nor operation-level `callbacks`.
+    The event surface appears only as ordinary request/response schema properties named `callback`,
+    plus a `CallbackUrl` component ({url, format}). A code generator reading the spec will produce
+    a settable field, not a subscription API, and will not know the event names are an enum. This
+    is the single biggest machine-readability gap in TextMaster's contract, and the reason this
+    catalogue is worth writing down.
+  delivery:
+    method: POST
+    payload_format: JSON
+    event_type_header: X-TextMaster-Event
+    event_type_header_quote: >-
+      "The X-TextMaster-Event request header can be used to know which event has been received so
+      that processing can be handled appropriately."
+    ssl_verification: true
+    ssl_verification_quote: >-
+      "By default, TextMaster will verify SSL certificates when delivering payloads. Any SSL errors
+      will be logged in the webhook's response."
+    receiver_timeout_seconds: 30
+    retries: 20
+    retry_strategy: exponential backoff
+    delivery_guarantee: at-least-once
+    ordering_guarantee: none
+    ordering_quote: >-
+      "We also cannot guarantee the order in which webhooks are delivered. Your server should
+      handle receiving events out of order."
+    consumer_idempotency_required: true
+    consumer_idempotency_quote: >-
+      "Your server implementation should be idempotent, meaning it should not error out if
+      receiving the same webhook multiple times."
+    expected_response_codes: >-
+      Any prompt 2xx. The docs suggest 201 or 202 to acknowledge a payload that will not be
+      processed, and reserving 500 for catastrophic failures.
+  security:
+    signature_header: false
+    signature_header_note: >-
+      There is NO HMAC signature header today. TextMaster says so plainly and states an intent:
+      "In the future, TextMaster will use your secret token to create a hash signature of each
+      payload." Until then a receiver cannot cryptographically verify a delivery.
+    documented_pattern: shared-secret-in-callback-URL
+    documented_pattern_detail: >-
+      The integrator embeds a high-entropy token as a query parameter of the callback URL it
+      registers (e.g. https://example.com/payload?token=<40 hex chars>) and compares it on receipt.
+      The docs suggest generating it with `ruby -rsecurerandom -e 'puts SecureRandom.hex(20)'` and
+      recommend a DIFFERENT token per user of the integrator's service.
+    weakness_note: >-
+      A URL query parameter is a weaker channel than a signature header: it is logged by proxies
+      and web servers by default and it authenticates the endpoint, not the payload. Recorded as
+      published, not endorsed.
+    source_ip_allowlist:
+      recommended_by_provider: false
+      provider_caveat: >-
+        "Our public IP addresses are subject to changes, we do not encourage using IP addresses to
+        secure payload delivery."
+      production:
+      - 104.155.57.91
+      - 104.155.91.236
+      - 35.205.172.93
+      - 34.140.71.130
+      sandbox:
+      - 34.76.154.26
+      - 34.76.94.225
+      - 34.76.144.86
+      - 35.241.160.58
+      note: >-
+        Published verbatim in the integrator best-practices guide. Two disjoint egress ranges
+        confirm the sandbox is genuinely separate infrastructure, not a flag on production.
+  observability:
+    delivery_log: true
+    delivery_log_detail: >-
+      TextMaster exposes recent deliveries in the application with the full outbound HTTP request
+      (headers + JSON payload) and the receiver's response (status, headers, body). Failed
+      deliveries are visible per attempt.
+    retention: unquantified
+event_count: 19
+events:
+- resource: project
+  name: project_in_progress
+  description: >-
+    Triggered when a project has launched and is made available to be claimed by an author.
+  reconciliation_note: >-
+    The recovery primitive for the missing idempotency key: "Launch process can safely be retried
+    if this event is not received in a reasonable time (more than 30 minutes)."
+- resource: project
+  name: project_finalized
+  description: >-
+    Triggered when a project is finalized, meaning that all documents have been attached to it and
+    translation memory analysis and/or PEMT have been ran successfully.
+- resource: project
+  name: project_not_launched
+  description: >-
+    Triggered when a project with the `auto_launch` option cannot be launched, often due to the
+    client account not having enough credits on its wallet.
+  commercial_note: The insufficient-funds event. Essential for any agent that launches projects.
+- resource: project
+  name: project_canceled
+  description: Triggered when a project is canceled.
+  spelling_note: >-
+    Both `project_canceled` and `project_cancelled` appear as accepted callback keys in the
+    OpenAPI request schema. The events documentation uses the single-l `project_canceled`. A
+    receiver should tolerate both.
+- resource: project
+  name: project_tm_completed
+  description: >-
+    Triggered when a project's translation memory analysis has successfully completed and the
+    project's cost has been updated accordingly.
+  commercial_note: Cost changes on this event; re-read the project before launching.
+- resource: project
+  name: project_tm_diff_completed
+  description: >-
+    Triggered when a project's "Force Exact Matches" analysis has successfully completed and the
+    project's cost has been updated accordingly.
+- resource: project
+  name: project_in_review
+  description: >-
+    Triggered when the work for all project's documents has been submitted, and the documents are
+    ready for internal quality control or for review by the client.
+- resource: document
+  name: waiting_assignment
+  kind: status-change
+  description: Document is published and awaiting an author.
+- resource: document
+  name: in_progress
+  kind: status-change
+  description: An author has claimed the document and work has begun.
+- resource: document
+  name: in_review
+  kind: status-change
+  description: Work submitted and available for review.
+- resource: document
+  name: incomplete
+  kind: status-change
+- resource: document
+  name: completed
+  kind: status-change
+  description: Final content is available; retrieve it via the document's author_work URL.
+- resource: document
+  name: paused
+  kind: status-change
+- resource: document
+  name: canceled
+  kind: status-change
+- resource: document
+  name: quality_control
+  kind: status-change
+- resource: document
+  name: copyscape
+  kind: status-change
+  description: Plagiarism check stage (Copyscape is a named subprocessor).
+- resource: document
+  name: counting_words
+  kind: status-change
+- resource: document
+  name: word_count_finished
+  kind: task-completion
+  description: Triggered when the task of counting words on a document has successfully completed.
+- resource: document
+  name: support_message_created
+  kind: activity
+  description: Triggered when a new message has been created on a document's support thread.
+  related_operations:
+  - GET /v1/clients/projects/{project_id}/documents/{document_id}/support_messages
+  - POST /v1/clients/projects/{project_id}/documents/{document_id}/support_messages
+additional_callback_keys_in_spec:
+  note: >-
+    Three callback keys appear in the OpenAPI request schemas but are NOT in the documented event
+    tables. Recorded as observed, unconfirmed by docs.
+  keys:
+  - in_creation
+  - in_extra_review
+  - complete
+  caveat: >-
+    `complete` and `completed` both appear as document callback keys in the spec; only `completed`
+    is documented. Do not assume `complete` fires.
+streaming:
+  present: false
+  note: No SSE, WebSocket or message-queue surface is documented or discoverable.
+polling_alternative:
+  available: true
+  operations:
+  - GET /v1/clients/projects/{project_id}
+  - GET /v1/clients/projects/{project_id}/documents/{document_id}
+  - GET /v1/clients/projects/filter
+  provider_guidance: >-
+    Discouraged. "Always prefer using webhooks over HTTP polling for reliability." The stated
+    reason is payload size: fetching finished documents over the API risks the 30-second timeout,
+    whereas webhooks push the content to you.

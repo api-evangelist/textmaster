@@ -1,0 +1,124 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://developer.textmaster.com/overview/troubleshooting +
+  https://developer.textmaster.com/guides/integrator-best-practices +
+  https://developer.textmaster.com/overview/resources-in-the-rest-api
+corroboration: >-
+  Live unauthenticated GET https://api.textmaster.com/ping on 2026-08-17 returned HTTP 200 with no
+  X-RateLimit-*, no RateLimit-* and no Retry-After header. A full-text scan of the 246KB OpenAPI
+  returns zero matches for "rate limit", "ratelimit" and "retry-after", and no operation declares
+  a 429 response.
+checked: '2026-08-17'
+limit_count: 0
+limit_count_note: >-
+  An honest zero. TextMaster publishes NO request-rate limit — no requests-per-second, no
+  per-minute quota, no daily cap, no burst allowance, no 429, and no rate-limit response headers.
+  This is not a discovery failure: the developer portal is complete and machine-readable, the
+  OpenAPI is published, and neither contains a rate limit. The docs refer to "API limits" twice in
+  prose ("reduce the risk of hitting API limits", "make sure you never hit the API limits") but the
+  limits they are pointing at are the SIZE and TIME limits below, not a request rate.
+scopes: []
+headers: []
+headers_note: >-
+  No rate-limit signalling of any kind. An agent cannot pace itself against this API from response
+  metadata; it can only respect the 30-second timeout and keep payloads small. The runtime signals
+  that ARE emitted are X-Request-Id and X-Runtime (see conventions/textmaster-conventions.yml).
+status_on_exhaustion: null
+status_on_exhaustion_note: >-
+  No 429 is declared on any of the 54 operations and none was observed. The documented failure
+  mode for an over-large request is a terminated connection at 30 seconds, not a 429.
+documented_limits:
+- kind: request-timeout
+  limit: 30
+  unit: seconds
+  scope: per-request, server-side
+  quote: >-
+    "If TextMaster takes more than 30 seconds to process an API request, TextMaster will terminate
+    the request and you will receive a timeout response. Make sure to use async endpoints when
+    available to overcome this issue."
+  source: https://developer.textmaster.com/overview/troubleshooting
+  mitigation: >-
+    Use POST /v1/clients/projects/{project_id}/async_launch,
+    POST /v1/clients/projects/{project_id}/batch/documents and
+    POST /v1/clients/projects/{project_id}/batch/documents/complete.
+- kind: webhook-receiver-timeout
+  limit: 30
+  unit: seconds
+  scope: per-delivery, outbound to the integrator's server
+  quote: >-
+    "The HTTP connection between TextMaster and your server will stay opened for at most 30
+    seconds. After that, the connection is automatically closed and the delivery is considered a
+    failure."
+  source: https://developer.textmaster.com/webhooks-and-events/webhooks/troubleshooting-webhooks
+- kind: documents-per-project
+  limit: 99999
+  unit: documents
+  scope: per-project
+  quote: 'You cannot add more than `99_999` documents to a single project.'
+  source: https://developer.textmaster.com/guides/integrator-best-practices
+- kind: page-size
+  limit: 100
+  unit: items
+  scope: per-request, list endpoints
+  quote: >-
+    "Requests that return multiple items will be paginated to 100 items by default... you can also
+    set a custom page size up to 100 with the per_page parameter."
+  caveat: 'Not all endpoints honour per_page.'
+  source: https://developer.textmaster.com/overview/resources-in-the-rest-api
+- kind: search-results
+  limit: 100
+  unit: items
+  scope: per-request, several list endpoints
+  quote: 'Search results are limited to 100 items. Specify page number to read more than the first page.'
+  source: openapi/textmaster-api-v1-openapi.yml
+- kind: signature-validity
+  limit: 300
+  unit: seconds
+  scope: per-credential (legacy signature auth)
+  quote: 'The signature is only valid for 5 minutes after its creation.'
+  source: https://developer.textmaster.com/overview/authentication
+- kind: temporary-upload-retention
+  limit: 60
+  unit: days
+  scope: per-file, upload staging store
+  quote: >-
+    "TextMaster uses a temporary storage to store your files until they are linked to a document.
+    They will be automatically deleted after a period of 60 days from this temporary storage
+    location."
+  source: https://developer.textmaster.com/overview/file-uploads
+batching_guidance:
+  quote: >-
+    "You should instead split into multiple batch requests of for example 10 documents each or even
+    lower. Use common sense here to make reasonably sized requests against the API."
+  worked_example: >-
+    The docs work an example of 100 documents averaging ~100,000 words each and conclude a single
+    batch would hit the 30-second timeout; the recommendation is batches of ~10 or fewer.
+  source: https://developer.textmaster.com/guides/integrator-best-practices
+webhook_retry_budget:
+  attempts: 20
+  strategy: exponential backoff
+  delivery_guarantee: at-least-once
+  ordering_guarantee: none
+  quote: >-
+    "TextMaster will automatically retry failed deliveries for up to 20 times with exponential
+    backoff time in between each retry attempts."
+  source: https://developer.textmaster.com/webhooks-and-events/webhooks/troubleshooting-webhooks
+  note: >-
+    This is the only quantified retry budget TextMaster publishes, and it governs its OUTBOUND
+    deliveries — not inbound client requests.
+enforcement_posture:
+  quote: >-
+    "Intentionally ignoring repeated validation errors may result in the suspension of your app for
+    abuse."
+  interpretation: >-
+    In the absence of a numeric rate limit, enforcement is discretionary and account-level (app
+    suspension) rather than mechanical (429 + Retry-After). For an integrator that is a worse
+    contract than a published limit: there is no header to obey and no documented threshold to
+    stay under.
+  source: https://developer.textmaster.com/guides/integrator-best-practices
+probed:
+- url: https://api.textmaster.com/ping
+  status: 200
+  rate_limit_headers_present: false
+  checked: '2026-08-17'

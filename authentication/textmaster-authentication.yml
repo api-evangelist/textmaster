@@ -1,0 +1,108 @@
+generated: '2026-08-17'
+method: searched
+source: openapi/textmaster-api-v1-openapi.yml
+docs: https://developer.textmaster.com/overview/authentication
+checked: '2026-08-17'
+summary:
+  types:
+  - oauth2
+  - custom-signature
+  oauth2_flows:
+  - authorizationCode
+  note: >-
+    The OpenAPI declares ONE security scheme (oauth2, authorizationCode). The developer portal
+    documents a SECOND, spec-undeclared strategy — a custom HMAC-style "Signature" scheme using
+    Apikey / Date / Signature request headers — which the provider itself marks as test-only and
+    discourages for production. Both are recorded here; the signature scheme is the reason this
+    file is `searched` rather than the mechanically `derived` baseline.
+schemes:
+- name: oauth2
+  type: oauth2
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://api.textmaster.com/oauth/authorize
+    tokenUrl: https://api.textmaster.com/oauth/token
+    refreshUrl: https://api.textmaster.com/oauth/token
+    scopes: 3
+    scopes_note: >-
+      The spec's flow `scopes` map declares only the three preferred_author scopes, but operation
+      `security[]` requirements reference 21 distinct scopes and the docs publish a 20-row scope
+      table including `public`. The full union of 22 scopes is in scopes/textmaster-scopes.yml.
+  description: OAuth2 Bearer token authentication
+  token_delivery:
+    header: Authorization
+    format: 'Bearer <ACCESS-TOKEN>'
+    provider_recommendation: >-
+      "TextMaster recommends sending OAuth tokens using the Authorization header."
+  app_model: >-
+    OAuth Apps are registered from the TextMaster application under "API & Loop" ->
+    "View OAuth Applications". Each app has a client_id, client_secret and a registered callback
+    URL. An OAuth App acts as the authenticated user across all of TextMaster and, once granted,
+    receives permissions to every project that user can access.
+  refresh_tokens: true
+  revocable_by_user: true
+  user_editable_scopes: true
+  user_editable_scopes_note: >-
+    Users may grant fewer scopes than requested and may edit token scopes after the flow
+    completes, so the granted `scope` attribute on the token must be read rather than assumed.
+  authorization_host_discrepancy: >-
+    The spec names https://api.textmaster.com/oauth/authorize; the scopes documentation and the
+    published Postman collection both use the application host
+    (https://app.textmaster.com/oauth/authorize, and {{baseUrl}}/oauth/authorize where baseUrl is
+    the API host). Both hosts are TextMaster's. Recorded rather than resolved — a client should
+    follow the docs.
+  sources:
+  - openapi/textmaster-api-v1-openapi.yml
+  - https://developer.textmaster.com/apps/about-oauth-apps
+  - https://developer.textmaster.com/apps/building-oauth-apps/scopes-for-oauth-apps
+- name: signature
+  type: apiKey
+  in: header
+  spec_declared: false
+  description: >-
+    Legacy per-user key-pair strategy. The client computes SHA-1 over the concatenation of the
+    API secret and a UTC timestamp, then sends three headers. The signature is valid for five
+    minutes after creation. Keys are read from the TextMaster application's "API & Loop" page.
+  headers:
+  - name: Apikey
+    meaning: The account's public API key.
+  - name: Date
+    meaning: 'UTC timestamp, format: YYYY-MM-DD HH:MM:SS'
+  - name: Signature
+    meaning: SHA-1 hex digest of (api_secret + date)
+  signature_algorithm: sha1(api_secret || date)
+  validity_seconds: 300
+  provider_guidance: >-
+    "TextMaster discourages using the signature strategy to authenticate production applications
+    to the API. Clients should use OAuth2 Apps instead." The quick-start repeats the warning:
+    signature is for test purposes only.
+  verification_endpoint: https://api.textmaster.com/test
+  sources:
+  - https://developer.textmaster.com/overview/authentication
+  - https://developer.textmaster.com/quick-start
+unauthenticated_surface:
+  note: >-
+    Two surfaces need no credentials at all. Recorded because an agent can reach them with no
+    onboarding.
+  endpoints:
+  - path: /ping
+    method: GET
+    probed_status: 200
+    probed: '2026-08-17'
+    response: '{"message":"Textmaster API at your service"}'
+  - path: /v1/public/*
+    method: GET
+    note: >-
+      categories, countries, expertises (+ sub_expertises), languages and locales carry no
+      `security[]` requirement in the spec. The docs assign these to the default `public` scope.
+oauth_error_envelope:
+  shape: '{"error": "...", "error_description": "..."}'
+  documented_codes:
+  - code: invalid_client
+    meaning: client_id and/or client_secret are incorrect.
+  - code: invalid_grant
+    meaning: >-
+      Authorization code / refresh token invalid, expired, revoked, or redirect_uri mismatch.
+  - code: invalid_token
+    meaning: The access token is invalid (returned as 401/403 on API calls).
+  see: errors/textmaster-problem-types.yml

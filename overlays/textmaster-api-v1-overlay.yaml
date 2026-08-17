@@ -1,0 +1,268 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for TextMaster API v1
+  version: 1.0.0
+extends: openapi/textmaster-api-v1-openapi.yml
+x-generated: '2026-08-17'
+x-method: generated
+x-source: >-
+  Enhancements derived from https://developer.textmaster.com/ (the provider's own developer portal)
+  and from live probes of api.textmaster.com on 2026-08-17. The harvested specification at
+  openapi/_original/textmaster-api-v1-openapi-original.yml is never mutated.
+x-rationale: >-
+  TextMaster's published OpenAPI is functionally complete but metadata-thin: info carries only a
+  title and a version, there are no tag descriptions, no contact, no license, no terms, and — most
+  consequentially — not one of the 54 operations declares an operationId. This overlay adds the
+  descriptive and provenance metadata that the docs supply in prose, without touching a single
+  schema, parameter or response. It deliberately does NOT invent operationIds: minting ids the
+  provider does not publish would create identifiers that look canonical and are not, and would
+  break the moment TextMaster publishes its own.
+actions:
+- target: $.info
+  description: Add the descriptive, contact and provenance metadata the published spec omits.
+  update:
+    description: >-
+      REST API for ordering and managing professional translation, proofreading and copywriting
+      work on the TextMaster platform. Projects hold the commercial and linguistic parameters;
+      Documents hold the content. The lifecycle is create -> attach documents -> (optionally quote)
+      -> finalize -> launch, where launch debits a prepaid credit wallet. Progress is delivered by
+      status-change callbacks rather than polling. Authentication is OAuth 2.0 authorization code
+      with 22 granular scopes; a legacy Apikey/Date/Signature strategy exists for test use only.
+      A parallel sandbox is available at https://api.textmasterstaging.com/.
+    contact:
+      name: TextMaster Support
+      email: support@textmaster.com
+      url: https://developer.textmaster.com/
+    x-security-contact: bounty@textmaster.com
+    x-apievangelist-profile: https://apis.io/provider/textmaster
+    x-parent-organization: Acolad Group
+- target: $.servers
+  description: >-
+    Record the sandbox host alongside production. The published spec lists only production, so a
+    generated client has no way to reach the test environment the docs describe.
+  update:
+  - url: https://api.textmaster.com
+    description: Production.
+  - url: https://api.textmasterstaging.com
+    description: >-
+      Sandbox. "It behaves the same way as the production environment."
+      (https://developer.textmaster.com/overview/resources-in-the-rest-api). Requires its own
+      account and OAuth app; no shared test credentials are published.
+- target: $
+  description: >-
+    Declare the tag vocabulary with descriptions. The spec uses 20 tags across its operations but
+    declares none of them at the document root, so tooling renders bare tag names with no guidance.
+  update:
+    tags:
+    - name: Projects
+      description: >-
+        The container for a unit of work — language pair, activity, category, briefing, options,
+        templates and callbacks. Also carries the lifecycle transitions (quote, finalize, launch,
+        pause, resume, cancel, archive, duplicate) and the translation-memory controls.
+    - name: Documents
+      description: >-
+        The content to be worked on, attached to a project. Prefer the batch create; prefer sending
+        a file URL over inline text. Exposes review URLs and per-document completion.
+      externalDocs:
+        url: https://developer.textmaster.com/guides/integrator-best-practices
+    - name: 'My Authors'
+      description: >-
+        The client's curated roster of preferred, blacklisted or uncategorized human authors.
+        Guarded by the preferred_author:* scope family.
+    - name: Authors
+      description: Discovery of authors eligible to work on a given project.
+    - name: Abilities
+      description: Author capability records, filterable by activity.
+    - name: Glossaries
+      description: >-
+        Client terminology sets enforced across projects, including sets shared from the
+        organization.
+    - name: 'Work Templates'
+      description: Reusable definitions of the work to be performed.
+    - name: 'API Templates'
+      description: Reusable project configurations addressable by the API.
+    - name: 'Support Messages'
+      description: >-
+        Human message thread between the client and the assigned author on a specific document.
+        Guarded by the discussion:* scopes; emits the support_message_created event.
+    - name: Transactions
+      description: Movements against the prepaid credit wallet.
+    - name: Invoices
+      description: Issued invoices.
+    - name: Receipts
+      description: Payment receipts.
+    - name: 'Negotiated Contracts'
+      description: >-
+        Individually negotiated commercial terms — the API-visible evidence that enterprise pricing
+        is bespoke rather than published.
+    - name: Users
+      description: >-
+        The authenticated identity, plus the account-level callback (webhook) registration used to
+        subscribe to events globally.
+    - name: UploadProperties
+      description: >-
+        Issues signed properties for uploading a file to TextMaster's temporary store. Files not
+        linked to a document are deleted after 60 days.
+    - name: Expertises
+      description: Subject-matter expertise taxonomy, with sub-expertises. Public reference data.
+    - name: Categories
+      description: Content category taxonomy (C001-C010). Public reference data.
+    - name: Languages
+      description: Supported source and target languages. Public reference data.
+    - name: Locales
+      description: Supported locales. Public reference data.
+    - name: Countries
+      description: Supported countries. Public reference data.
+- target: $
+  description: >-
+    Attach external documentation, which the published spec omits entirely.
+  update:
+    externalDocs:
+      description: TextMaster Developer Documentation
+      url: https://developer.textmaster.com/
+- target: $.components.securitySchemes.oauth2
+  description: >-
+    Complete the scope map. The published flow declares only the three preferred_author scopes even
+    though operation security[] requirements reference 21 and the documented table plus the
+    provider's own Postman collection name 22. Descriptions are the provider's own wording.
+  update:
+    flows:
+      authorizationCode:
+        scopes:
+          public: >-
+            Grants read-only access to public information (such as, but not limited to, available
+            languages, options, pricing, expertises). This is the default scope if none is provided.
+          'user:manage': Grants full access to user's profile info only (includes user:email).
+          'user:read': Grants read-only access to user's profile info.
+          'user:write': Grants read/write access to user's profile info.
+          'user:email': Grants read-only access to user's private email address.
+          'glossary:manage': Grants full access to glossaries (includes the ones shared from organization).
+          'glossary:read': Grants read-only access to glossaries (includes the ones shared from organization).
+          'glossary:write': Grants read/write access to glossaries (includes the ones shared from organization).
+          'project:manage': >-
+            Grants full access to projects, documents and templates (includes project:launch and
+            project:quote).
+          'project:read': Grants read-only access to projects, documents and templates.
+          'project:write': Grants read/write access to projects, documents and templates.
+          'project:launch': Grants access to launch projects and debit the client's account.
+          'project:quote': Grants access to request project quotations.
+          'discussion:manage': Grants full access to team discussions.
+          'discussion:read': Grants read-only access to team discussions.
+          'discussion:write': Grants read/write access to team discussions.
+          'transaction:manage': >-
+            Full access to financial transactions. Referenced by operation security[] and by
+            TextMaster's own Postman collection, but absent from the published scopes table.
+          'transaction:read': Grants read-only access to financial transactions.
+          'transaction:write': >-
+            Write access to financial transactions. Referenced by operation security[] and by
+            TextMaster's own Postman collection, but absent from the published scopes table.
+          'preferred_author:manage': Grants full access to client's preferred authors.
+          'preferred_author:read': Grants read-only access to client's preferred authors.
+          'preferred_author:write': Grants write access to client's preferred authors.
+- target: $.components.securitySchemes
+  description: >-
+    Add the second authentication strategy. The docs describe a signature scheme the spec does not
+    declare, so a client generated from the spec alone cannot use the test-oriented auth path the
+    quick-start teaches.
+  update:
+    signature:
+      type: apiKey
+      in: header
+      name: Apikey
+      description: >-
+        LEGACY, TEST USE ONLY. "TextMaster discourages using the signature strategy to authenticate
+        production applications to the API. Clients should use OAuth2 Apps instead."
+        Requires three headers: `Apikey` (public key), `Date` (UTC, format YYYY-MM-DD HH:MM:SS), and
+        `Signature` (SHA-1 hex digest of api_secret concatenated with that date). Valid for 5
+        minutes. Validate a triple against GET /test.
+      x-additional-headers:
+      - Date
+      - Signature
+      x-signature-algorithm: sha1(api_secret || date)
+      x-validity-seconds: 300
+      x-docs: https://developer.textmaster.com/overview/authentication
+- target: $.paths['/v1/clients/projects/{project_id}/launch'].put
+  description: >-
+    Warn about the synchronous launch. The provider's own guidance is to prefer the async variant;
+    the spec gives no hint that this operation can be terminated by the 30-second server timeout.
+  update:
+    x-apievangelist-warning: >-
+      Synchronous launch. TextMaster terminates any request exceeding 30 seconds, so this operation
+      can time out on a project of realistic size. Prefer
+      POST /v1/clients/projects/{project_id}/async_launch and wait for the project_in_progress event.
+    x-spend-authority: >-
+      Debits the client's prepaid credit wallet. Requires the project:launch scope. There is no
+      idempotency key on this operation; if the response is lost, do not blind-retry — re-read the
+      project, or wait up to 30 minutes for project_in_progress before retrying (the provider's
+      documented reconciliation window).
+- target: $.paths['/v1/clients/projects/{project_id}/async_launch'].post
+  update:
+    x-spend-authority: >-
+      Debits the client's prepaid credit wallet. Requires the project:launch scope. Completion is
+      signalled by the project_in_progress event; project_not_launched signals insufficient credits.
+    x-no-idempotency-key: true
+- target: $.paths['/v1/clients/projects/{project_id}/finalize'].put
+  update:
+    x-apievangelist-note: >-
+      Finalization runs translation-memory and/or PEMT analysis, which can CHANGE the project cost.
+      Re-read the project (or wait for project_tm_completed) before launching so the amount debited
+      is the amount expected.
+- target: $.paths['/v1/clients/users/{user_id}'].put
+  description: >-
+    Name what this operation actually is. Its summary, "Update my callback information", conceals
+    that it is the account-level webhook subscription API.
+  update:
+    x-apievangelist-role: webhook-subscription
+    x-event-catalog: asyncapi/textmaster-event-surface.yml
+    x-apievangelist-note: >-
+      This is how a client subscribes to events globally, by writing a callback URL per event name
+      under user.callback. Project- and document-level callbacks are set on their own create/update
+      operations instead. There is no HMAC signature header on deliveries; the documented pattern is
+      a high-entropy shared secret carried as a query parameter of the callback URL.
+- target: $.paths['/v1/clients/projects/quotation'].get
+  update:
+    x-apievangelist-note: >-
+      The dry run. Prices work from activity, language pair, expertise, language level, quality,
+      priority and word count without creating anything or spending anything. TextMaster publishes no
+      rate card, so this operation IS the price list.
+- target: $.paths['/v1/clients/projects/{project_id}/documents'].post
+  update:
+    x-apievangelist-warning: >-
+      For more than a couple of documents, use
+      POST /v1/clients/projects/{project_id}/batch/documents instead. The provider's best-practices
+      guide works an example showing that unbatched or over-large creates hit the 30-second timeout,
+      and recommends batches of roughly 10 documents or fewer.
+- target: $.components.schemas.CallbackUrl
+  description: >-
+    Enumerate the event names. The spec types callbacks as free-form object keys, so no generated
+    client knows the vocabulary is closed.
+  update:
+    description: >-
+      A webhook destination. `url` is the HTTPS endpoint TextMaster POSTs to; `format` selects the
+      payload format. The KEY this object sits under is the event name, drawn from a closed set of 19
+      documented events (7 project-level, 12 document-level) — see
+      asyncapi/textmaster-event-surface.yml. Deliveries carry an X-TextMaster-Event header, are
+      retried up to 20 times with exponential backoff, are at-least-once and are UNORDERED, so the
+      receiver must be idempotent.
+    x-event-names:
+      project:
+      - project_in_progress
+      - project_finalized
+      - project_not_launched
+      - project_canceled
+      - project_tm_completed
+      - project_tm_diff_completed
+      - project_in_review
+      document:
+      - waiting_assignment
+      - in_progress
+      - in_review
+      - incomplete
+      - completed
+      - paused
+      - canceled
+      - quality_control
+      - copyscape
+      - counting_words
+      - word_count_finished
+      - support_message_created

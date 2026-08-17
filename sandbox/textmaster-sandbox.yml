@@ -1,0 +1,142 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  https://developer.textmaster.com/overview/resources-in-the-rest-api +
+  https://developer.textmaster.com/quick-start/postman +
+  https://developer.textmaster.com/quick-start/openapi +
+  https://developer.textmaster.com/guides/integrator-best-practices
+corroboration: probed live 2026-08-17
+checked: '2026-08-17'
+summary: >-
+  TextMaster runs a genuinely separate sandbox on its own domain — api.textmasterstaging.com — and
+  ships a ready-made Postman environment pointed at it. There are no "magic" test values (no test
+  cards, no reserved identifiers, no time simulation): the sandbox is a full parallel installation
+  where you create real objects against fake money, which the provider states "behaves the same way
+  as the production environment". It also runs a distinct set of webhook egress IPs, which is the
+  strongest available proof the two environments are separate infrastructure rather than a flag.
+test_vs_live:
+  separation_model: separate-hostname
+  live_base_url: https://api.textmaster.com/
+  sandbox_base_url: https://api.textmasterstaging.com/
+  provider_quote: >-
+    "A sandbox environment is made available for tests and can be accessed from
+    https://api.textmasterstaging.com/. It behaves the same way as the production environment."
+  source: https://developer.textmaster.com/overview/resources-in-the-rest-api
+  key_prefixes: null
+  key_prefix_note: >-
+    Neither auth strategy uses an environment-encoded key prefix. There is no `sk_test_` /
+    `sk_live_` style discriminator: OAuth client credentials and signature key-pairs are issued per
+    environment and are told apart only by which host you send them to. A client that points a
+    production token at the staging host (or vice versa) gets an authentication failure rather than
+    a clear mode error.
+  mode_switch: change the host; no header, parameter or key flag
+  probed:
+  - url: https://api.textmasterstaging.com/ping
+    status: 200
+    body: '{"message":"TextMaster API at your service"}'
+    checked: '2026-08-17'
+  - url: https://api.textmaster.com/ping
+    status: 200
+    body: '{"message":"Textmaster API at your service"}'
+    checked: '2026-08-17'
+  probe_note: >-
+    Both environments answer the unauthenticated /ping health endpoint. Note the casing differs
+    between them ("TextMaster" on staging vs "Textmaster" on production) — a small but reliable
+    tell that these are separately deployed builds.
+provisioned_environment:
+  postman_environment: Staging
+  postman_environment_file: >-
+    Published on the provider's Postman page as staging.json (GitBook attachment), harvested
+    2026-08-17.
+  values:
+  - key: baseUrl
+    value: https://api.textmasterstaging.com
+  - key: clientId
+    value: ''
+    note: Blank in the published file; the integrator pastes their own OAuth app client id.
+  - key: clientSecret
+    value: ''
+    type: secret
+    note: Blank in the published file. No credential is shipped.
+  - key: callbackUrl
+    value: 'urn:ietf:wg:oauth:2.0:oob'
+    note: >-
+      Out-of-band redirect URI, so the OAuth dance can complete inside Postman without hosting a
+      redirect endpoint. A sensible touch for a test environment.
+  source: https://developer.textmaster.com/quick-start/postman
+  local_copy: collections/textmaster-api-v1-postman-collection.json
+  no_shipped_credentials: true
+  no_shipped_credentials_note: >-
+    IMPORTANT: TextMaster publishes NO shared test credentials of any kind. A sandbox account must
+    be created and an OAuth app registered before anything can be called. Every authenticated
+    operation in the sandbox is gated behind that signup.
+interactive_console:
+  present: true
+  kind: Swagger UI (static distribution bundle)
+  urls:
+  - https://app.textmaster.com/api-docs/index.html
+  - https://api.textmaster.com/api-docs/index.html
+  probed_status: 200
+  checked: '2026-08-17'
+  spec_loaded: v1/clients/specs.yaml
+  provider_quote: >-
+    "You can also explore our API through our interactive interface allowing you to send and
+    inspect request without having to write any code!"
+  source: https://developer.textmaster.com/quick-start/openapi
+  caveat: >-
+    The console is served on the PRODUCTION hosts and loads the production spec whose single
+    servers[] entry is https://api.textmaster.com. "Try it out" therefore fires at production, not
+    at the sandbox, unless the user overrides the server. Worth knowing before clicking execute on
+    PUT /v1/clients/projects/{project_id}/launch, which debits the credit wallet.
+magic_test_values:
+  present: false
+  note: >-
+    No test card numbers, no reserved test IBANs, no magic identifiers, no test clocks, no fixture
+    generator and no trigger/simulation tooling are published. Payment behaviour in the sandbox is
+    not documented at all. TextMaster's sandbox is a mirror installation, not a simulator — the
+    pattern is "create your own objects on a parallel system", which is common for marketplace/work
+    platforms and less capable than a payments-grade sandbox.
+  what_replaces_it: >-
+    The `project:quote` scope and GET /v1/clients/projects/quotation let a client price work
+    without committing money on EITHER environment. That is the closest thing to a dry run
+    TextMaster offers, and it works in production. Combined with the `auto_launch: false` default,
+    a project can be created and costed without ever being launched or debited.
+webhook_testing:
+  sandbox_egress_ips:
+  - 34.76.154.26
+  - 34.76.94.225
+  - 34.76.144.86
+  - 35.241.160.58
+  production_egress_ips:
+  - 104.155.57.91
+  - 104.155.91.236
+  - 35.205.172.93
+  - 34.140.71.130
+  source: https://developer.textmaster.com/guides/integrator-best-practices
+  significance: >-
+    Two disjoint /32 sets. The sandbox delivers webhooks from its own egress addresses, confirming
+    independent infrastructure.
+  local_tunnelling_guidance: >-
+    The creating-webhooks tutorial walks ngrok (`./ngrok http 4567`) to expose a localhost receiver
+    and registers the resulting *.ngrok.io URL as the callback. Provider-published, and the only
+    local-development affordance in the docs.
+  delivery_inspection: >-
+    The application's recent-deliveries view shows the full request and response for each attempt,
+    which is the sandbox's replay/debug tool. See asyncapi/textmaster-event-surface.yml.
+non_destructive_read_surface:
+  note: >-
+    Five collections need no credentials and no sandbox account at all, so an agent can explore the
+    vocabulary before onboarding. Verified unauthenticated in the spec (`security[]` absent).
+  endpoints:
+  - GET /v1/public/categories
+  - GET /v1/public/countries
+  - GET /v1/public/expertises
+  - GET /v1/public/expertises/{expertise_id}/sub_expertises
+  - GET /v1/public/languages
+  - GET /v1/public/locales
+  - GET /ping
+  - GET /test
+  test_endpoint_note: >-
+    GET /test is a credential-validation echo endpoint for the signature strategy: it reports
+    whether the Apikey is valid, the Date well-formatted and the Signature correct, which is a
+    genuinely useful onboarding affordance.

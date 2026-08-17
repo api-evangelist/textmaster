@@ -1,0 +1,230 @@
+generated: '2026-08-17'
+method: searched
+source: >-
+  Registry sweeps of Packagist (repo.packagist.org/p2 metadata), npm
+  (registry.npmjs.org/-/v1/search + package metadata), PyPI, RubyGems and the github.com/textmaster
+  organization, plus the provider's own developer portal and integrations documentation.
+checked: '2026-08-17'
+summary:
+  first_party_package_count: 3
+  third_party_package_count: 4
+  ecosystems_covered: [php]
+  ecosystems_absent: [javascript, python, ruby, java, dotnet, go, rust]
+  note: >-
+    TextMaster is a PHP-only SDK shop. All three first-party packages are on Packagist under the
+    `textmaster/` vendor namespace and all three are sourced from github.com/textmaster, which is
+    what establishes them as first-party. There is no official JavaScript, Python, Ruby, Java, .NET,
+    Go or Rust client — PyPI has no `textmaster` project at all, and the only npm package named
+    `textmaster` belongs to Localize (a third party). Two of the three first-party packages are
+    e-commerce/PIM connectors rather than API clients; the actual API client is
+    `textmaster/textmaster-api`.
+  decay_signal: >-
+    Every first-party package is stale relative to the API it wraps. The PHP API client last shipped
+    2024-02-14, the Akeneo extension 2021-08-19, the Magento 2 module 2025-02-17 — while the live
+    OpenAPI is served today and the platform's TLS certs were reissued 2026-08-11. The Akeneo
+    extension is ~5 years behind despite akeneo.textmaster.com being an actively monitored
+    production host on the status page. Nothing here has been touched since the Acolad transition.
+packages:
+- language: php
+  registry: packagist
+  name: textmaster/textmaster-api
+  url: https://packagist.org/packages/textmaster/textmaster-api
+  install: composer require textmaster/textmaster-api
+  official: true
+  official_basis: >-
+    Published under the provider's own `textmaster/` Packagist vendor namespace and sourced from
+    github.com/textmaster/php-textmaster-api-client (verified HTTP 200 on the GitHub API).
+  description: Textmaster API v1 client
+  version: v1.2.0
+  published: '2024-02-14'
+  version_count: 22
+  repository: https://github.com/textmaster/php-textmaster-api-client
+  homepage: https://github.com/textmaster/php-textmaster-api-client
+  license: null
+  license_note: Packagist reports an empty license array for every published version.
+  release_history:
+  - {version: v1.2.0, published: '2024-02-14'}
+  - {version: v1.1.0, published: '2018-06-27'}
+  - {version: v1.0.0, published: '2018-03-16'}
+  - {version: v0.7.1, published: '2018-01-23'}
+  - {version: v0.7.0, published: '2018-01-17'}
+  - {version: v0.6.0, published: '2017-05-19'}
+  provenance_note: >-
+    Version-for-version identical release history with `worldia/textmaster-api` up to v1.1.0
+    (2018-06-27), then TextMaster shipped v1.2.0 alone in 2024. This is a community client that
+    TextMaster adopted and took over under its own namespace — the original author, Worldia, stopped
+    at v1.1.0. Both are listed here so the lineage is legible.
+  metadata_source: https://repo.packagist.org/p2/textmaster/textmaster-api.json
+- language: php
+  registry: packagist
+  name: textmaster/akeneo-extension
+  url: https://packagist.org/packages/textmaster/akeneo-extension
+  install: composer require textmaster/akeneo-extension
+  official: true
+  official_basis: >-
+    Provider vendor namespace; source github.com/textmaster/akeneo-extension.
+  description: Textmaster extension for Akeneo product data
+  kind: connector
+  version: v4.0.2
+  published: '2021-08-19'
+  version_count: 46
+  repository: https://github.com/textmaster/akeneo-extension
+  license: OSL-3.0
+  release_history:
+  - {version: v4.0.2, published: '2021-08-19'}
+  - {version: v4.0.1, published: '2020-12-10'}
+  - {version: v3.2.14, published: '2020-09-18'}
+  - {version: v4.0.0, published: '2020-04-09'}
+  related_docs: https://developer.textmaster.com/integrations/akeneo
+  related_host: akeneo.textmaster.com
+  note: >-
+    46 published versions makes this the most actively developed package in the set historically —
+    and the most conspicuously abandoned now, five years without a release while its dedicated
+    production host is monitored every 10 minutes and its integration documentation (getting
+    started, configuration, usage, monitoring, troubleshooting) remains fully published.
+  metadata_source: https://repo.packagist.org/p2/textmaster/akeneo-extension.json
+- language: php
+  registry: packagist
+  name: textmaster/module-textmaster
+  url: https://packagist.org/packages/textmaster/module-textmaster
+  install: composer require textmaster/module-textmaster
+  official: true
+  official_basis: >-
+    Provider vendor namespace; source github.com/textmaster/magento-extension; homepage
+    https://fr.textmaster.com/.
+  description: TextMaster Module for Magento 2
+  kind: connector
+  version: 1.0.6
+  published: '2025-02-17'
+  version_count: 1
+  version_count_note: >-
+    Exactly one version published on Packagist, and it is numbered 1.0.6 — earlier releases were
+    distributed some other way (Magento Marketplace or direct download) and never registered.
+  repository: https://github.com/textmaster/magento-extension
+  license: OSL-3.0
+  release_history:
+  - {version: 1.0.6, published: '2025-02-17'}
+  note: The most recently published first-party artifact of any kind.
+  metadata_source: https://repo.packagist.org/p2/textmaster/module-textmaster.json
+third_party_packages:
+- language: php
+  registry: packagist
+  name: worldia/textmaster-api
+  url: https://packagist.org/packages/worldia/textmaster-api
+  install: composer require worldia/textmaster-api
+  official: false
+  description: Textmaster API v1 client
+  version: v1.1.0
+  published: '2018-06-27'
+  version_count: 21
+  downloads: 23662
+  repository: https://github.com/worldia/textmaster-api
+  license: proprietary
+  note: >-
+    The upstream original of the first-party client. Abandoned at v1.1.0 in 2018 but still the more
+    downloaded of the two (23,662 vs 137), so most PHP integrations in the wild are running the
+    unmaintained community fork rather than TextMaster's own package.
+- language: php
+  registry: packagist
+  name: worldia/textmaster-bundle
+  url: https://packagist.org/packages/worldia/textmaster-bundle
+  install: composer require worldia/textmaster-bundle
+  official: false
+  description: A Symfony2 bundle integrating textmaster-api
+  version: v2.2.0
+  published: '2018-06-27'
+  version_count: 22
+  downloads: 15898
+  repository: https://github.com/worldia/textmaster-bundle
+  license: proprietary
+- language: php
+  registry: packagist
+  name: weglot/text-master-api
+  url: https://packagist.org/packages/weglot/text-master-api
+  install: composer require weglot/text-master-api
+  official: false
+  version: 0.5.0
+  published: '2026-04-24'
+  version_count: 27
+  downloads: 53707
+  repository: https://github.com/weglot/TextMasterBundle
+  license: MIT
+  note: >-
+    Maintained by Weglot and the single most-downloaded TextMaster client on Packagist (53,707), and
+    the ONLY client in the entire ecosystem with a 2026 release. A third party is currently doing a
+    better job of keeping a TextMaster client current than TextMaster is.
+- language: javascript
+  registry: npm
+  name: textmaster
+  url: https://www.npmjs.com/package/textmaster
+  install: npm install textmaster
+  official: false
+  description: Textmaster API for node
+  version: 1.0.4
+  published: '2019-06-28'
+  repository: https://github.com/Localize/node-textmaster
+  note: >-
+    Published by Localize (itself a listed TextMaster integration partner), not by TextMaster.
+    Supersedes the same author's `node-textmaster` (0.1.33, 2016-10-04). This is the closest thing
+    to a JavaScript SDK and it is seven years stale.
+  metadata_source: https://registry.npmjs.org/-/v1/search?text=textmaster
+registries_checked:
+- registry: packagist
+  result: 3 first-party, 3 third-party
+  url: https://packagist.org/search.json?q=textmaster
+- registry: npm
+  result: 'no first-party package; 1 third-party (textmaster, by Localize)'
+  url: https://registry.npmjs.org/-/v1/search?text=textmaster
+- registry: pypi
+  result: 'absent'
+  probed:
+  - {name: textmaster, status: 404}
+  - {name: textmaster-api, status: 404}
+  - {name: python-textmaster, status: 404}
+- registry: rubygems
+  result: 'absent — search returned zero gems'
+  url: https://rubygems.org/api/v1/search.json?query=textmaster
+  irony_note: >-
+    The platform itself is a Ruby on Rails application — the bug-bounty policy names "the Ruby
+    interpreter (MRI), the Ruby on Rails framework, as well as third party libraries that we use
+    (such as Ruby gems)" as in-scope — yet TextMaster publishes no Ruby client.
+- registry: cdn
+  result: 'no CDN-distributed browser build; see components (none published)'
+github_organization:
+  url: https://github.com/textmaster
+  found: true
+  verified: '2026-08-17'
+  verification: 'https://api.github.com/users/textmaster -> 200, org id 579616'
+  repos_observed: 34
+  repos_note: >-
+    Enumerated from https://github.com/orgs/textmaster/repositories (the REST repos endpoint was
+    returning HTTP 504 during this run). Mostly forks of Ruby gems the platform depends on
+    (state_machine, roo, settingslogic, protected_attributes, best_in_place, carrierwave-mongoid,
+    rails_semantic_logger, jsonapi-resources, re_captcha), plus first-party integration code and
+    infrastructure.
+  first_party_repos_of_interest:
+  - {name: php-textmaster-api-client, role: the official PHP API client}
+  - {name: akeneo-extension, role: Akeneo PIM connector}
+  - {name: magento-extension, role: Magento 2 module}
+  - {name: hybris-extension, role: SAP Hybris connector (not published to a registry)}
+  - {name: demandware-cartridge, role: Salesforce Commerce Cloud cartridge (not published to a registry)}
+  - {name: bugbounty, role: 'public vulnerability disclosure program — see security/'}
+  - {name: tm-react-checkout, role: checkout UI}
+  - {name: tm-ruby-checkout, role: checkout service}
+  unregistered_connectors_note: >-
+    `hybris-extension` and `demandware-cartridge` are real first-party connector distributions that
+    exist ONLY as GitHub repositories — no Packagist, no npm, no marketplace listing found. They are
+    recorded here rather than in `packages[]` because they have no registry entry and therefore no
+    version metadata to read. The Salesforce Commerce Cloud integration they implement is fully
+    documented at https://developer.textmaster.com/integrations/salesforce-commerce-cloud.
+cli:
+  present: false
+  note: >-
+    No first-party CLI exists on any registry, in the GitHub org, or in the developer portal. No
+    cli/ artifact is written and no `CLI` pointer is emitted.
+ui_components:
+  present: false
+  note: >-
+    No embeddable web components, element library, hosted widget or CDN browser build is published.
+    `tm-react-checkout` is internal application code, not a distributed component. No components/
+    artifact is written.
