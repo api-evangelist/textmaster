@@ -32,6 +32,22 @@ tags:
 - Glossary
 - Ecommerce Localization
 - Product Information Management
+- Webhook
+- Authentication
+- Software-as-a-Service
+tags_raw:
+- Company
+- Translation
+- Localization
+- Language Services
+- Copywriting
+- Proofreading
+- Machine Translation
+- Content Production
+- Translation Memory
+- Glossary
+- Ecommerce Localization
+- Product Information Management
 - Webhooks
 - OAuth2
 - SaaS
@@ -50,6 +66,16 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - Translation
+  - Localization
+  - Copywriting
+  - Proofreading
+  - Machine Translation
+  - Translation Memory
+  - Glossary
+  - Webhook
+  - Authentication
+  tags_raw:
   - Translation
   - Localization
   - Copywriting
