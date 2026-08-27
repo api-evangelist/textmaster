@@ -52,44 +52,16 @@ tags_raw:
 - OAuth2
 - SaaS
 apis:
-- name: TextMaster API v1
-  description: >-
-    OpenAPI 3.0.3-described REST API for ordering and managing translation, proofreading and
-    copywriting work. 54 operations across Projects (create, quote, finalize, launch sync/async,
-    pause, resume, cancel, archive, duplicate, translation-memory options), Documents (single and
-    batch create/complete, review URLs, support messages), My Authors, Glossaries, Work and API
-    Templates, Abilities, Negotiated Contracts, Transactions, Invoices, Receipts, Uploads and
-    Users, plus an unauthenticated public reference surface for categories, countries,
-    expertises, languages and locales. Authenticated with OAuth 2.0 bearer tokens (22 scopes) or
-    the legacy Apikey/Date/Signature header strategy. Asynchronous progress is delivered by
-    status-change callbacks (webhooks) rather than polling.
+- aid: textmaster:textmaster-abilities-api
+  name: TextMaster Abilities API
+  description: The Abilities API from TextMaster — 1 operation(s) for abilities.
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
-  - Translation
-  - Localization
-  - Copywriting
-  - Proofreading
-  - Machine Translation
-  - Translation Memory
-  - Glossary
-  - Webhook
-  - Authentication
-  tags_raw:
-  - Translation
-  - Localization
-  - Copywriting
-  - Proofreading
-  - Machine Translation
-  - Translation Memory
-  - Glossary
-  - Webhooks
-  - OAuth2
+  - Abilities
   properties:
   - type: OpenAPI
-    url: openapi/textmaster-api-v1-openapi.yml
-  - type: OpenAPI
-    url: openapi/_original/textmaster-api-v1-openapi-original.yml
+    url: openapi/textmaster-abilities-api-openapi.yml
   - type: DeveloperPortal
     url: https://developer.textmaster.com/
   - type: Documentation
@@ -118,18 +90,778 @@ apis:
     url: https://developer.textmaster.com/quick-start/postman
   - type: PostmanCollection
     url: collections/textmaster-api-v1-postman-collection.json
-  - type: MCPServer
-    url: mcp/textmaster-mcp.yml
   - type: ToolCrosswalk
     url: mcp/textmaster-tool-crosswalk.yml
-  - type: Overlay
-    url: overlays/textmaster-api-v1-overlay.yaml
+- aid: textmaster:textmaster-api-templates-api
+  name: TextMaster API Templates API
+  description: The API Templates API from TextMaster — 2 operation(s) for api templates.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - API Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-api-templates-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-authors-api
+  name: TextMaster Authors API
+  description: The Authors API from TextMaster — 1 operation(s) for authors.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Authors
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-authors-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-categories-api
+  name: TextMaster Categories API
+  description: The Categories API from TextMaster — 1 operation(s) for categories.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Categories
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-categories-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-countries-api
+  name: TextMaster Countries API
+  description: The Countries API from TextMaster — 1 operation(s) for countries.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Countries
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-countries-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-documents-api
+  name: TextMaster Documents API
+  description: The Documents API from TextMaster — 7 operation(s) for documents.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-documents-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-expertises-api
+  name: TextMaster Expertises API
+  description: The Expertises API from TextMaster — 3 operation(s) for expertises.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Expertises
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-expertises-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-glossaries-api
+  name: TextMaster Glossaries API
+  description: The Glossaries API from TextMaster — 1 operation(s) for glossaries.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Glossaries
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-glossaries-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-invoices-api
+  name: TextMaster Invoices API
+  description: The Invoices API from TextMaster — 1 operation(s) for invoices.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Invoices
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-invoices-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-languages-api
+  name: TextMaster Languages API
+  description: The Languages API from TextMaster — 1 operation(s) for languages.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Languages
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-languages-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-locales-api
+  name: TextMaster Locales API
+  description: The Locales API from TextMaster — 1 operation(s) for locales.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Locales
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-locales-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-my-authors-api
+  name: TextMaster My Authors API
+  description: The My Authors API from TextMaster — 3 operation(s) for my authors.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - My Authors
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-my-authors-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-negotiated-contracts-api
+  name: TextMaster Negotiated Contracts API
+  description: The Negotiated Contracts API from TextMaster — 1 operation(s) for negotiated contracts.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Negotiated Contracts
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-negotiated-contracts-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-projects-api
+  name: TextMaster Projects API
+  description: The Projects API from TextMaster — 14 operation(s) for projects.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-projects-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-receipts-api
+  name: TextMaster Receipts API
+  description: The Receipts API from TextMaster — 1 operation(s) for receipts.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Receipts
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-receipts-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-support-messages-api
+  name: TextMaster Support Messages API
+  description: The Support Messages API from TextMaster — 1 operation(s) for support messages.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Support Messages
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-support-messages-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-transactions-api
+  name: TextMaster Transactions API
+  description: The Transactions API from TextMaster — 1 operation(s) for transactions.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Transactions
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-transactions-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-uploadproperties-api
+  name: TextMaster Upload Properties API
+  description: The UploadProperties API from TextMaster — 1 operation(s) for uploadproperties.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - UploadProperties
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-uploadproperties-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-users-api
+  name: TextMaster Users API
+  description: The Users API from TextMaster — 2 operation(s) for users.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-users-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
+- aid: textmaster:textmaster-work-templates-api
+  name: TextMaster Work Templates API
+  description: The Work Templates API from TextMaster — 2 operation(s) for work templates.
+  humanURL: https://developer.textmaster.com/
+  baseURL: https://api.textmaster.com
+  tags:
+  - Work Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/textmaster-work-templates-api-openapi.yml
+  - type: DeveloperPortal
+    url: https://developer.textmaster.com/
+  - type: Documentation
+    url: https://developer.textmaster.com/
+  - type: APIReference
+    url: https://developer.textmaster.com/reference/abilities
+  - type: GettingStarted
+    url: https://developer.textmaster.com/quick-start
+  - type: Authentication
+    url: authentication/textmaster-authentication.yml
+  - type: OAuthScopes
+    url: scopes/textmaster-scopes.yml
+  - type: Webhooks
+    url: asyncapi/textmaster-event-surface.yml
+  - type: ErrorCatalog
+    url: errors/textmaster-problem-types.yml
+  - type: Conventions
+    url: conventions/textmaster-conventions.yml
+  - type: DataModel
+    url: data-model/textmaster-data-model.yml
+  - type: RateLimits
+    url: rate-limits/textmaster-rate-limits.yml
+  - type: Sandbox
+    url: sandbox/textmaster-sandbox.yml
+  - type: Postman
+    url: https://developer.textmaster.com/quick-start/postman
+  - type: PostmanCollection
+    url: collections/textmaster-api-v1-postman-collection.json
+  - type: ToolCrosswalk
+    url: mcp/textmaster-tool-crosswalk.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/textmaster-mcp.yml
+- type: Overlay
+  url: overlays/textmaster-api-v1-overlay.yaml
 - type: Website
   url: https://www.textmaster.com/
 - type: DeveloperPortal
