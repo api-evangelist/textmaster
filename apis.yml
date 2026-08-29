@@ -12,6 +12,18 @@ description: >-
   Cloud and Hybris connectors and a PHP API client. TextMaster is now part of Acolad Group; the
   marketing site is a transition landing page pointing at Acolad's Lia platform, while the
   application, the API and the developer portal remain live and in service.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://www.textmaster.com/assets/textmaster-logo.svg
 url: https://raw.githubusercontent.com/api-evangelist/textmaster/refs/heads/main/apis.yml
 x-type: company
