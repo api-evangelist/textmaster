@@ -1,0 +1,70 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Countries API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Countries
+paths:
+  /v1/public/countries:
+    get:
+      summary: List Countries
+      tags:
+      - Countries
+      parameters:
+      - name: locale
+        in: query
+        required: true
+        description: Locale name. Full list available via the List Locales endpoint.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lists countries
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - id: AD
+                    name: Andorra
+                  - id: AE
+                    name: United Arab Emirates
+                  - id: AF
+                    name: Afghanistan
+                  - id: AG
+                    name: Antigua And Barbuda
+                  - id: AI
+                    name: Anguilla
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Country'
+                minItems: 1
+                uniqueItems: true
+components:
+  schemas:
+    Country:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

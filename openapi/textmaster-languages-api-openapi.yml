@@ -1,0 +1,64 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Languages API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Languages
+paths:
+  /v1/public/languages:
+    get:
+      summary: List Languages
+      tags:
+      - Languages
+      responses:
+        '200':
+          description: Lists languages
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    languages:
+                    - code: af
+                      value: Afrikaans (South Africa)
+                    - code: af-za
+                      value: Afrikaans (South Africa)
+                    - code: am
+                      value: Amharic (Ethiopia)
+                    - code: am-et
+                      value: Amharic (Ethiopia)
+              schema:
+                type: object
+                properties:
+                  languages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Language'
+components:
+  schemas:
+    Language:
+      type: object
+      properties:
+        code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        value:
+          type: string
+      required:
+      - code
+      - value
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

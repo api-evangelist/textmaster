@@ -1,0 +1,89 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Upload Properties API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: UploadProperties
+paths:
+  /v1/clients/upload_properties:
+    post:
+      summary: Get Upload Properties
+      tags:
+      - UploadProperties
+      security:
+      - oauth2: []
+      parameters: []
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                file_name:
+                  type: string
+                  description: File name for the uploaded file
+                hashed_payload:
+                  type: string
+                  description: SHA256 digest of the file content
+              required:
+              - file_name
+              - hashed_payload
+        description: File name for the uploaded file
+      responses:
+        '200':
+          description: File Uploaded
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    url: https://storage-proxy.textmaster.com/api-files/uploads/10922fb8-9265-4ef2-92e8-c4177c3b03da/ef9f1ca8/my-file.pdf
+                    headers:
+                      x-upload-path: uploads/10922fb8-9265-4ef2-92e8-c4177c3b03da/ef9e1ca8/my-file.pdf
+                      x-upload-sha256: f2ca1bb6c7e907d06dafe4687e579fce76b37e4e39b7605022da52e6ccc26fd2
+                      x-upload-date: 20500102T123456Z
+                      Authorization: 78ca271e7f6464961ef3db6903da3d2c51cd4156975322ba678840e12a334de3
+              schema:
+                $ref: '#/components/schemas/UploadProperties'
+components:
+  schemas:
+    UploadProperties:
+      type: object
+      properties:
+        url:
+          type: string
+        headers:
+          type: object
+          properties:
+            x-upload-path:
+              type: string
+            x-upload-sha256:
+              type: string
+            x-upload-date:
+              type: string
+              pattern: ^\d{8}T\d{6}Z$
+            Authorization:
+              type: string
+          required:
+          - x-upload-path
+          - x-upload-sha256
+          - x-upload-date
+          - Authorization
+      required:
+      - url
+      - headers
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

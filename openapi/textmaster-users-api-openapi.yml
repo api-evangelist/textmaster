@@ -1,0 +1,254 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Users API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Users
+paths:
+  /v1/clients/users/me:
+    get:
+      summary: Retrieve my information
+      tags:
+      - Users
+      security:
+      - oauth2:
+        - user:manage
+        - user:read
+        - user:write
+        - user:email
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Gets my information
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    ident: C-982C-FM
+                    callback:
+                      waiting_assignment:
+                        url: http://my.host/waiting_assignment_callback
+                        format: json
+                      completed:
+                        url: http://my.host/completed_callback
+                        format: json
+                    locale: en
+                    email: factory_122@example.com
+                    wallet:
+                      current_money: 0.0
+                      currency_code: USD
+                    id: 61698aff8b81926d91c0f72c
+                    contact_information:
+                      first_name: john
+                      last_name: doe
+                      company: company
+                      address: 12, street
+                      address2: null
+                      city: Plougasnou
+                      zip_code: '29188'
+                      state_region: null
+                      country: FR
+                      vat_number: null
+                      profession: lost
+                      website: null
+                      mother_tongue: null
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+  /v1/clients/users/{user_id}:
+    put:
+      summary: Update my callback information
+      tags:
+      - Users
+      security:
+      - oauth2:
+        - user:manage
+        - user:write
+      parameters:
+      - name: user_id
+        in: path
+        description: Your own User ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Information Updated
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    ident: C-982C-FM
+                    callback:
+                      waiting_assignment:
+                        url: http://my.host/waiting_assignment_callback
+                        format: json
+                      completed:
+                        url: http://my.host/completed_callback
+                        format: json
+                    locale: en
+                    email: factory_122@example.com
+                    wallet:
+                      current_money: 0.0
+                      currency_code: USD
+                    id: 61698aff8b81926d91c0f72c
+                    contact_information:
+                      first_name: john
+                      last_name: doe
+                      company: company
+                      address: 12, street
+                      address2: null
+                      city: Plougasnou
+                      zip_code: '29188'
+                      state_region: null
+                      country: FR
+                      vat_number: null
+                      profession: lost
+                      website: null
+                      mother_tongue: null
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: object
+                  properties:
+                    callback:
+                      type: object
+                      properties:
+                        waiting_assignment:
+                          $ref: '#/components/schemas/CallbackUrl'
+                        completed:
+                          $ref: '#/components/schemas/CallbackUrl'
+components:
+  schemas:
+    UserInfo:
+      type: object
+      properties:
+        id:
+          type: string
+        ident:
+          type: string
+        callback:
+          type: object
+          properties:
+            waiting_assignment:
+              $ref: '#/components/schemas/CallbackUrl'
+            completed:
+              $ref: '#/components/schemas/CallbackUrl'
+        locale:
+          type: string
+        email:
+          type: string
+        wallet:
+          type: object
+          properties:
+            currency_code:
+              type: string
+            current_money:
+              type: number
+        contact_information:
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            company:
+              type: string
+            address:
+              type: string
+            address2:
+              type:
+              - string
+              - 'null'
+            city:
+              type: string
+            zip_code:
+              type: string
+            state_region:
+              type:
+              - string
+              - 'null'
+            country:
+              type: string
+            vat_number:
+              type:
+              - string
+              - 'null'
+            profession:
+              type: string
+            website:
+              type:
+              - string
+              - 'null'
+            mother_tongue:
+              type:
+              - string
+              - 'null'
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

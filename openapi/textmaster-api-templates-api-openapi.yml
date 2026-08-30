@@ -1,0 +1,307 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 API Templates API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: API Templates
+paths:
+  /v1/clients/api_templates:
+    get:
+      summary: List API Templates
+      tags:
+      - API Templates
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists API Templates
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    api_templates:
+                    - id: e1e452a3-9bcd-408e-810e-91d63175ebc1
+                      name: Foo Bar 2021-10-15 16:05:13 +0200
+                      description: '[TM] Enterprise Translation (en-us > fr-fr)'
+                      level_name: enterprise
+                      activity_name: translation
+                      language_from: en-us
+                      language_to: fr-fr
+                      project_briefing: Bacon ipsum dolor amet ribeye tenderloin pancetta ground round cow turducken shankle beef ribs.
+                      options:
+                        language_level: enterprise
+                      textmasters: []
+                      cost_per_word:
+                        currency: credits
+                        amount: 10
+                      cost_per_word_in_currency:
+                        currency: USD
+                        amount: 0.014
+                      same_author_must_do_entire_project: true
+                      auto_launch: true
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:14 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:14 UTC
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  api_templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApiTemplate'
+  /v1/clients/api_templates/filter:
+    get:
+      summary: Filter API Templates
+      tags:
+      - API Templates
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: where
+        in: query
+        required: false
+        description: URL encoded JSON selector composed of one or several criteria.
+        schema:
+          type: string
+      - name: order
+        in: query
+        required: false
+        description: Comma separated order list
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists API Templates
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    api_templates:
+                    - id: e1e452a3-9bcd-408e-810e-91d63175ebc1
+                      name: Foo Bar 2021-10-15 16:05:13 +0200
+                      description: '[TM] Enterprise Translation (en-us > fr-fr)'
+                      level_name: enterprise
+                      activity_name: translation
+                      language_from: en-us
+                      language_to: fr-fr
+                      project_briefing: Bacon ipsum dolor amet ribeye tenderloin pancetta ground round cow turducken shankle beef ribs.
+                      options:
+                        language_level: enterprise
+                      textmasters: []
+                      cost_per_word:
+                        currency: credits
+                        amount: 10
+                      cost_per_word_in_currency:
+                        currency: USD
+                        amount: 0.014
+                      same_author_must_do_entire_project: true
+                      auto_launch: true
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:14 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:14 UTC
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  api_templates:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ApiTemplate'
+components:
+  schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    ApiTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        level_name:
+          type: string
+          enum:
+          - enterprise
+          - regular
+          - premium
+        activity_name:
+          type: string
+          enum:
+          - translation
+          - copywriting
+          - proofreading
+        language_from:
+          type: string
+        language_to:
+          type: string
+        project_briefing:
+          type: string
+        options:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        textmasters:
+          type: array
+          items:
+            type: string
+        cost_per_word:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+        cost_per_word_in_currency:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+        same_author_must_do_entire_project:
+          type: boolean
+        auto_launch:
+          type: boolean
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

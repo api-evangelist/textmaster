@@ -1,0 +1,1729 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Documents API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Documents
+paths:
+  /v1/clients/projects/{project_id}/documents:
+    get:
+      summary: List Documents
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists Documents
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    documents:
+                    - language_from: fr
+                      language_to: en
+                      language_from_code: fr-fr
+                      language_to_code: en-us
+                      status: waiting_assignment
+                      skip_copyscape: false
+                      title: document_3
+                      instructions: Lorem ipsum dolor sit amet,...
+                      word_count: 200
+                      word_count_rule: 0
+                      keywords_repeat_count: 1
+                      deliver_work_as_file: false
+                      custom_data: {}
+                      plagiarism_analysis: {}
+                      written_words: 0
+                      type: standard
+                      id: 61698a9e8b81926d91c0e3a4
+                      project_id: 61698a9e8b81926d91c0e3a3
+                      callback: {}
+                      reference: TR-99D-3815-00000
+                      ctype: translation
+                      keyword_list: foo, bar, baz
+                      satisfaction: null
+                      completion: 0.0
+                      can_post_message_to_author: false
+                      author_work: {}
+                      author_id: null
+                      author_rating: 1
+                      original_content: foo bar
+                      markup_in_content: false
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:18 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:18 UTC
+                      completed_at: null
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+    post:
+      summary: Create a Document
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Document Created
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: in_creation
+                    skip_copyscape: false
+                    title: document_4
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: true
+                    custom_data:
+                      tags:
+                      - red
+                      - soft
+                      external_client_id: 1234
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa08b81926d91c0e471
+                    project_id: 61698a9f8b81926d91c0e41b
+                    callback:
+                      support_message_created:
+                        url: https://callback.example.com/
+                    reference: TR-915-49834-91906
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: test_content
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:20 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:20 UTC
+                    completed_at: null
+              schema:
+                $ref: '#/components/schemas/Document'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: object
+                  properties:
+                    title:
+                      description: Title of the Document
+                      type: string
+                    type:
+                      description: 'Type of document.
+
+
+                        * standard (default): defined with a template
+
+                        * key_value: defines multiple phrases with an associated key
+
+                        '
+                      type: string
+                    word_count:
+                      description: (required unless perform_word_count is true) Base number of words. See the word_count_rule parameter.
+                      type: integer
+                    word_count_rule:
+                      description: 'Specifies how to treat the specified "word_count".
+
+
+                        * 0: +/- 10% [word_count] words
+
+                        * 1: at least [word_count] words
+
+                        * 2: maximum [word_count] words
+
+                        '
+                      type: integer
+                      enum:
+                      - 0
+                      - 1
+                      - 2
+                    perform_word_count:
+                      description: Automated word count is possible for translation and proofreading projects
+                      type: boolean
+                    original_content:
+                      description: Content for translation or proofreading projects.
+                      oneOf:
+                      - type: string
+                      - type: object
+                    markup_in_content:
+                      description: Does the content contains markup (HTML, XML, etc) or not?
+                      type: boolean
+                    remote_file_url:
+                      description: URL to a stored file (see Uploading files to TextMaster for more information).
+                      type: string
+                    remote_file_help_url:
+                      description: URL to a stored help file providing instructions/comments for the authors (see Uploading files to TextMaster for more information).
+                      type: string
+                    instructions:
+                      description: Specific briefing. Add here any information specific to this Document.
+                      type: string
+                    keyword_list:
+                      description: The keywords you the Author must include in the content (a comma-separated list).
+                      type: string
+                    keywords_repeat_count:
+                      description: (required if keyword_list is provided) Each key word should be repeated at least X times.
+                      type: integer
+                    callback:
+                      description: List of callbacks to be called upon Document status changes.
+                      type: object
+                      properties:
+                        in_creation:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        waiting_assignment:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_progress:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        incomplete:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        paused:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        quality_control:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        copyscape:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        counting_words:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_review:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_extra_review:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        completed:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        canceled:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        word_count_finished:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        complete:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        support_message_created:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                    deliver_work_as_file:
+                      description: Should the Authors submit their work as a file?
+                      type: boolean
+  /v1/clients/projects/{project_id}/documents/filter:
+    get:
+      summary: Filter Documents
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      - name: where
+        in: query
+        required: false
+        description: URL encoded JSON selector composed of one or several criteria.
+        schema:
+          type: string
+      - name: order
+        in: query
+        required: false
+        description: Comma separated order list
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Filters Documents
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    documents:
+                    - language_from: fr
+                      language_to: en
+                      language_from_code: fr-fr
+                      language_to_code: en-us
+                      status: waiting_assignment
+                      skip_copyscape: false
+                      title: document_2
+                      instructions: Lorem ipsum dolor sit amet,...
+                      word_count: 200
+                      word_count_rule: 0
+                      keywords_repeat_count: 1
+                      deliver_work_as_file: false
+                      custom_data: {}
+                      plagiarism_analysis: {}
+                      written_words: 0
+                      type: standard
+                      id: 61698a9c8b81926d91c0e32c
+                      project_id: 61698a9c8b81926d91c0e32b
+                      callback: {}
+                      reference: TR-925-85279-00000
+                      ctype: translation
+                      keyword_list: foo, bar, baz
+                      satisfaction: null
+                      completion: 0.0
+                      can_post_message_to_author: false
+                      author_work: {}
+                      author_id: null
+                      author_rating: 1
+                      original_content: foo bar
+                      markup_in_content: false
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:17 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:17 UTC
+                      completed_at: null
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  documents:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Document'
+  /v1/clients/projects/{project_id}/documents/{document_id}:
+    get:
+      summary: Get a Document
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: The Document ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Gets a Document
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: waiting_assignment
+                    skip_copyscape: false
+                    title: document_8
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: false
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa18b81926d91c0e4e4
+                    project_id: 61698aa18b81926d91c0e4e3
+                    callback: {}
+                    reference: TR-9DD-51325-00000
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: foo bar
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    completed_at: null
+              schema:
+                $ref: '#/components/schemas/Document'
+    put:
+      summary: Update a Document
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: The Document ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Document Updated
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: in_creation
+                    skip_copyscape: false
+                    title: document_10
+                    instructions: '456'
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: false
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa48b81926d91c0e5c5
+                    project_id: 61698aa38b81926d91c0e55b
+                    callback: {}
+                    reference: TR-955-58851-684849
+                    ctype: proofreading
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: '123'
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:24 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:24 UTC
+                    completed_at: null
+              schema:
+                $ref: '#/components/schemas/Document'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                document:
+                  type: object
+                  properties:
+                    title:
+                      description: Title of the Document
+                      type: string
+                    type:
+                      description: 'Type of document.
+
+
+                        * standard (default): defined with a template
+
+                        * key_value: defines multiple phrases with an associated key
+
+                        '
+                      type: string
+                    word_count:
+                      description: (required unless perform_word_count is true) Base number of words. See the word_count_rule parameter.
+                      type: integer
+                    perform_word_count:
+                      description: Automated word count is possible for translation and proofreading projects
+                      type: boolean
+                    original_content:
+                      description: Content for translation or proofreading projects.
+                      oneOf:
+                      - type: string
+                      - type: object
+                    markup_in_content:
+                      description: Does the content contains markup (HTML, XML, etc) or not?
+                      type: boolean
+                    remote_file_url:
+                      description: URL to a stored file (see Uploading files to TextMaster for more information).
+                      type: string
+                    remote_file_help_url:
+                      description: URL to a stored help file providing instructions/comments for the authors (see Uploading files to TextMaster for more information).
+                      type: string
+                    instructions:
+                      description: Specific briefing. Add here any information specific to this Document.
+                      type: string
+                    keyword_list:
+                      description: The keywords you the Author must include in the content (a comma-separated list).
+                      type: string
+                    keywords_repeat_count:
+                      description: (required if keyword_list is provided) Each key word should be repeated at least X times.
+                      type: integer
+                    callback:
+                      description: List of callbacks to be called upon Document status changes.
+                      type: object
+                      properties:
+                        in_creation:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        waiting_assignment:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_progress:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        incomplete:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        paused:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        quality_control:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        copyscape:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        counting_words:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_review:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        in_extra_review:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        completed:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        canceled:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        word_count_finished:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        complete:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        support_message_created:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                    deliver_work_as_file:
+                      description: Should the Authors submit their work as a file?
+                      type: boolean
+    delete:
+      summary: Delete a Document
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: The Document ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Document Deleted
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: in_creation
+                    skip_copyscape: false
+                    title: document_11
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: false
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa58b81926d91c0e64b
+                    project_id: 61698aa48b81926d91c0e5fd
+                    callback: {}
+                    reference: TR-9F7-91411-691278
+                    ctype: proofreading
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: test_content
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:25 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:25 UTC
+                    completed_at: null
+              schema:
+                $ref: '#/components/schemas/Document'
+  /v1/clients/projects/{project_id}/documents/{document_id}/complete:
+    put:
+      summary: Complete a Document
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: The Document ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Document Completed
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: completed
+                    skip_copyscape: false
+                    title: document_12
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: false
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 27
+                    type: standard
+                    id: 61698aa58b81926d91c0e685
+                    project_id: 61698aa58b81926d91c0e684
+                    callback: {}
+                    reference: TR-97E-94280-00000
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: 1
+                    completion: 100.0
+                    can_post_message_to_author: false
+                    author_work:
+                      factory_template_element9: 'foo bar baz
+
+                        foo bar baz'
+                    author_id: 61698aa68b81926d91c0e6d7
+                    author_rating: 1
+                    original_content: foo bar
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:26 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:28 UTC
+                    completed_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:27 UTC
+              schema:
+                $ref: '#/components/schemas/Document'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                satisfaction:
+                  description: Satisfaction level. * positive * neutral (default) * negative
+                  type: string
+                  enum:
+                  - neutral
+                  - positive
+                  - negative
+                message:
+                  description: Message addressed to the Author.
+                  type: string
+  /v1/clients/projects/{project_id}/documents/{document_id}/review_url:
+    post:
+      summary: Generate a Review URL
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: The Document ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Gets a Review URL
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    url: /authors/tasks/61698aa88b81926d91c0e71c?indexes=0-1
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                required:
+                - url
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keys:
+                  description: The document keys to be reviewed
+                  type: array
+                  items:
+                    type: string
+              required:
+              - keys
+        required: true
+  /v1/clients/projects/{project_id}/batch/documents:
+    post:
+      summary: Create multiple Documents
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Documents Created
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: in_creation
+                    skip_copyscape: false
+                    title: document_5
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: true
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa18b81926d91c0e4d1
+                    project_id: 61698aa08b81926d91c0e47b
+                    callback: {}
+                    reference: TR-975-38954-395263
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: test_content
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    completed_at: null
+                  - language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    status: in_creation
+                    skip_copyscape: false
+                    title: document_6
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: true
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa18b81926d91c0e4d5
+                    project_id: 61698aa08b81926d91c0e47b
+                    callback: {}
+                    reference: TR-975-38954-675554
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: test_content
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    completed_at: null
+                  - status: in_creation
+                    skip_copyscape: false
+                    title: document_7
+                    instructions: Lorem ipsum dolor sit amet, consectetur ...
+                    word_count: 200
+                    word_count_rule: 0
+                    keywords_repeat_count: 1
+                    deliver_work_as_file: true
+                    custom_data: {}
+                    plagiarism_analysis: {}
+                    written_words: 0
+                    type: standard
+                    id: 61698aa18b81926d91c0e4d9
+                    project_id: 61698aa08b81926d91c0e47b
+                    callback: {}
+                    reference: TR-975-38954-557113
+                    ctype: translation
+                    keyword_list: foo, bar, baz
+                    satisfaction: null
+                    completion: 0.0
+                    can_post_message_to_author: false
+                    author_work: {}
+                    author_id: null
+                    author_rating: 1
+                    original_content: test_content
+                    markup_in_content: false
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:21 UTC
+                    completed_at: null
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Document'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documents:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        description: Title of the Document
+                        type: string
+                      type:
+                        description: 'Type of document.
+
+
+                          * standard (default): defined with a template
+
+                          * key_value: defines multiple phrases with an associated key
+
+                          '
+                        type: string
+                      word_count:
+                        description: (required unless perform_word_count is true) Base number of words. See the word_count_rule parameter.
+                        type: integer
+                      word_count_rule:
+                        description: 'Specifies how to treat the specified "word_count".
+
+
+                          * 0: +/- 10% [word_count] words
+
+                          * 1: at least [word_count] words
+
+                          * 2: maximum [word_count] words
+
+                          '
+                        type: integer
+                        enum:
+                        - 0
+                        - 1
+                        - 2
+                      perform_word_count:
+                        description: Automated word count is possible for translation and proofreading projects
+                        type: boolean
+                      original_content:
+                        description: Content for translation or proofreading projects.
+                        oneOf:
+                        - type: string
+                        - type: object
+                      markup_in_content:
+                        description: Does the content contains markup (HTML, XML, etc) or not?
+                        type: boolean
+                      remote_file_url:
+                        description: URL to a stored file (see Uploading files to TextMaster for more information).
+                        type: string
+                      remote_file_help_url:
+                        description: URL to a stored help file providing instructions/comments for the authors (see Uploading files to TextMaster for more information).
+                        type: string
+                      instructions:
+                        description: Specific briefing. Add here any information specific to this Document.
+                        type: string
+                      keyword_list:
+                        description: The keywords you the Author must include in the content (a comma-separated list).
+                        type: string
+                      keywords_repeat_count:
+                        description: (required if keyword_list is provided) Each key word should be repeated at least X times.
+                        type: integer
+                      callback:
+                        description: List of callbacks to be called upon Document status changes.
+                        type: object
+                        properties:
+                          in_creation:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          waiting_assignment:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          in_progress:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          incomplete:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          paused:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          quality_control:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          copyscape:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          counting_words:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          in_review:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          in_extra_review:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          completed:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          canceled:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          word_count_finished:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          complete:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                          support_message_created:
+                            type: object
+                            properties:
+                              url:
+                                type: string
+                            required:
+                            - url
+                      deliver_work_as_file:
+                        description: Should the Authors submit their work as a file?
+                        type: boolean
+  /v1/clients/projects/{project_id}/batch/documents/complete:
+    post:
+      summary: Complete multiple Documents
+      tags:
+      - Documents
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Documents Completed
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    status: ok
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required:
+                - status
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                documents:
+                  type: array
+                  items:
+                    type: string
+                satisfaction:
+                  description: Satisfaction level. * positive * neutral (default) * negative
+                  type: string
+                  enum:
+                  - neutral
+                  - positive
+                  - negative
+                message:
+                  description: Message addressed to the Author.
+                  type: string
+              required:
+              - documents
+components:
+  schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    Document:
+      type: object
+      properties:
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        status:
+          type: string
+        skip_copyscape:
+          type: boolean
+        title:
+          type: string
+        instructions:
+          type: string
+        word_count:
+          type: integer
+        word_count_rule:
+          type: integer
+        keywords_repeat_count:
+          type: integer
+        deliver_work_as_file:
+          type: boolean
+        custom_data:
+          type: object
+        plagiarism_analysis:
+          type: object
+        written_words:
+          type: integer
+        type:
+          type: string
+        id:
+          type: string
+        project_id:
+          type: string
+        callback:
+          type: object
+          properties:
+            canceled:
+              $ref: '#/components/schemas/CallbackUrl'
+            completed:
+              $ref: '#/components/schemas/CallbackUrl'
+            copyscape:
+              $ref: '#/components/schemas/CallbackUrl'
+            counting_words:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_progress:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_review:
+              $ref: '#/components/schemas/CallbackUrl'
+            incomplete:
+              $ref: '#/components/schemas/CallbackUrl'
+            paused:
+              $ref: '#/components/schemas/CallbackUrl'
+            quality_control:
+              $ref: '#/components/schemas/CallbackUrl'
+            waiting_assignment:
+              $ref: '#/components/schemas/CallbackUrl'
+        reference:
+          type: string
+        ctype:
+          type: string
+        keyword_list:
+          type: string
+        satisfaction:
+          type:
+          - integer
+          - 'null'
+        completion:
+          type: number
+        can_post_message_to_author:
+          type: boolean
+        author_work:
+          oneOf:
+          - type: object
+          - type: string
+        author_id:
+          type:
+          - string
+          - 'null'
+        author_rating:
+          type: integer
+        original_content:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
+    DateOrNull:
+      type:
+      - object
+      - 'null'
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

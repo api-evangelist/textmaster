@@ -1,0 +1,151 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Authors API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Authors
+paths:
+  /v1/clients/authors:
+    get:
+      summary: List all potential authors for a project
+      tags:
+      - Authors
+      security:
+      - oauth2: []
+      parameters:
+      - name: project[activity_name]
+        in: query
+        required: false
+        description: 'Type of project to filter on.
+
+
+          Possible values:
+
+
+          * translation
+
+          * copywriting
+
+          * proofreading
+
+          '
+        schema:
+          type: string
+          enum:
+          - translation
+          - copywriting
+          - proofreading
+      - name: project[language_from]
+        in: query
+        required: false
+        description: 'Source language for translation projects (ex: fr-FR).'
+        schema:
+          type: string
+          pattern: ^[a-z]{2}-[A-Z]{2}$
+      - name: project[language_to]
+        in: query
+        required: false
+        description: 'Target language (ex: en-US)'
+        schema:
+          type: string
+          pattern: ^[a-z]{2}-[A-Z]{2}$
+      - name: project[options][expertise]
+        in: query
+        required: false
+        description: An Expertise ID (See List Expertises for more info)
+        schema:
+          type: string
+      - name: project[options][language_level]
+        in: query
+        required: false
+        description: An Expertise ID (See List Expertises for more info)
+        schema:
+          type: string
+          enum:
+          - enterprise
+          - premium
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists Potential Authors
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    total_pages: 1
+                    count: 2
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+                    authors:
+                    - id: 61698a9a8b81926d91c0e28c
+                      ident: A-988C-FM
+                    - id: 61698a9a8b81926d91c0e299
+                      ident: A-9899-FM
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  authors:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PotentialAuthor'
+components:
+  schemas:
+    PotentialAuthor:
+      type: object
+      properties:
+        id:
+          type: string
+        ident:
+          type: string
+      required:
+      - id
+      - ident
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

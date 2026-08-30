@@ -1,0 +1,108 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Receipts API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Receipts
+paths:
+  /v1/clients/receipts:
+    get:
+      summary: List Receipts
+      tags:
+      - Receipts
+      description: List available receipts.
+      security:
+      - oauth2:
+        - transaction:manage
+        - transaction:read
+        - transaction:write
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists receipts
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    receipts:
+                    - receipt_num: 20211015-A44D-FM5
+                      money_amount: 48.0
+                      type: Transaction::ProjectSpending::LaunchingAProject
+                      issued_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:06:53 UTC
+              schema:
+                type: object
+                properties:
+                  receipts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Receipt'
+                    minItems: 1
+                    uniqueItems: true
+components:
+  schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    Receipt:
+      type: object
+      properties:
+        invoice_num:
+          type: string
+        money_amount:
+          type: number
+        type:
+          type: string
+        issued_at:
+          $ref: '#/components/schemas/Date'
+      required:
+      - invoice_num
+      - money_amount
+      - type
+      - issued_at
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

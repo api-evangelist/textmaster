@@ -1,0 +1,3053 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Projects API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Projects
+paths:
+  /v1/clients/projects:
+    get:
+      summary: List Projects
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists Projects
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    projects:
+                    - id: 61698ac38b81926d91c0ebba
+                      name: factory_project
+                      language_from: fr
+                      language_to: en
+                      language_from_code: fr-fr
+                      language_to_code: en-us
+                      category: C014
+                      vocabulary_type: not_specified
+                      target_reader_groups: not_specified
+                      grammatical_person: not_specified
+                      custom_data: {}
+                      project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                      project_briefing_is_rich: false
+                      priority: 48.0
+                      status: in_progress
+                      total_word_count: 200
+                      documents_statuses:
+                        canceled: 0
+                        completed: 0
+                        copyscape: 0
+                        counting_words: 0
+                        in_creation: 0
+                        in_extra_review: 0
+                        in_progress: 0
+                        in_review: 0
+                        incomplete: 0
+                        paused: 0
+                        quality_control: 0
+                        waiting_assignment: 1
+                      progress: 0.0
+                      same_author_must_do_entire_project: false
+                      callback: {}
+                      external_id: null
+                      multi_project_id: null
+                      auto_launch: false
+                      project_template_id: null
+                      finalized: false
+                      word_count_error: null
+                      cost_in_credits: 2000
+                      ctype: translation
+                      creation_channel: standard
+                      reference: TR-9A6-1792
+                      cost_per_word:
+                        currency: credits
+                        amount: 10
+                      options:
+                        language_level: premium
+                      option_values:
+                        language_level: premium
+                      textmasters:
+                      - 61698ac38b81926d91c0ebf8
+                      glossaries: []
+                      cost_in_currency:
+                        currency: USD
+                        amount: 2.8
+                      api_template_id: null
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:55 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:56 UTC
+                      launched_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:56 UTC
+                      completed_at: null
+                      work_template:
+                        name: factory_template17
+                        description: null
+                        image_preview_path: null
+                        ctype: public
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+    post:
+      summary: Create a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters: []
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Project Created
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698af18b81926d91c0f397
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data:
+                      tags:
+                      - red
+                      - soft
+                      external_client_id: 1234
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 0.0
+                    status: in_creation
+                    total_word_count: 0
+                    documents_statuses:
+                      in_creation: 1
+                      waiting_assignment: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      completed: 0
+                      paused: 0
+                      canceled: 0
+                      quality_control: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_extra_review: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback:
+                      project_in_progress:
+                        url: https://callback.example.com/
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 0
+                    ctype: translation
+                    creation_channel: api
+                    reference: TR-909-9784
+                    cost_per_word:
+                      currency: credits
+                      amount: 20
+                    options:
+                      expertise: true
+                      language_level: premium
+                    option_values:
+                      expertise: 61698af08b81926d91c0f320
+                      language_level: premium
+                    textmasters: []
+                    glossaries: []
+                    total_costs:
+                    - currency: USD
+                      amount: 0.0
+                    - currency: credits
+                      amount: 0
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    launched_at: null
+                    completed_at: null
+                    work_template:
+                      name: factory_template29
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project:
+                  type: object
+                  properties:
+                    activity_name:
+                      description: (required) Project type (copywriting, proofreading or translation)
+                      type: string
+                    api_template_id:
+                      description: 'ApiTemplate for the Project by passing its ID. If provided, the following attributes will be copied from the Template:
+
+
+                        * level_name
+
+                        * activity_name
+
+                        * language_from
+
+                        * language_to
+
+                        * project_briefing
+
+                        * textmasters
+
+                        * same_author_must_do_entire_project
+
+                        * auto_launch
+
+                        '
+                      type: string
+                    author_should_use_rich_text:
+                      description: Enables author to write HTML content and displays it as such (defaults to false). Only applies to Copywriting projects.
+                      type: boolean
+                    auto_launch:
+                      description: Instruct the API to automatically attempt to launch the Project as soon as all asynchronous operations have been completed. Such operations are, for example, counting the number of words on each Document and running the translation memory analysis on the Project and its Documents (defaults to false).
+                      type: boolean
+                    callback:
+                      description: List of callbacks to be called upon Project status changes.
+                      type: object
+                      properties:
+                        project_in_progress:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_tm_completed:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_finalized:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_tm_diff_completed:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_in_review:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_cancelled:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_canceled:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                        project_not_launched:
+                          type: object
+                          properties:
+                            url:
+                              type: string
+                          required:
+                          - url
+                    category:
+                      description: '(required) Code representing a category (eg: "C014"). Full list available via API call.'
+                      type: string
+                    custom_data:
+                      description: Arbitrary structured data to attach to a Project
+                      type: object
+                    deadline:
+                      description: You can add an optional deadline to inform the author when the project should be delivered by. Please note that this deadline is not enforced and serve for informational purposes. Finally, please make sure you provide a realistic deadline in order not to impact negativaly the selection of your project by the authors. Must be a string in "YYYY-MM-DD" or "YYYY-MM-DD hh:mm:ss" format.
+                      type: string
+                    documents:
+                      description: In case Documents are already known when creating the projects, Documents fields can be encapsulated inside the project. This Document will appear after creation in the Documents list field of the project. For more details on the Document fields to add, refer to the Documents endpoint.
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/Document'
+                    glossaries:
+                      description: An array of IDs listing the Glossaries to add to the project.
+                      type: array
+                      items:
+                        type: string
+                    grammatical_person:
+                      description: 'Which personal pronoun should the content be written with?
+
+
+                        * not_specified: Same as "first_person_singular"
+
+                        * first_person_singular: I
+
+                        * second_person_singular: You
+
+                        * third_person_singular_masculine: He
+
+                        * third_person_singular_feminine: She
+
+                        * third_person_singular_neuter: It
+
+                        * first_person_plural: We
+
+                        * second_person_plural: You
+
+                        * third_person_plural: They
+
+                        '
+                      type: string
+                    language_from:
+                      description: '(required) Bigram representing a language (ex: en-us). Full list available via API call.'
+                      type: string
+                      pattern: ^[a-z]{2}(-[a-z]{2})?$
+                    language_to:
+                      description: '(required for translation projects) Bigram representing a language (ex: en-us). Full list available via API call.'
+                      type: string
+                      pattern: ^[a-z]{2}(-[a-z]{2})?$
+                    name:
+                      description: (required) Name of the Project
+                      type: string
+                    options:
+                      description: (required) Options for the Project
+                      type: object
+                      properties:
+                        expertise:
+                          type: string
+                        language_level:
+                          type: string
+                        quality:
+                          type: boolean
+                        priority:
+                          type: boolean
+                        specific_attachment:
+                          type: boolean
+                        uniq_author:
+                          type: boolean
+                        translation_memory:
+                          type: boolean
+                        translation_diff:
+                          type: boolean
+                      required:
+                      - language_level
+                    project_briefing:
+                      description: (required) This is where you have to provide the general instructions for the project. All the information must be common to all documents and allow the authors to carry out their task in the best possible conditions. Providing more details will increase your chances of getting the best content.
+                      type: string
+                    project_briefing_is_rich:
+                      description: 'Specifies if project briefing contains rich formatting (defaults to false).
+
+
+                        Unless ''true'', HTML in briefing is escaped when displayed.
+
+
+                        Allowed tags (the rest is stipped):
+
+                        div h1 h2 h3 h4 h5 h6 p br a b strong i em u del strike ul ol li
+
+                        '
+                      type: boolean
+                    target_reader_groups:
+                      description: 'What is the age population target audience of this project?
+
+
+                        * not_specified (default): Any age
+
+                        * children: 0–13
+
+                        * teenager: 14–18
+
+                        * young_adults: 19–29
+
+                        * adults: 30–59
+
+                        * old_adults: 60+
+
+                        '
+                      type: string
+                    textmasters:
+                      description: Provide an array with the IDs of the authors you’d like to give the job to.
+                      type: array
+                      items:
+                        type: string
+                    vocabulary_type:
+                      description: 'What style are you expecting your content to be written with?
+
+
+                        * not_specified (default): Same as "popular"
+
+                        * popular: based on simple, every day words and sentences
+
+                        * technical: focused on precise and specific terms
+
+                        * fictional: writing style amplified, expanded and scripted
+
+                        '
+                      type: string
+                    work_template:
+                      description: Select the template that fits your project (defaults to "Libre", no specifications about structure of work). This choice will determine how the content is organized in each Document that will be produced. Full list available via API call.
+                  required:
+                  - activity_name
+                  - category
+                  - language_from
+                  - name
+                  - options
+                  - project_briefing
+              required:
+              - project
+  /v1/clients/projects/filter:
+    get:
+      summary: Filter Projects
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: where
+        in: query
+        required: false
+        description: URL encoded JSON selector composed of one or several criteria.
+        schema:
+          type: string
+      - name: order
+        in: query
+        required: false
+        description: Comma separated order list
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists Projects
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    projects:
+                    - id: 61698ac38b81926d91c0ebba
+                      name: factory_project
+                      language_from: fr
+                      language_to: en
+                      language_from_code: fr-fr
+                      language_to_code: en-us
+                      category: C014
+                      vocabulary_type: not_specified
+                      target_reader_groups: not_specified
+                      grammatical_person: not_specified
+                      custom_data: {}
+                      project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                      project_briefing_is_rich: false
+                      priority: 48.0
+                      status: in_progress
+                      total_word_count: 200
+                      documents_statuses:
+                        canceled: 0
+                        completed: 0
+                        copyscape: 0
+                        counting_words: 0
+                        in_creation: 0
+                        in_extra_review: 0
+                        in_progress: 0
+                        in_review: 0
+                        incomplete: 0
+                        paused: 0
+                        quality_control: 0
+                        waiting_assignment: 1
+                      progress: 0.0
+                      same_author_must_do_entire_project: false
+                      callback: {}
+                      external_id: null
+                      multi_project_id: null
+                      auto_launch: false
+                      project_template_id: null
+                      finalized: false
+                      word_count_error: null
+                      cost_in_credits: 2000
+                      ctype: translation
+                      creation_channel: standard
+                      reference: TR-9A6-1792
+                      cost_per_word:
+                        currency: credits
+                        amount: 10
+                      options:
+                        language_level: premium
+                      option_values:
+                        language_level: premium
+                      textmasters:
+                      - 61698ac38b81926d91c0ebf8
+                      glossaries: []
+                      cost_in_currency:
+                        currency: USD
+                        amount: 2.8
+                      api_template_id: null
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:55 UTC
+                      updated_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:56 UTC
+                      launched_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:05:56 UTC
+                      completed_at: null
+                      work_template:
+                        name: factory_template17
+                        description: null
+                        image_preview_path: null
+                        ctype: public
+                    total_pages: 1
+                    count: 1
+                    page: 1
+                    per_page: 20
+                    previous_page: null
+                    next_page: null
+              schema:
+                type: object
+                properties:
+                  total_pages:
+                    type: integer
+                  count:
+                    type: integer
+                  page:
+                    type: integer
+                  per_page:
+                    type: integer
+                  previous_page:
+                    type:
+                    - integer
+                    - 'null'
+                  next_page:
+                    type:
+                    - integer
+                    - 'null'
+                  projects:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Project'
+  /v1/clients/projects/quotation:
+    get:
+      summary: Get a quotation
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:quote
+        - project:read
+        - project:write
+      parameters:
+      - name: project[activity_name]
+        in: query
+        description: (required) Project type
+        schema:
+          type: string
+          enum:
+          - copywriting
+          - proofreading
+          - translation
+      - name: project[language_from]
+        in: query
+        required: true
+        description: '(required) Bigram representing a language (ex: en-us). Full list available via API call.'
+        schema:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+      - name: project[language_to]
+        in: query
+        required: false
+        description: '(required for translation projects) Bigram representing a language (ex: en-us). Full list available via API call.'
+        schema:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+      - name: project[options][expertise]
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: project[options][language_level]
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: project[options][quality]
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: project[options][priority]
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: project[options][specific_attachment]
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: project[total_word_count]
+        in: query
+        required: true
+        description: (required) Number of words to quote
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Gets a quotation
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698af18b81926d91c0f397
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data:
+                      tags:
+                      - red
+                      - soft
+                      external_client_id: 1234
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 0.0
+                    status: in_creation
+                    total_word_count: 0
+                    documents_statuses:
+                      in_creation: 0
+                      waiting_assignment: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      completed: 0
+                      paused: 0
+                      canceled: 0
+                      quality_control: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_extra_review: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 0
+                    ctype: translation
+                    creation_channel: api
+                    reference: TR-909-9784
+                    cost_per_word:
+                      currency: credits
+                      amount: 20
+                    options:
+                      expertise: true
+                      language_level: premium
+                    option_values:
+                      expertise: 61698af08b81926d91c0f320
+                      language_level: premium
+                    textmasters: []
+                    glossaries: []
+                    total_costs:
+                    - currency: USD
+                      amount: 0.0
+                    - currency: credits
+                      amount: 0
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    launched_at: null
+                    completed_at: null
+                    work_template:
+                      name: factory_template29
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Quotation'
+  /v1/clients/projects/{project_id}:
+    get:
+      summary: Get a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:read
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Gets the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: in_progress
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 1
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+    put:
+      summary: Update a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '422':
+          description: Update failed
+        '200':
+          description: Project Updated
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698af18b81926d91c0f397
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data:
+                      tags:
+                      - red
+                      - soft
+                      external_client_id: 1234
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 0.0
+                    status: in_creation
+                    total_word_count: 0
+                    documents_statuses:
+                      in_creation: 1
+                      waiting_assignment: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      completed: 0
+                      paused: 0
+                      canceled: 0
+                      quality_control: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_extra_review: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 0
+                    ctype: translation
+                    creation_channel: api
+                    reference: TR-909-9784
+                    cost_per_word:
+                      currency: credits
+                      amount: 20
+                    options:
+                      expertise: true
+                      language_level: premium
+                    option_values:
+                      expertise: 61698af08b81926d91c0f320
+                      language_level: premium
+                    textmasters: []
+                    glossaries: []
+                    total_costs:
+                    - currency: USD
+                      amount: 0.0
+                    - currency: credits
+                      amount: 0
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    launched_at: null
+                    completed_at: null
+                    work_template:
+                      name: factory_template29
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project:
+                  type: object
+                  properties:
+                    author_should_use_rich_text:
+                      description: Enables author to write HTML content and displays it as such (defaults to false). Only applies to Copywriting projects.
+                      type: boolean
+                    auto_launch:
+                      description: Instruct the API to automatically attempt to launch the Project as soon as all asynchronous operations have been completed. Such operations are, for example, counting the number of words on each Document and running the translation memory analysis on the Project and its Documents (defaults to false).
+                      type: boolean
+                    category:
+                      description: 'Code representing a category (eg: "C014"). Full list available via API call.'
+                      type: string
+                    custom_data:
+                      description: Arbitrary structured data to attach to a Project
+                      type: object
+                    deadline:
+                      description: You can add an optional deadline to inform the author when the project should be delivered by. Please note that this deadline is not enforced and serve for informational purposes. Finally, please make sure you provide a realistic deadline in order not to impact negativaly the selection of your project by the authors. Must be a string in "YYYY-MM-DD" or "YYYY-MM-DD hh:mm:ss" format.
+                      type: string
+                    glossaries:
+                      description: An array of IDs listing the Glossaries to add to the project.
+                      type: array
+                      items:
+                        type: string
+                    grammatical_person:
+                      description: 'Which personal pronoun should the content be written with?
+
+
+                        * not_specified: Same as "first_person_singular"
+
+                        * first_person_singular: I
+
+                        * second_person_singular: You
+
+                        * third_person_singular_masculine: He
+
+                        * third_person_singular_feminine: She
+
+                        * third_person_singular_neuter: It
+
+                        * first_person_plural: We
+
+                        * second_person_plural: You
+
+                        * third_person_plural: They
+
+                        '
+                      type: string
+                    language_from:
+                      description: 'Bigram representing a language (ex: en-us). Full list available via API call.'
+                      type: string
+                      pattern: ^[a-z]{2}(-[a-z]{2})?$
+                    language_to:
+                      description: 'Bigram representing a language (ex: en-us). Full list available via API call.'
+                      type: string
+                      pattern: ^[a-z]{2}(-[a-z]{2})?$
+                    name:
+                      description: Name of the Project
+                      type: string
+                    options:
+                      description: Options for the Project
+                      type: object
+                      properties:
+                        expertise:
+                          type: string
+                        language_level:
+                          type: string
+                        quality:
+                          type: boolean
+                        priority:
+                          type: boolean
+                        specific_attachment:
+                          type: boolean
+                        uniq_author:
+                          type: boolean
+                        translation_memory:
+                          type: boolean
+                        translation_diff:
+                          type: boolean
+                    project_briefing:
+                      description: This is where you have to provide the general instructions for the project. All the information must be common to all documents and allow the authors to carry out their task in the best possible conditions. Providing more details will increase your chances of getting the best content.
+                      type: string
+                    project_briefing_is_rich:
+                      description: 'Specifies if project briefing contains rich formatting (defaults to false).
+
+
+                        Unless ''true'', HTML in briefing is escaped when displayed.
+
+
+                        Allowed tags (the rest is stipped):
+
+                        div h1 h2 h3 h4 h5 h6 p br a b strong i em u del strike ul ol li
+
+                        '
+                      type: boolean
+                    target_reader_groups:
+                      description: 'What is the age population target audience of this project?
+
+
+                        * not_specified (default): Any age
+
+                        * children: 0–13
+
+                        * teenager: 14–18
+
+                        * young_adults: 19–29
+
+                        * adults: 30–59
+
+                        * old_adults: 60+
+
+                        '
+                      type: string
+                    textmasters:
+                      description: Provide an array with the IDs of the authors you’d like to give the job to.
+                      type: array
+                      items:
+                        type: string
+                    vocabulary_type:
+                      description: 'What style are you expecting your content to be written with?
+
+
+                        * not_specified (default): Same as "popular"
+
+                        * popular: based on simple, every day words and sentences
+
+                        * technical: focused on precise and specific terms
+
+                        * fictional: writing style amplified, expanded and scripted
+
+                        '
+                      type: string
+              required:
+              - project
+  /v1/clients/projects/{project_id}/activate_tm_options:
+    put:
+      summary: Activate Translation Memory options on a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                project:
+                  type: object
+                  properties:
+                    options:
+                      description: (required) Translation Memory options for the Project
+                      type: object
+                      properties:
+                        post_editing_machine_translation:
+                          type: boolean
+                        translation_memory:
+                          type: boolean
+                        translation_diff:
+                          type: boolean
+                  required:
+                  - options
+              required:
+              - project
+  /v1/clients/projects/{project_id}/archive:
+    put:
+      summary: Archive a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Archives the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: canceled
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 1
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/async_launch:
+    post:
+      summary: Launch a Project asynchronously
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:launch
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '422':
+          description: Insufficient credits
+        '200':
+          description: Launches the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: in_creation
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 1
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/cancel:
+    put:
+      summary: Cancels a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Cancels the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: canceled
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 1
+                      quality_control: 0
+                      waiting_assignment: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/duplicate:
+    post:
+      summary: Duplicate a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Project Duplicated
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698af18b81926d91c0f397
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data:
+                      tags:
+                      - red
+                      - soft
+                      external_client_id: 1234
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 0.0
+                    status: in_creation
+                    total_word_count: 0
+                    documents_statuses:
+                      in_creation: 1
+                      waiting_assignment: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      completed: 0
+                      paused: 0
+                      canceled: 0
+                      quality_control: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_extra_review: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 0
+                    ctype: translation
+                    creation_channel: api
+                    reference: TR-909-9784
+                    cost_per_word:
+                      currency: credits
+                      amount: 20
+                    options:
+                      expertise: true
+                      language_level: premium
+                    option_values:
+                      expertise: 61698af08b81926d91c0f320
+                      language_level: premium
+                    textmasters: []
+                    glossaries: []
+                    total_costs:
+                    - currency: USD
+                      amount: 0.0
+                    - currency: credits
+                      amount: 0
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:42 UTC
+                    launched_at: null
+                    completed_at: null
+                    work_template:
+                      name: factory_template29
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/finalize:
+    put:
+      summary: Finalize a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:launch
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Finalizes the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: in_creation
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 1
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/launch:
+    put:
+      summary: Launch a Project synchronously
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:launch
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '422':
+          description: Insufficient credits
+        '200':
+          description: Launches the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: in_creation
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 1
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/pause:
+    put:
+      summary: Pause a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Pauses the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: paused
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 1
+                      quality_control: 0
+                      waiting_assignment: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/resume:
+    put:
+      summary: Resume a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Resumes the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: paused
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 0
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 1
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+  /v1/clients/projects/{project_id}/unarchive:
+    put:
+      summary: Unarchive a Project
+      tags:
+      - Projects
+      security:
+      - oauth2:
+        - project:manage
+        - project:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: The Project ID.
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Unarchives the Project
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 61698ac38b81926d91c0ebba
+                    name: factory_project
+                    language_from: fr
+                    language_to: en
+                    language_from_code: fr-fr
+                    language_to_code: en-us
+                    category: C014
+                    vocabulary_type: not_specified
+                    target_reader_groups: not_specified
+                    grammatical_person: not_specified
+                    custom_data: {}
+                    project_briefing: Lorem ipsum dolor sit amet, consectetur ...
+                    project_briefing_is_rich: false
+                    priority: 48.0
+                    status: canceled
+                    total_word_count: 200
+                    documents_statuses:
+                      canceled: 1
+                      completed: 0
+                      copyscape: 0
+                      counting_words: 0
+                      in_creation: 0
+                      in_extra_review: 0
+                      in_progress: 0
+                      in_review: 0
+                      incomplete: 0
+                      paused: 0
+                      quality_control: 0
+                      waiting_assignment: 0
+                    progress: 0.0
+                    same_author_must_do_entire_project: false
+                    callback: {}
+                    external_id: null
+                    multi_project_id: null
+                    auto_launch: false
+                    project_template_id: null
+                    finalized: false
+                    word_count_error: null
+                    cost_in_credits: 2000
+                    ctype: translation
+                    creation_channel: standard
+                    reference: TR-9A6-1792
+                    cost_per_word:
+                      currency: credits
+                      amount: 10
+                    options:
+                      language_level: premium
+                    option_values:
+                      language_level: premium
+                    textmasters:
+                    - 61698ac38b81926d91c0ebf8
+                    glossaries: []
+                    cost_in_currency:
+                      currency: USD
+                      amount: 2.8
+                    api_template_id: null
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:55 UTC
+                    updated_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    launched_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:05:56 UTC
+                    completed_at: null
+                    work_template:
+                      name: factory_template17
+                      description: null
+                      image_preview_path: null
+                      ctype: public
+              schema:
+                $ref: '#/components/schemas/Project'
+components:
+  schemas:
+    Quotation:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        category:
+          type: string
+          enum:
+          - C001
+          - C002
+          - C003
+          - C004
+          - C005
+          - C006
+          - C007
+          - C008
+          - C009
+          - C010
+          - C011
+          - C012
+          - C013
+          - C014
+          - C015
+          - C016
+          - C017
+          - C018
+          - C019
+          - C020
+          - C021
+          - C022
+          - C023
+          - C024
+          - C025
+          - C026
+          - C027
+          - C028
+          - C029
+          - C030
+          - C031
+          - C032
+          - C033
+          - C034
+        vocabulary_type:
+          type: string
+          enum:
+          - not_specified
+          - popular
+          - technical
+          - fictional
+        target_reader_groups:
+          type: string
+          enum:
+          - not_specified
+          - children
+          - teenager
+          - young_adults
+          - adults
+          - old_adults
+        grammatical_person:
+          type: string
+          enum:
+          - not_specified
+          - first_person_singular
+          - second_person_singular
+          - third_person_singular_masculine
+          - third_person_singular_feminine
+          - third_person_singular_neuter
+          - first_person_plural
+          - second_person_plural
+          - third_person_plural
+        custom_data:
+          type: object
+        project_briefing:
+          type:
+          - string
+          - 'null'
+        project_briefing_is_rich:
+          type: boolean
+        priority:
+          type: number
+        status:
+          type: string
+          enum:
+          - in_creation
+          - in_progress
+          - in_review
+          - paused
+          - completed
+          - canceled
+        total_word_count:
+          type: integer
+        documents_statuses:
+          type: object
+          properties:
+            in_creation:
+              type: integer
+            waiting_assignment:
+              type: integer
+            in_progress:
+              type: integer
+            in_review:
+              type: integer
+            incomplete:
+              type: integer
+            completed:
+              type: integer
+            paused:
+              type: integer
+            canceled:
+              type: integer
+            quality_control:
+              type: integer
+            copyscape:
+              type: integer
+            counting_words:
+              type: integer
+            in_extra_review:
+              type: integer
+        progress:
+          type: number
+        same_author_must_do_entire_project:
+          type: boolean
+        callback:
+          $ref: '#/components/schemas/CallbackUrl'
+        external_id:
+          type:
+          - string
+          - 'null'
+        multi_project_id:
+          type:
+          - string
+          - 'null'
+        auto_launch:
+          type: boolean
+        project_template_id:
+          type:
+          - string
+          - 'null'
+        finalized:
+          type: boolean
+        word_count_error:
+          type:
+          - string
+          - 'null'
+        cost_in_credits:
+          type: number
+        ctype:
+          type: string
+          enum:
+          - translation
+          - copywriting
+          - proofreading
+        creation_channel:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        cost_per_word:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+          required:
+          - currency
+          - amount
+        options:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        option_values:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        textmasters:
+          type: array
+          items:
+            type: string
+        glossaries:
+          type: array
+          items:
+            type: string
+        total_costs:
+          type: array
+          items:
+            type: object
+            properties:
+              currency:
+                type: string
+              amount:
+                type: number
+            required:
+            - currency
+            - amount
+        api_template_id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/DateOrNull'
+        updated_at:
+          $ref: '#/components/schemas/DateOrNull'
+        launched_at:
+          $ref: '#/components/schemas/DateOrNull'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
+        work_template:
+          $ref: '#/components/schemas/ObjectOrNull'
+    DateOrNull:
+      type:
+      - object
+      - 'null'
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    Project:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        category:
+          type: string
+          enum:
+          - C001
+          - C002
+          - C003
+          - C004
+          - C005
+          - C006
+          - C007
+          - C008
+          - C009
+          - C010
+          - C011
+          - C012
+          - C013
+          - C014
+          - C015
+          - C016
+          - C017
+          - C018
+          - C019
+          - C020
+          - C021
+          - C022
+          - C023
+          - C024
+          - C025
+          - C026
+          - C027
+          - C028
+          - C029
+          - C030
+          - C031
+          - C032
+          - C033
+          - C034
+        vocabulary_type:
+          type: string
+          enum:
+          - not_specified
+          - popular
+          - technical
+          - fictional
+        target_reader_groups:
+          type: string
+          enum:
+          - not_specified
+          - children
+          - teenager
+          - young_adults
+          - adults
+          - old_adults
+        grammatical_person:
+          type: string
+          enum:
+          - not_specified
+          - first_person_singular
+          - second_person_singular
+          - third_person_singular_masculine
+          - third_person_singular_feminine
+          - third_person_singular_neuter
+          - first_person_plural
+          - second_person_plural
+          - third_person_plural
+        custom_data:
+          type: object
+        project_briefing:
+          type: string
+        project_briefing_is_rich:
+          type: boolean
+        priority:
+          type: number
+        status:
+          type: string
+          enum:
+          - in_creation
+          - in_progress
+          - in_review
+          - paused
+          - completed
+          - canceled
+        total_word_count:
+          type: integer
+        documents_statuses:
+          type: object
+          properties:
+            in_creation:
+              type: integer
+            waiting_assignment:
+              type: integer
+            in_progress:
+              type: integer
+            in_review:
+              type: integer
+            incomplete:
+              type: integer
+            completed:
+              type: integer
+            paused:
+              type: integer
+            canceled:
+              type: integer
+            quality_control:
+              type: integer
+            copyscape:
+              type: integer
+            counting_words:
+              type: integer
+            in_extra_review:
+              type: integer
+        progress:
+          type: number
+        same_author_must_do_entire_project:
+          type: boolean
+        callback:
+          $ref: '#/components/schemas/CallbackUrl'
+        external_id:
+          type:
+          - string
+          - 'null'
+        multi_project_id:
+          type:
+          - string
+          - 'null'
+        auto_launch:
+          type: boolean
+        project_template_id:
+          type:
+          - string
+          - 'null'
+        finalized:
+          type: boolean
+        word_count_error:
+          type:
+          - string
+          - 'null'
+        cost_in_credits:
+          type: number
+        ctype:
+          type: string
+          enum:
+          - translation
+          - copywriting
+          - proofreading
+        creation_channel:
+          type: string
+        reference:
+          type: string
+        cost_per_word:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+          required:
+          - currency
+          - amount
+        options:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        option_values:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        textmasters:
+          type: array
+          items:
+            type: string
+        glossaries:
+          type: array
+          items:
+            type: string
+        cost_in_currency:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+          required:
+          - currency
+          - amount
+        api_template_id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        launched_at:
+          $ref: '#/components/schemas/DateOrNull'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
+        work_template:
+          $ref: '#/components/schemas/WorkTemplate'
+    ObjectOrNull:
+      type:
+      - object
+      - 'null'
+    WorkTemplate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        image_preview_path:
+          type:
+          - string
+          - 'null'
+        ctype:
+          type: string
+          enum:
+          - public
+          - private
+      required:
+      - name
+      - ctype
+    Document:
+      type: object
+      properties:
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        status:
+          type: string
+        skip_copyscape:
+          type: boolean
+        title:
+          type: string
+        instructions:
+          type: string
+        word_count:
+          type: integer
+        word_count_rule:
+          type: integer
+        keywords_repeat_count:
+          type: integer
+        deliver_work_as_file:
+          type: boolean
+        custom_data:
+          type: object
+        plagiarism_analysis:
+          type: object
+        written_words:
+          type: integer
+        type:
+          type: string
+        id:
+          type: string
+        project_id:
+          type: string
+        callback:
+          type: object
+          properties:
+            canceled:
+              $ref: '#/components/schemas/CallbackUrl'
+            completed:
+              $ref: '#/components/schemas/CallbackUrl'
+            copyscape:
+              $ref: '#/components/schemas/CallbackUrl'
+            counting_words:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_progress:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_review:
+              $ref: '#/components/schemas/CallbackUrl'
+            incomplete:
+              $ref: '#/components/schemas/CallbackUrl'
+            paused:
+              $ref: '#/components/schemas/CallbackUrl'
+            quality_control:
+              $ref: '#/components/schemas/CallbackUrl'
+            waiting_assignment:
+              $ref: '#/components/schemas/CallbackUrl'
+        reference:
+          type: string
+        ctype:
+          type: string
+        keyword_list:
+          type: string
+        satisfaction:
+          type:
+          - integer
+          - 'null'
+        completion:
+          type: number
+        can_post_message_to_author:
+          type: boolean
+        author_work:
+          oneOf:
+          - type: object
+          - type: string
+        author_id:
+          type:
+          - string
+          - 'null'
+        author_rating:
+          type: integer
+        original_content:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

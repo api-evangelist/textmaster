@@ -1,0 +1,301 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Transactions API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Transactions
+paths:
+  /v1/clients/transactions:
+    get:
+      summary: List Transactions
+      tags:
+      - Transactions
+      description: '🔐 This endpoint requires one of the following scopes:
+
+
+        * transaction:manage
+
+        * transaction:read
+
+        * transaction:write
+
+        '
+      security:
+      - oauth2:
+        - transaction:manage
+        - transaction:read
+        - transaction:write
+      parameters:
+      - name: types[]
+        in: query
+        style: form
+        explode: true
+        required: false
+        description: 'Possible values:
+
+
+          * Transaction::CreditPurchase::RedeemingAPromoCode
+
+          * Transaction::ProjectSpending::LaunchingAProject
+
+          * Transaction::ProjectSpending::CancelingAProject
+
+          * Transaction::CreditPurchase::BuyingACreditBundle
+
+          * Transaction::CreditPayment::ModeratingAnApplication
+
+          * Transaction::CreditPayment::CompletingAJob
+
+          * Transaction::CashWithdrawal::WithdrawingMoney
+
+          * Transaction::CreditPayment::EarningFromReferredAuthor
+
+          * Transaction::CreditPurchase::EarningFromReferredClient
+
+          * Transaction::ProjectSpending::RepoDocWithCanceledProject
+
+          * Transaction::CreditPayment::FinancialCompensation
+
+          * Transaction::CreditPurchase::ExpiringCredits
+
+          * Transaction::CreditPayment::ExpiringWallet
+
+          * Transaction::ProjectSpending::AdminProjectRefund
+
+          * Transaction::ProjectSpending::AdminProjectLevy
+
+          * Transaction::CreditExchange::GivenToSubordinate
+
+          * Transaction::CreditExchange::GivenByManager
+
+          * Transaction::CreditPayment::AdminRefund
+
+          * Transaction::CreditPurchase::AdminLevy
+
+          * Transaction::ProjectSpending::EarningFromAProject
+
+          * Transaction::CreditPurchase::Rollback
+
+          * Transaction::CashWithdrawal::BundleCancellation
+
+          '
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Transaction::CreditPurchase::RedeemingAPromoCode
+            - Transaction::ProjectSpending::LaunchingAProject
+            - Transaction::ProjectSpending::CancelingAProject
+            - Transaction::CreditPurchase::BuyingACreditBundle
+            - Transaction::CreditPayment::ModeratingAnApplication
+            - Transaction::CreditPayment::CompletingAJob
+            - Transaction::CashWithdrawal::WithdrawingMoney
+            - Transaction::CreditPayment::EarningFromReferredAuthor
+            - Transaction::CreditPurchase::EarningFromReferredClient
+            - Transaction::ProjectSpending::RepoDocWithCanceledProject
+            - Transaction::CreditPayment::FinancialCompensation
+            - Transaction::CreditPurchase::ExpiringCredits
+            - Transaction::CreditPayment::ExpiringWallet
+            - Transaction::ProjectSpending::AdminProjectRefund
+            - Transaction::ProjectSpending::AdminProjectLevy
+            - Transaction::CreditExchange::GivenToSubordinate
+            - Transaction::CreditExchange::GivenByManager
+            - Transaction::CreditPayment::AdminRefund
+            - Transaction::CreditPurchase::AdminLevy
+            - Transaction::ProjectSpending::EarningFromAProject
+            - Transaction::CreditPurchase::Rollback
+            - Transaction::CashWithdrawal::BundleCancellation
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists transactions
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    transactions:
+                    - invoice_num: 20220102-XXXX-XXX
+                      money_value_in_currency: 175.32
+                      type: Transaction::ProjectSpending::LaunchingAProject
+                      issued_at:
+                        day: 2
+                        month: 1
+                        year: 2022
+                        full: 2022-01-02 01:23:45 UTC
+                    - invoice_num: 20220101-XXXX-XXX
+                      money_value_in_currency: 8000
+                      invoice:
+                        bundle_base_price_in_author_currency: 8000
+                        bundle_price_in_author_currency: 8000
+                        currency: € 0.0
+                        currency_code: EUR
+                        ordered_credits: 8000000
+                        extra_credits: 0
+                        promo_credits: 0
+                        total_credits: 8000000
+                        real_credit_price_in_ref_cur: 0.001
+                        vat_rate: 0
+                        address: 221B Baker Street
+                        legal_mention: '*VAT exemption under Article 283-2 of the General Tax Code'
+                        payment_method: wire
+                        locale: en
+                      bundle:
+                      - {}
+                      - {}
+                      promo_code: {}
+                      billing_address:
+                        city: Paris
+                        address: 55 Rue du Faubourg Saint-Honoré
+                        address2: Palais de l’Élysée
+                        company: Top Secret
+                        country: FR
+                        zip_code: '76008'
+                        state_region: ''
+                        last_name: Wallace
+                        first_name: Marsellus
+                      type: Transaction::CreditPurchase::BuyingACreditBundle
+                      issued_at:
+                        day: 1
+                        month: 1
+                        year: 2022
+                        full: 2022-12-01 01:23:45 UTC
+              schema:
+                type: object
+                properties:
+                  transactions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Transaction'
+                    minItems: 1
+                    uniqueItems: true
+components:
+  schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    Transaction:
+      type: object
+      properties:
+        invoice_num:
+          type: string
+        money_value_in_currency:
+          type: number
+        invoice:
+          type: object
+          properties:
+            bundle_base_price_in_author_currency:
+              type: number
+            bundle_price_in_author_currency:
+              type: number
+            currency:
+              type: string
+            ordered_credits:
+              type: number
+            extra_credits:
+              type: number
+            promo_credits:
+              type: number
+            total_credits:
+              type: number
+            real_credit_price_in_ref_cur:
+              type: number
+            vat_rate:
+              type: number
+            address:
+              type: string
+            legal_mention:
+              type: string
+            payment_method:
+              type: string
+            locale:
+              type: string
+        bundle:
+          type: array
+          items:
+            type: object
+            properties: {}
+        promo_code:
+          type: object
+          properties: {}
+        billing_address:
+          type: object
+          properties:
+            city:
+              type: string
+            address:
+              type: string
+            address2:
+              type:
+              - string
+              - 'null'
+            company:
+              type: string
+            country:
+              type: string
+            zip_code:
+              type: string
+            state_region:
+              type: string
+            last_name:
+              type: string
+            first_name:
+              type: string
+        type:
+          type: string
+        issued_at:
+          $ref: '#/components/schemas/Date'
+      required:
+      - invoice_num
+      - money_value_in_currency
+      - type
+      - issued_at
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

@@ -1,0 +1,245 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Expertises API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Expertises
+paths:
+  /v1/public/expertises:
+    get:
+      summary: List Expertises
+      tags:
+      - Expertises
+      parameters:
+      - name: filter
+        in: query
+        required: true
+        description: '(required) Type of abilities to list.
+
+
+          Possible values:
+
+
+          * professional
+
+          * interest
+
+          '
+        schema:
+          type: string
+          enum:
+          - professional
+          - interest
+      - name: locale
+        in: query
+        required: false
+        description: Locale used to translate the expertises name (en by default)
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Lists expertises
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - id: 596da90cc4f05c000170ffd0
+                    name: Arts & Culture
+                    general_label: General
+                    code: arts_and_culture
+                    kind: professional
+                    is_root: true
+                    client_pricing: 40
+                    client_pricing_in_currency: 0.04
+                    client_pricings:
+                      translation: 40
+                      copywriting: 100
+                    client_pricings_in_currency:
+                      translation: 0.04
+                      copywriting: 0.1
+                  - id: 57ce805b39775e0003e221fe
+                    name: Economics & Research
+                    general_label: General
+                    code: economics_and_research
+                    kind: professional
+                    is_root: true
+                    client_pricing: 40
+                    client_pricing_in_currency: 0.04
+                    client_pricings:
+                      translation: 40
+                      copywriting: 100
+                    client_pricings_in_currency:
+                      translation: 0.04
+                      copywriting: 0.1
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expertise'
+                minItems: 1
+                uniqueItems: true
+  /v1/public/expertises/{expertise_id}/sub_expertises:
+    get:
+      summary: List Sub-Expertises
+      tags:
+      - Expertises
+      parameters:
+      - name: expertise_id
+        in: path
+        required: true
+        description: (required) The parent Expertise ID
+        schema:
+          type: string
+      - name: locale
+        in: query
+        required: false
+        description: Locale used to translate the Sub-Expertises name (en by default)
+        schema:
+          type: string
+      responses:
+        '404':
+          description: Not found
+        '200':
+          description: Lists Sub-Expertises
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - id: 57ce805b39775e0003e221e6
+                    name: Automotive
+                    general_label: General
+                    code: automotive
+                    kind: professional
+                    is_root: false
+                    client_pricing: 40
+                    client_pricing_in_currency: 0.04
+                    client_pricings:
+                      translation: 40
+                      copywriting: 100
+                    client_pricings_in_currency:
+                      translation: 0.04
+                      copywriting: 0.1
+                  - id: 57ce805b39775e0003e221ef
+                    name: Energy & Natural Resources
+                    general_label: General
+                    code: energy_and_natural_resources
+                    kind: professional
+                    is_root: false
+                    client_pricing: 40
+                    client_pricing_in_currency: 0.04
+                    client_pricings:
+                      translation: 40
+                      copywriting: 100
+                    client_pricings_in_currency:
+                      translation: 0.04
+                      copywriting: 0.1
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expertise'
+                minItems: 1
+                uniqueItems: true
+  /v1/public/expertises/{expertise_id}/sub_expertises/{sub_expertise_id}:
+    get:
+      summary: Retrieve a single Sub-Expertise
+      tags:
+      - Expertises
+      parameters:
+      - name: expertise_id
+        in: path
+        required: true
+        description: (required) The parent Expertise ID
+        schema:
+          type: string
+      - name: sub_expertise_id
+        in: path
+        required: true
+        description: (required) The Sub-Expertise ID
+        schema:
+          type: string
+      - name: locale
+        in: query
+        required: false
+        description: Locale used to translate the Sub-Expertise name (en by default)
+        schema:
+          type: string
+      responses:
+        '404':
+          description: Not found
+        '200':
+          description: Lists Sub-Expertises
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    id: 57ce805b39775e0003e221e6
+                    name: Automotive
+                    general_label: General
+                    code: automotive
+                    kind: professional
+                    is_root: false
+                    client_pricing: 40
+                    client_pricing_in_currency: 0.04
+                    client_pricings:
+                      translation: 40
+                      copywriting: 100
+                    client_pricings_in_currency:
+                      translation: 0.04
+                      copywriting: 0.1
+              schema:
+                $ref: '#/components/schemas/Expertise'
+components:
+  schemas:
+    Expertise:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        general_label:
+          type: string
+        code:
+          type: string
+        kind:
+          type: string
+          enum:
+          - interest
+          - professional
+        is_root:
+          type: boolean
+        client_pricing:
+          type: number
+        client_pricing_in_currency:
+          type: number
+        client_pricings:
+          type: object
+          properties:
+            translation:
+              type: number
+            copywriting:
+              type: number
+        client_pricings_in_currency:
+          type: object
+          properties:
+            translation:
+              type: number
+            copywriting:
+              type: number
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

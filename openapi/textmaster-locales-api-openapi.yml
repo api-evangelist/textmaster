@@ -1,0 +1,81 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Locales API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Locales
+paths:
+  /v1/public/locales:
+    get:
+      summary: List Locales
+      tags:
+      - Locales
+      responses:
+        '200':
+          description: Lists locales
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - code: de
+                    name: German
+                    active: true
+                  - code: en
+                    name: English (US)
+                    active: true
+                  - code: en-GB
+                    name: English (UK)
+                    active: true
+                  - code: fr
+                    name: Français
+                    active: true
+                  - code: es
+                    name: Spanish
+                    active: true
+                  - code: it
+                    name: Italian
+                    active: true
+                  - code: nl
+                    name: Dutch
+                    active: true
+                  - code: pt
+                    name: Portuguese
+                    active: true
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Locale'
+                minItems: 1
+                uniqueItems: true
+components:
+  schemas:
+    Locale:
+      type: object
+      properties:
+        active:
+          type: boolean
+        code:
+          type: string
+          pattern: ^[a-z]{2}(-[A-Z]{2})?$
+        name:
+          type: string
+      required:
+      - active
+      - code
+      - name
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

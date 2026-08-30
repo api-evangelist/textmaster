@@ -1,0 +1,149 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Glossaries API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Glossaries
+paths:
+  /v1/clients/glossaries:
+    get:
+      summary: List Glossaries
+      tags:
+      - Glossaries
+      security:
+      - oauth2:
+        - glossary:manage
+        - glossary:read
+        - glossary:write
+      parameters:
+      - name: filter
+        in: query
+        required: false
+        description: 'Possible values:
+
+
+          * all: list both shared and owned glossaries (default).
+
+          * share: shared glossaries only.
+
+          * owned: owned glossaries only.
+
+          '
+        schema:
+          type: string
+          enum:
+          - all
+          - share
+          - owned
+      - name: page
+        in: query
+        required: false
+        description: Search results are limited to 100 items. Specify page number to read more than the first page.
+        schema:
+          type: integer
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists glossaries
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                  - name: some-glossary.xlsx
+                    language_codes:
+                    - en-eu
+                    - fr-fr
+                    created_at: '2021-12-25T12:34:45.123Z'
+                    file_url: https://s3-eu-west-1.amazonaws.com/base-textmaster-production/uploads/glossaries/user_abcdefghijklmn0123456789/2e485972-3bbf-41f7-bead-5b328c3ad1d2/some-glossary.xlsx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=XXX%2F20211225%2Feu-west-1%2Fs3%2Faws4_request&X-Amz-Date=20211225T123456Z&X-Amz-Expires=86400&X-Amz-Signature=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX&X-Amz-SignedHeaders=host&response-content-disposition=attachment
+                    user_id: 97e36903-1c7b-4790-9ff3-bf76e0e4c17c
+                    term_count: 123456
+                    id: 2e485972-3bbf-41f7-bead-5b328c3ad1d2
+                    type: glossaries
+                    links:
+                      self: http://api.glossary.svc.cluster.local/api/v1/glossaries/2e485972-3bbf-41f7-bead-5b328c3ad1d2
+                    relationships:
+                      glossary_holders:
+                        links:
+                          self: http://api.glossary.svc.cluster.local/api/v1/glossaries/2e485972-3bbf-41f7-bead-5b328c3ad1d2/relationships/glossary_holders
+                          related: http://api.glossary.svc.cluster.local/api/v1/glossaries/2e485972-3bbf-41f7-bead-5b328c3ad1d2/glossary_holders
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Glossary'
+                minItems: 1
+                uniqueItems: true
+components:
+  schemas:
+    Glossary:
+      type: object
+      properties:
+        name:
+          type: string
+        language_codes:
+          type: array
+          items:
+            type: string
+            pattern: ^[a-z]{2}(-[a-z]{2})?$
+        created_at:
+          type: string
+        file_url:
+          type: string
+        user_id:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        links:
+          type: object
+          properties:
+            self:
+              type: string
+        relationships:
+          type: object
+          properties:
+            glossary_holders:
+              type: object
+              properties:
+                links:
+                  type: object
+                  properties:
+                    self:
+                      type: string
+                    related:
+                      type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors

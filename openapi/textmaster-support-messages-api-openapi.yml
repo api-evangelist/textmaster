@@ -1,0 +1,230 @@
+openapi: 3.2.0
+info:
+  title: TextMaster API v1 Support Messages API
+  version: v1
+servers:
+- url: https://api.textmaster.com
+tags:
+- name: Support Messages
+paths:
+  /v1/clients/projects/{project_id}/documents/{document_id}/support_messages:
+    get:
+      summary: List Support Messages
+      tags:
+      - Support Messages
+      security:
+      - oauth2:
+        - discussion:manage
+        - discussion:read
+        - discussion:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: Project ID
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: Document ID
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists support Messages
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    support_messages:
+                    - content: Hey, we need a small fix there
+                      message: Hey, we need a small fix there
+                      author_id: 61698af88b81926d91c0f50e
+                      written_by_you: true
+                      written_by_author: false
+                      author_ref: C-980E-FM
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:06:50 UTC
+                    - content: done
+                      message: done
+                      author_id: 61698afa8b81926d91c0f58e
+                      written_by_you: false
+                      written_by_author: true
+                      author_ref: A-988E-FM
+                      created_at:
+                        day: 15
+                        month: 10
+                        year: 2021
+                        full: 2021-10-15 14:06:50 UTC
+              schema:
+                type: object
+                properties:
+                  support_messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SupportMessage'
+    post:
+      summary: Create a Support Message
+      tags:
+      - Support Messages
+      security:
+      - oauth2:
+        - discussion:manage
+        - discussion:write
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        description: Project ID
+        schema:
+          type: string
+      - name: document_id
+        in: path
+        required: true
+        description: Document ID
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    error: invalid_token
+                    error_description: The access token is invalid
+                    state: unauthorizez
+        '200':
+          description: Lists support Messages
+          content:
+            application/json:
+              examples:
+                example_0:
+                  value:
+                    content: we need a fix here
+                    message: we need a fix here
+                    author_id: 61698afa8b81926d91c0f5a2
+                    written_by_you: true
+                    written_by_author: false
+                    author_ref: C-98A2-FM
+                    created_at:
+                      day: 15
+                      month: 10
+                      year: 2021
+                      full: 2021-10-15 14:06:52 UTC
+              schema:
+                $ref: '#/components/schemas/SupportMessage'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                support_message:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      description: Text of the message
+                  required:
+                  - message
+                revision_request:
+                  type: boolean
+                  description: 'Only used when document status in ''in_review''. If ''true'' (default), this
+
+                    support message is considered a revision request and the document is
+
+                    transitioned back to the ''incomplete'' status so that the author can
+
+                    continue working on it.
+
+                    '
+              required:
+              - support_message
+components:
+  schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    SupportMessage:
+      type: object
+      properties:
+        content:
+          type: string
+        message:
+          type: string
+        author_id:
+          type: string
+        written_by_you:
+          type: boolean
+        written_by_author:
+          type: boolean
+        author_ref:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Date'
+      required:
+      - author_id
+      - author_ref
+      - content
+      - created_at
+      - message
+      - written_by_author
+      - written_by_you
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      description: OAuth2 Bearer token authentication
+      flows:
+        authorizationCode:
+          authorizationUrl: https://api.textmaster.com/oauth/authorize
+          tokenUrl: https://api.textmaster.com/oauth/token
+          refreshUrl: https://api.textmaster.com/oauth/token
+          scopes:
+            preferred_author:manage: Allow read & write access to My Authors
+            preferred_author:read: Allow read access to My Authors
+            preferred_author:write: Allow write access to My Authors
