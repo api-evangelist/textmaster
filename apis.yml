@@ -350,6 +350,8 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - Glossary
+  tags_raw:
   - Glossaries
   properties:
   - type: OpenAPI
@@ -430,6 +432,8 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - Language
+  tags_raw:
   - Languages
   properties:
   - type: OpenAPI
@@ -590,6 +594,8 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - Project
+  tags_raw:
   - Projects
   properties:
   - type: OpenAPI
@@ -710,6 +716,8 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -790,6 +798,8 @@ apis:
   humanURL: https://developer.textmaster.com/
   baseURL: https://api.textmaster.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
