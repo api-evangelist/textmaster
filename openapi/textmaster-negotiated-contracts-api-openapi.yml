@@ -73,6 +73,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/NegotiatedContract'
+      operationId: getV1ClientsNegotiatedContracts
+      x-operation-id-source: derived
 components:
   schemas:
     NegotiatedContract:

@@ -88,6 +88,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/SupportMessage'
+      operationId: getV1ClientsProjectsByProjectIdDocumentsByDocumentIdSupportMessages
+      x-operation-id-source: derived
     post:
       summary: Create a Support Message
       tags:
@@ -177,19 +179,10 @@ paths:
                     '
               required:
               - support_message
+      operationId: postV1ClientsProjectsByProjectIdDocumentsByDocumentIdSupportMessages
+      x-operation-id-source: derived
 components:
   schemas:
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     SupportMessage:
       type: object
       properties:
@@ -215,6 +208,17 @@ components:
       - message
       - written_by_author
       - written_by_you
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

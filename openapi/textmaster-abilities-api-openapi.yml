@@ -171,6 +171,8 @@ paths:
                       $ref: '#/components/schemas/Ability'
                     minItems: 1
                     uniqueItems: true
+      operationId: getV1ClientsAbilities
+      x-operation-id-source: derived
 components:
   schemas:
     Ability:

@@ -43,6 +43,8 @@ paths:
                   $ref: '#/components/schemas/Country'
                 minItems: 1
                 uniqueItems: true
+      operationId: getV1PublicCountries
+      x-operation-id-source: derived
 components:
   schemas:
     Country:

@@ -94,6 +94,8 @@ paths:
                   $ref: '#/components/schemas/Glossary'
                 minItems: 1
                 uniqueItems: true
+      operationId: getV1ClientsGlossaries
+      x-operation-id-source: derived
 components:
   schemas:
     Glossary:

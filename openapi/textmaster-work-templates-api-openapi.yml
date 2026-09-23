@@ -77,6 +77,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/WorkTemplate'
+      operationId: getV1ClientsWorkTemplates
+      x-operation-id-source: derived
   /v1/clients/work_templates/{work_template_name}:
     get:
       summary: Retrieve a Work Templates
@@ -115,6 +117,8 @@ paths:
                     ctype: public
               schema:
                 $ref: '#/components/schemas/WorkTemplate'
+      operationId: getV1ClientsWorkTemplatesByWorkTemplateName
+      x-operation-id-source: derived
 components:
   schemas:
     WorkTemplate:

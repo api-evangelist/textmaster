@@ -159,6 +159,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Project'
+      operationId: getV1ClientsProjects
+      x-operation-id-source: derived
     post:
       summary: Create a Project
       tags:
@@ -520,6 +522,8 @@ paths:
                   - project_briefing
               required:
               - project
+      operationId: postV1ClientsProjects
+      x-operation-id-source: derived
   /v1/clients/projects/filter:
     get:
       summary: Filter Projects
@@ -684,6 +688,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Project'
+      operationId: getV1ClientsProjectsFilter
+      x-operation-id-source: derived
   /v1/clients/projects/quotation:
     get:
       summary: Get a quotation
@@ -860,6 +866,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Quotation'
+      operationId: getV1ClientsProjectsQuotation
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}:
     get:
       summary: Get a Project
@@ -984,6 +992,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: getV1ClientsProjectsByProjectId
+      x-operation-id-source: derived
     put:
       summary: Update a Project
       tags:
@@ -1250,6 +1260,8 @@ paths:
                       type: string
               required:
               - project
+      operationId: putV1ClientsProjectsByProjectId
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/activate_tm_options:
     put:
       summary: Activate Translation Memory options on a Project
@@ -1310,6 +1322,8 @@ paths:
                   - options
               required:
               - project
+      operationId: putV1ClientsProjectsByProjectIdActivateTmOptions
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/archive:
     put:
       summary: Archive a Project
@@ -1433,6 +1447,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdArchive
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/async_launch:
     post:
       summary: Launch a Project asynchronously
@@ -1558,6 +1574,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: postV1ClientsProjectsByProjectIdAsyncLaunch
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/cancel:
     put:
       summary: Cancels a Project
@@ -1681,6 +1699,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdCancel
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/duplicate:
     post:
       summary: Duplicate a Project
@@ -1807,6 +1827,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: postV1ClientsProjectsByProjectIdDuplicate
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/finalize:
     put:
       summary: Finalize a Project
@@ -1930,6 +1952,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdFinalize
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/launch:
     put:
       summary: Launch a Project synchronously
@@ -2055,6 +2079,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdLaunch
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/pause:
     put:
       summary: Pause a Project
@@ -2178,6 +2204,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdPause
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/resume:
     put:
       summary: Resume a Project
@@ -2301,6 +2329,8 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdResume
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/unarchive:
     put:
       summary: Unarchive a Project
@@ -2424,8 +2454,41 @@ paths:
                       ctype: public
               schema:
                 $ref: '#/components/schemas/Project'
+      operationId: putV1ClientsProjectsByProjectIdUnarchive
+      x-operation-id-source: derived
 components:
   schemas:
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    DateOrNull:
+      type:
+      - object
+      - 'null'
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
     Quotation:
       type: object
       properties:
@@ -2660,30 +2723,6 @@ components:
           $ref: '#/components/schemas/DateOrNull'
         work_template:
           $ref: '#/components/schemas/ObjectOrNull'
-    DateOrNull:
-      type:
-      - object
-      - 'null'
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     Project:
       type: object
       properties:
@@ -2910,31 +2949,6 @@ components:
           $ref: '#/components/schemas/DateOrNull'
         work_template:
           $ref: '#/components/schemas/WorkTemplate'
-    ObjectOrNull:
-      type:
-      - object
-      - 'null'
-    WorkTemplate:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        image_preview_path:
-          type:
-          - string
-          - 'null'
-        ctype:
-          type: string
-          enum:
-          - public
-          - private
-      required:
-      - name
-      - ctype
     Document:
       type: object
       properties:
@@ -3031,13 +3045,31 @@ components:
           $ref: '#/components/schemas/Date'
         completed_at:
           $ref: '#/components/schemas/DateOrNull'
-    CallbackUrl:
+    ObjectOrNull:
+      type:
+      - object
+      - 'null'
+    WorkTemplate:
       type: object
       properties:
-        url:
+        name:
           type: string
-        format:
+        description:
+          type:
+          - string
+          - 'null'
+        image_preview_path:
+          type:
+          - string
+          - 'null'
+        ctype:
           type: string
+          enum:
+          - public
+          - private
+      required:
+      - name
+      - ctype
   securitySchemes:
     oauth2:
       type: oauth2

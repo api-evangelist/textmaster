@@ -47,6 +47,8 @@ paths:
                       Authorization: 78ca271e7f6464961ef3db6903da3d2c51cd4156975322ba678840e12a334de3
               schema:
                 $ref: '#/components/schemas/UploadProperties'
+      operationId: postV1ClientsUploadProperties
+      x-operation-id-source: derived
 components:
   schemas:
     UploadProperties:

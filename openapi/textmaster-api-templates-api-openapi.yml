@@ -101,6 +101,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ApiTemplate'
+      operationId: getV1ClientsApiTemplates
+      x-operation-id-source: derived
   /v1/clients/api_templates/filter:
     get:
       summary: Filter API Templates
@@ -217,19 +219,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/ApiTemplate'
+      operationId: getV1ClientsApiTemplatesFilter
+      x-operation-id-source: derived
 components:
   schemas:
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     ApiTemplate:
       type: object
       properties:
@@ -292,6 +285,17 @@ components:
           $ref: '#/components/schemas/Date'
         updated_at:
           $ref: '#/components/schemas/Date'
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

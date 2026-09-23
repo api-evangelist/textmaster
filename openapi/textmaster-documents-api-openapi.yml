@@ -129,6 +129,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Document'
+      operationId: getV1ClientsProjectsByProjectIdDocuments
+      x-operation-id-source: derived
     post:
       summary: Create a Document
       tags:
@@ -400,6 +402,8 @@ paths:
                     deliver_work_as_file:
                       description: Should the Authors submit their work as a file?
                       type: boolean
+      operationId: postV1ClientsProjectsByProjectIdDocuments
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/documents/filter:
     get:
       summary: Filter Documents
@@ -534,6 +538,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Document'
+      operationId: getV1ClientsProjectsByProjectIdDocumentsFilter
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/documents/{document_id}:
     get:
       summary: Get a Document
@@ -628,6 +634,8 @@ paths:
                     completed_at: null
               schema:
                 $ref: '#/components/schemas/Document'
+      operationId: getV1ClientsProjectsByProjectIdDocumentsByDocumentId
+      x-operation-id-source: derived
     put:
       summary: Update a Document
       tags:
@@ -883,6 +891,8 @@ paths:
                     deliver_work_as_file:
                       description: Should the Authors submit their work as a file?
                       type: boolean
+      operationId: putV1ClientsProjectsByProjectIdDocumentsByDocumentId
+      x-operation-id-source: derived
     delete:
       summary: Delete a Document
       tags:
@@ -975,6 +985,8 @@ paths:
                     completed_at: null
               schema:
                 $ref: '#/components/schemas/Document'
+      operationId: deleteV1ClientsProjectsByProjectIdDocumentsByDocumentId
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/documents/{document_id}/complete:
     put:
       summary: Complete a Document
@@ -1091,6 +1103,8 @@ paths:
                 message:
                   description: Message addressed to the Author.
                   type: string
+      operationId: putV1ClientsProjectsByProjectIdDocumentsByDocumentIdComplete
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/documents/{document_id}/review_url:
     post:
       summary: Generate a Review URL
@@ -1163,6 +1177,8 @@ paths:
               required:
               - keys
         required: true
+      operationId: postV1ClientsProjectsByProjectIdDocumentsByDocumentIdReviewUrl
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/batch/documents:
     post:
       summary: Create multiple Documents
@@ -1511,6 +1527,8 @@ paths:
                       deliver_work_as_file:
                         description: Should the Authors submit their work as a file?
                         type: boolean
+      operationId: postV1ClientsProjectsByProjectIdBatchDocuments
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/batch/documents/complete:
     post:
       summary: Complete multiple Documents
@@ -1585,19 +1603,10 @@ paths:
                   type: string
               required:
               - documents
+      operationId: postV1ClientsProjectsByProjectIdBatchDocumentsComplete
+      x-operation-id-source: derived
 components:
   schemas:
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     Document:
       type: object
       properties:
@@ -1713,6 +1722,17 @@ components:
         url:
           type: string
         format:
+          type: string
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
           type: string
   securitySchemes:
     oauth2:

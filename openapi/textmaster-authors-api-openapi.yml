@@ -124,6 +124,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/PotentialAuthor'
+      operationId: getV1ClientsAuthors
+      x-operation-id-source: derived
 components:
   schemas:
     PotentialAuthor:

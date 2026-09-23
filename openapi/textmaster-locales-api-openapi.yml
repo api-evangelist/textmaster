@@ -50,6 +50,8 @@ paths:
                   $ref: '#/components/schemas/Locale'
                 minItems: 1
                 uniqueItems: true
+      operationId: getV1PublicLocales
+      x-operation-id-source: derived
 components:
   schemas:
     Locale:

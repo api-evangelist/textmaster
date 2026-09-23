@@ -131,6 +131,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/MyAuthor'
+      operationId: getV1ClientsMyAuthors
+      x-operation-id-source: derived
     post:
       summary: Add a My Author
       tags:
@@ -244,6 +246,8 @@ paths:
                   - status
               required:
               - my_author
+      operationId: postV1ClientsMyAuthors
+      x-operation-id-source: derived
   /v1/clients/my_authors/{author_id}:
     get:
       summary: Retrieve a single My Author
@@ -319,6 +323,8 @@ paths:
                     errors:
                       base:
                       - Resource not found.
+      operationId: getV1ClientsMyAuthorsByAuthorId
+      x-operation-id-source: derived
     put:
       summary: Update My Author
       tags:
@@ -468,6 +474,8 @@ paths:
                   - status
               required:
               - my_author
+      operationId: putV1ClientsMyAuthorsByAuthorId
+      x-operation-id-source: derived
   /v1/clients/projects/{project_id}/my_authors:
     get:
       summary: Get all My Authors who can do a given Project
@@ -592,19 +600,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/MyAuthor'
+      operationId: getV1ClientsProjectsByProjectIdMyAuthors
+      x-operation-id-source: derived
 components:
   schemas:
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     MyAuthor:
       type: object
       properties:
@@ -632,6 +631,17 @@ components:
             type: string
         updated_at:
           $ref: '#/components/schemas/Date'
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

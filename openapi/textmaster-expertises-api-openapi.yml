@@ -80,6 +80,8 @@ paths:
                   $ref: '#/components/schemas/Expertise'
                 minItems: 1
                 uniqueItems: true
+      operationId: getV1PublicExpertises
+      x-operation-id-source: derived
   /v1/public/expertises/{expertise_id}/sub_expertises:
     get:
       summary: List Sub-Expertises
@@ -142,6 +144,8 @@ paths:
                   $ref: '#/components/schemas/Expertise'
                 minItems: 1
                 uniqueItems: true
+      operationId: getV1PublicExpertisesByExpertiseIdSubExpertises
+      x-operation-id-source: derived
   /v1/public/expertises/{expertise_id}/sub_expertises/{sub_expertise_id}:
     get:
       summary: Retrieve a single Sub-Expertise
@@ -192,6 +196,8 @@ paths:
                       copywriting: 0.1
               schema:
                 $ref: '#/components/schemas/Expertise'
+      operationId: getV1PublicExpertisesByExpertiseIdSubExpertisesBySubExpertiseId
+      x-operation-id-source: derived
 components:
   schemas:
     Expertise:

@@ -38,6 +38,8 @@ paths:
                       $ref: '#/components/schemas/Category'
                     minItems: 1
                     uniqueItems: true
+      operationId: getV1PublicCategories
+      x-operation-id-source: derived
 components:
   schemas:
     Category:

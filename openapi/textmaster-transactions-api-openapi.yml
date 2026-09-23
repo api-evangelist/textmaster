@@ -19,9 +19,7 @@ paths:
 
         * transaction:read
 
-        * transaction:write
-
-        '
+        * transaction:write'
       security:
       - oauth2:
         - transaction:manage
@@ -197,19 +195,10 @@ paths:
                       $ref: '#/components/schemas/Transaction'
                     minItems: 1
                     uniqueItems: true
+      operationId: getV1ClientsTransactions
+      x-operation-id-source: derived
 components:
   schemas:
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     Transaction:
       type: object
       properties:
@@ -286,6 +275,17 @@ components:
       - money_value_in_currency
       - type
       - issued_at
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

@@ -36,6 +36,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Language'
+      operationId: getV1PublicLanguages
+      x-operation-id-source: derived
 components:
   schemas:
     Language:
