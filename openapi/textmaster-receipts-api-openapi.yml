@@ -68,6 +68,17 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
     Receipt:
       type: object
       properties:
@@ -84,17 +95,6 @@ components:
       - money_amount
       - type
       - issued_at
-    Date:
-      type: object
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
   securitySchemes:
     oauth2:
       type: oauth2

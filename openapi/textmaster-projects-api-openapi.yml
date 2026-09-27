@@ -2458,13 +2458,236 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CallbackUrl:
+    Project:
       type: object
       properties:
-        url:
+        id:
           type: string
-        format:
+        name:
           type: string
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        category:
+          type: string
+          enum:
+          - C001
+          - C002
+          - C003
+          - C004
+          - C005
+          - C006
+          - C007
+          - C008
+          - C009
+          - C010
+          - C011
+          - C012
+          - C013
+          - C014
+          - C015
+          - C016
+          - C017
+          - C018
+          - C019
+          - C020
+          - C021
+          - C022
+          - C023
+          - C024
+          - C025
+          - C026
+          - C027
+          - C028
+          - C029
+          - C030
+          - C031
+          - C032
+          - C033
+          - C034
+        vocabulary_type:
+          type: string
+          enum:
+          - not_specified
+          - popular
+          - technical
+          - fictional
+        target_reader_groups:
+          type: string
+          enum:
+          - not_specified
+          - children
+          - teenager
+          - young_adults
+          - adults
+          - old_adults
+        grammatical_person:
+          type: string
+          enum:
+          - not_specified
+          - first_person_singular
+          - second_person_singular
+          - third_person_singular_masculine
+          - third_person_singular_feminine
+          - third_person_singular_neuter
+          - first_person_plural
+          - second_person_plural
+          - third_person_plural
+        custom_data:
+          type: object
+        project_briefing:
+          type: string
+        project_briefing_is_rich:
+          type: boolean
+        priority:
+          type: number
+        status:
+          type: string
+          enum:
+          - in_creation
+          - in_progress
+          - in_review
+          - paused
+          - completed
+          - canceled
+        total_word_count:
+          type: integer
+        documents_statuses:
+          type: object
+          properties:
+            in_creation:
+              type: integer
+            waiting_assignment:
+              type: integer
+            in_progress:
+              type: integer
+            in_review:
+              type: integer
+            incomplete:
+              type: integer
+            completed:
+              type: integer
+            paused:
+              type: integer
+            canceled:
+              type: integer
+            quality_control:
+              type: integer
+            copyscape:
+              type: integer
+            counting_words:
+              type: integer
+            in_extra_review:
+              type: integer
+        progress:
+          type: number
+        same_author_must_do_entire_project:
+          type: boolean
+        callback:
+          $ref: '#/components/schemas/CallbackUrl'
+        external_id:
+          type:
+          - string
+          - 'null'
+        multi_project_id:
+          type:
+          - string
+          - 'null'
+        auto_launch:
+          type: boolean
+        project_template_id:
+          type:
+          - string
+          - 'null'
+        finalized:
+          type: boolean
+        word_count_error:
+          type:
+          - string
+          - 'null'
+        cost_in_credits:
+          type: number
+        ctype:
+          type: string
+          enum:
+          - translation
+          - copywriting
+          - proofreading
+        creation_channel:
+          type: string
+        reference:
+          type: string
+        cost_per_word:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+          required:
+          - currency
+          - amount
+        options:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        option_values:
+          type: object
+          properties:
+            language_level:
+              type: string
+              enum:
+              - enterprise
+              - regular
+              - premium
+        textmasters:
+          type: array
+          items:
+            type: string
+        glossaries:
+          type: array
+          items:
+            type: string
+        cost_in_currency:
+          type: object
+          properties:
+            currency:
+              type: string
+            amount:
+              type: number
+          required:
+          - currency
+          - amount
+        api_template_id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        launched_at:
+          $ref: '#/components/schemas/DateOrNull'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
+        work_template:
+          $ref: '#/components/schemas/WorkTemplate'
+    ObjectOrNull:
+      type:
+      - object
+      - 'null'
     Date:
       type: object
       properties:
@@ -2489,6 +2712,102 @@ components:
           type: integer
         full:
           type: string
+    Document:
+      type: object
+      properties:
+        language_from:
+          type: string
+        language_to:
+          type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        status:
+          type: string
+        skip_copyscape:
+          type: boolean
+        title:
+          type: string
+        instructions:
+          type: string
+        word_count:
+          type: integer
+        word_count_rule:
+          type: integer
+        keywords_repeat_count:
+          type: integer
+        deliver_work_as_file:
+          type: boolean
+        custom_data:
+          type: object
+        plagiarism_analysis:
+          type: object
+        written_words:
+          type: integer
+        type:
+          type: string
+        id:
+          type: string
+        project_id:
+          type: string
+        callback:
+          type: object
+          properties:
+            canceled:
+              $ref: '#/components/schemas/CallbackUrl'
+            completed:
+              $ref: '#/components/schemas/CallbackUrl'
+            copyscape:
+              $ref: '#/components/schemas/CallbackUrl'
+            counting_words:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_progress:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_review:
+              $ref: '#/components/schemas/CallbackUrl'
+            incomplete:
+              $ref: '#/components/schemas/CallbackUrl'
+            paused:
+              $ref: '#/components/schemas/CallbackUrl'
+            quality_control:
+              $ref: '#/components/schemas/CallbackUrl'
+            waiting_assignment:
+              $ref: '#/components/schemas/CallbackUrl'
+        reference:
+          type: string
+        ctype:
+          type: string
+        keyword_list:
+          type: string
+        satisfaction:
+          type:
+          - integer
+          - 'null'
+        completion:
+          type: number
+        can_post_message_to_author:
+          type: boolean
+        author_work:
+          oneOf:
+          - type: object
+          - type: string
+        author_id:
+          type:
+          - string
+          - 'null'
+        author_rating:
+          type: integer
+        original_content:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
     Quotation:
       type: object
       properties:
@@ -2723,332 +3042,6 @@ components:
           $ref: '#/components/schemas/DateOrNull'
         work_template:
           $ref: '#/components/schemas/ObjectOrNull'
-    Project:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        language_from:
-          type: string
-        language_to:
-          type: string
-        language_from_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        language_to_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        category:
-          type: string
-          enum:
-          - C001
-          - C002
-          - C003
-          - C004
-          - C005
-          - C006
-          - C007
-          - C008
-          - C009
-          - C010
-          - C011
-          - C012
-          - C013
-          - C014
-          - C015
-          - C016
-          - C017
-          - C018
-          - C019
-          - C020
-          - C021
-          - C022
-          - C023
-          - C024
-          - C025
-          - C026
-          - C027
-          - C028
-          - C029
-          - C030
-          - C031
-          - C032
-          - C033
-          - C034
-        vocabulary_type:
-          type: string
-          enum:
-          - not_specified
-          - popular
-          - technical
-          - fictional
-        target_reader_groups:
-          type: string
-          enum:
-          - not_specified
-          - children
-          - teenager
-          - young_adults
-          - adults
-          - old_adults
-        grammatical_person:
-          type: string
-          enum:
-          - not_specified
-          - first_person_singular
-          - second_person_singular
-          - third_person_singular_masculine
-          - third_person_singular_feminine
-          - third_person_singular_neuter
-          - first_person_plural
-          - second_person_plural
-          - third_person_plural
-        custom_data:
-          type: object
-        project_briefing:
-          type: string
-        project_briefing_is_rich:
-          type: boolean
-        priority:
-          type: number
-        status:
-          type: string
-          enum:
-          - in_creation
-          - in_progress
-          - in_review
-          - paused
-          - completed
-          - canceled
-        total_word_count:
-          type: integer
-        documents_statuses:
-          type: object
-          properties:
-            in_creation:
-              type: integer
-            waiting_assignment:
-              type: integer
-            in_progress:
-              type: integer
-            in_review:
-              type: integer
-            incomplete:
-              type: integer
-            completed:
-              type: integer
-            paused:
-              type: integer
-            canceled:
-              type: integer
-            quality_control:
-              type: integer
-            copyscape:
-              type: integer
-            counting_words:
-              type: integer
-            in_extra_review:
-              type: integer
-        progress:
-          type: number
-        same_author_must_do_entire_project:
-          type: boolean
-        callback:
-          $ref: '#/components/schemas/CallbackUrl'
-        external_id:
-          type:
-          - string
-          - 'null'
-        multi_project_id:
-          type:
-          - string
-          - 'null'
-        auto_launch:
-          type: boolean
-        project_template_id:
-          type:
-          - string
-          - 'null'
-        finalized:
-          type: boolean
-        word_count_error:
-          type:
-          - string
-          - 'null'
-        cost_in_credits:
-          type: number
-        ctype:
-          type: string
-          enum:
-          - translation
-          - copywriting
-          - proofreading
-        creation_channel:
-          type: string
-        reference:
-          type: string
-        cost_per_word:
-          type: object
-          properties:
-            currency:
-              type: string
-            amount:
-              type: number
-          required:
-          - currency
-          - amount
-        options:
-          type: object
-          properties:
-            language_level:
-              type: string
-              enum:
-              - enterprise
-              - regular
-              - premium
-        option_values:
-          type: object
-          properties:
-            language_level:
-              type: string
-              enum:
-              - enterprise
-              - regular
-              - premium
-        textmasters:
-          type: array
-          items:
-            type: string
-        glossaries:
-          type: array
-          items:
-            type: string
-        cost_in_currency:
-          type: object
-          properties:
-            currency:
-              type: string
-            amount:
-              type: number
-          required:
-          - currency
-          - amount
-        api_template_id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          $ref: '#/components/schemas/Date'
-        updated_at:
-          $ref: '#/components/schemas/Date'
-        launched_at:
-          $ref: '#/components/schemas/DateOrNull'
-        completed_at:
-          $ref: '#/components/schemas/DateOrNull'
-        work_template:
-          $ref: '#/components/schemas/WorkTemplate'
-    Document:
-      type: object
-      properties:
-        language_from:
-          type: string
-        language_to:
-          type: string
-        language_from_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        language_to_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        status:
-          type: string
-        skip_copyscape:
-          type: boolean
-        title:
-          type: string
-        instructions:
-          type: string
-        word_count:
-          type: integer
-        word_count_rule:
-          type: integer
-        keywords_repeat_count:
-          type: integer
-        deliver_work_as_file:
-          type: boolean
-        custom_data:
-          type: object
-        plagiarism_analysis:
-          type: object
-        written_words:
-          type: integer
-        type:
-          type: string
-        id:
-          type: string
-        project_id:
-          type: string
-        callback:
-          type: object
-          properties:
-            canceled:
-              $ref: '#/components/schemas/CallbackUrl'
-            completed:
-              $ref: '#/components/schemas/CallbackUrl'
-            copyscape:
-              $ref: '#/components/schemas/CallbackUrl'
-            counting_words:
-              $ref: '#/components/schemas/CallbackUrl'
-            in_progress:
-              $ref: '#/components/schemas/CallbackUrl'
-            in_review:
-              $ref: '#/components/schemas/CallbackUrl'
-            incomplete:
-              $ref: '#/components/schemas/CallbackUrl'
-            paused:
-              $ref: '#/components/schemas/CallbackUrl'
-            quality_control:
-              $ref: '#/components/schemas/CallbackUrl'
-            waiting_assignment:
-              $ref: '#/components/schemas/CallbackUrl'
-        reference:
-          type: string
-        ctype:
-          type: string
-        keyword_list:
-          type: string
-        satisfaction:
-          type:
-          - integer
-          - 'null'
-        completion:
-          type: number
-        can_post_message_to_author:
-          type: boolean
-        author_work:
-          oneOf:
-          - type: object
-          - type: string
-        author_id:
-          type:
-          - string
-          - 'null'
-        author_rating:
-          type: integer
-        original_content:
-          type: string
-        created_at:
-          $ref: '#/components/schemas/Date'
-        updated_at:
-          $ref: '#/components/schemas/Date'
-        completed_at:
-          $ref: '#/components/schemas/DateOrNull'
-    ObjectOrNull:
-      type:
-      - object
-      - 'null'
     WorkTemplate:
       type: object
       properties:
@@ -3070,6 +3063,13 @@ components:
       required:
       - name
       - ctype
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

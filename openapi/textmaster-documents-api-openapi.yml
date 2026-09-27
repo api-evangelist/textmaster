@@ -1607,6 +1607,19 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    DateOrNull:
+      type:
+      - object
+      - 'null'
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
     Document:
       type: object
       properties:
@@ -1703,19 +1716,6 @@ components:
           $ref: '#/components/schemas/Date'
         completed_at:
           $ref: '#/components/schemas/DateOrNull'
-    DateOrNull:
-      type:
-      - object
-      - 'null'
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
-          type: string
     CallbackUrl:
       type: object
       properties:
