@@ -2684,130 +2684,13 @@ components:
           $ref: '#/components/schemas/DateOrNull'
         work_template:
           $ref: '#/components/schemas/WorkTemplate'
-    ObjectOrNull:
-      type:
-      - object
-      - 'null'
-    Date:
+    CallbackUrl:
       type: object
       properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
+        url:
           type: string
-    DateOrNull:
-      type:
-      - object
-      - 'null'
-      properties:
-        day:
-          type: integer
-        month:
-          type: integer
-        year:
-          type: integer
-        full:
+        format:
           type: string
-    Document:
-      type: object
-      properties:
-        language_from:
-          type: string
-        language_to:
-          type: string
-        language_from_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        language_to_code:
-          type: string
-          pattern: ^[a-z]{2}(-[a-z]{2})?$
-        status:
-          type: string
-        skip_copyscape:
-          type: boolean
-        title:
-          type: string
-        instructions:
-          type: string
-        word_count:
-          type: integer
-        word_count_rule:
-          type: integer
-        keywords_repeat_count:
-          type: integer
-        deliver_work_as_file:
-          type: boolean
-        custom_data:
-          type: object
-        plagiarism_analysis:
-          type: object
-        written_words:
-          type: integer
-        type:
-          type: string
-        id:
-          type: string
-        project_id:
-          type: string
-        callback:
-          type: object
-          properties:
-            canceled:
-              $ref: '#/components/schemas/CallbackUrl'
-            completed:
-              $ref: '#/components/schemas/CallbackUrl'
-            copyscape:
-              $ref: '#/components/schemas/CallbackUrl'
-            counting_words:
-              $ref: '#/components/schemas/CallbackUrl'
-            in_progress:
-              $ref: '#/components/schemas/CallbackUrl'
-            in_review:
-              $ref: '#/components/schemas/CallbackUrl'
-            incomplete:
-              $ref: '#/components/schemas/CallbackUrl'
-            paused:
-              $ref: '#/components/schemas/CallbackUrl'
-            quality_control:
-              $ref: '#/components/schemas/CallbackUrl'
-            waiting_assignment:
-              $ref: '#/components/schemas/CallbackUrl'
-        reference:
-          type: string
-        ctype:
-          type: string
-        keyword_list:
-          type: string
-        satisfaction:
-          type:
-          - integer
-          - 'null'
-        completion:
-          type: number
-        can_post_message_to_author:
-          type: boolean
-        author_work:
-          oneOf:
-          - type: object
-          - type: string
-        author_id:
-          type:
-          - string
-          - 'null'
-        author_rating:
-          type: integer
-        original_content:
-          type: string
-        created_at:
-          $ref: '#/components/schemas/Date'
-        updated_at:
-          $ref: '#/components/schemas/Date'
-        completed_at:
-          $ref: '#/components/schemas/DateOrNull'
     Quotation:
       type: object
       properties:
@@ -3042,6 +2925,30 @@ components:
           $ref: '#/components/schemas/DateOrNull'
         work_template:
           $ref: '#/components/schemas/ObjectOrNull'
+    Date:
+      type: object
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
+    DateOrNull:
+      type:
+      - object
+      - 'null'
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+        full:
+          type: string
     WorkTemplate:
       type: object
       properties:
@@ -3063,13 +2970,106 @@ components:
       required:
       - name
       - ctype
-    CallbackUrl:
+    ObjectOrNull:
+      type:
+      - object
+      - 'null'
+    Document:
       type: object
       properties:
-        url:
+        language_from:
           type: string
-        format:
+        language_to:
           type: string
+        language_from_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        language_to_code:
+          type: string
+          pattern: ^[a-z]{2}(-[a-z]{2})?$
+        status:
+          type: string
+        skip_copyscape:
+          type: boolean
+        title:
+          type: string
+        instructions:
+          type: string
+        word_count:
+          type: integer
+        word_count_rule:
+          type: integer
+        keywords_repeat_count:
+          type: integer
+        deliver_work_as_file:
+          type: boolean
+        custom_data:
+          type: object
+        plagiarism_analysis:
+          type: object
+        written_words:
+          type: integer
+        type:
+          type: string
+        id:
+          type: string
+        project_id:
+          type: string
+        callback:
+          type: object
+          properties:
+            canceled:
+              $ref: '#/components/schemas/CallbackUrl'
+            completed:
+              $ref: '#/components/schemas/CallbackUrl'
+            copyscape:
+              $ref: '#/components/schemas/CallbackUrl'
+            counting_words:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_progress:
+              $ref: '#/components/schemas/CallbackUrl'
+            in_review:
+              $ref: '#/components/schemas/CallbackUrl'
+            incomplete:
+              $ref: '#/components/schemas/CallbackUrl'
+            paused:
+              $ref: '#/components/schemas/CallbackUrl'
+            quality_control:
+              $ref: '#/components/schemas/CallbackUrl'
+            waiting_assignment:
+              $ref: '#/components/schemas/CallbackUrl'
+        reference:
+          type: string
+        ctype:
+          type: string
+        keyword_list:
+          type: string
+        satisfaction:
+          type:
+          - integer
+          - 'null'
+        completion:
+          type: number
+        can_post_message_to_author:
+          type: boolean
+        author_work:
+          oneOf:
+          - type: object
+          - type: string
+        author_id:
+          type:
+          - string
+          - 'null'
+        author_rating:
+          type: integer
+        original_content:
+          type: string
+        created_at:
+          $ref: '#/components/schemas/Date'
+        updated_at:
+          $ref: '#/components/schemas/Date'
+        completed_at:
+          $ref: '#/components/schemas/DateOrNull'
   securitySchemes:
     oauth2:
       type: oauth2
