@@ -172,13 +172,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CallbackUrl:
-      type: object
-      properties:
-        url:
-          type: string
-        format:
-          type: string
     UserInfo:
       type: object
       properties:
@@ -243,6 +236,13 @@ components:
               type:
               - string
               - 'null'
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2
