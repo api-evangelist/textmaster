@@ -1607,6 +1607,13 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    CallbackUrl:
+      type: object
+      properties:
+        url:
+          type: string
+        format:
+          type: string
     Document:
       type: object
       properties:
@@ -1726,13 +1733,6 @@ components:
         year:
           type: integer
         full:
-          type: string
-    CallbackUrl:
-      type: object
-      properties:
-        url:
-          type: string
-        format:
           type: string
   securitySchemes:
     oauth2:
