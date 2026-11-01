@@ -64,6 +64,151 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-TextMaster is a company surfaced as a portfolio company of serena and added to the API Evangelist network as a stub for enrichment. Sector: saas. This profile is a lead awaiting the enrichment pipeline.
+TextMaster is a French professional translation, proofreading and copywriting platform that sells human-and-machine language work as an API-first service in 50+ languages. Clients create Projects, attach Documents (plain text or file URLs), request a quotation, launch against a prepaid credit wallet, and receive finished content back through status-change webhooks. The platform exposes a documented OpenAPI 3.0.3 REST API at api.textmaster.com covering projects, documents, glossaries, expertises, preferred authors, work/API templates, transactions, invoices and receipts, secured by OAuth 2.0 authorization-code apps with 22 granular scopes plus a legacy signature strategy. It ships first-party Akeneo, Magento 2, Salesforce Commerce Cloud and Hybris connectors and a PHP API client. TextMaster is now part of Acolad Group; the marketing site is a transition landing page pointing at Acolad's Lia platform, while the application, the API and the developer portal remain live and in service.
 
-Source: portfolio company of [serena](https://github.com/api-evangelist/serena) — https://fr.textmaster.com/
+**Areas:** Company · Translation · Localization · Language Services · Copywriting · Proofreading · Machine Translation · Content Production · Translation Memory · Glossary · Ecommerce Localization · Product Information Management
+
+## TextMaster on APIs.io
+
+Everything profiled for TextMaster is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/textmaster/](https://apis.io/providers/textmaster/)** — or go straight to one of the APIs or properties below.
+
+### APIs (20)
+
+- [TextMaster Abilities API](https://apis.io/apis/textmaster/textmaster-abilities-api/) — The Abilities API from TextMaster — 1 operation(s) for abilities.
+- [TextMaster API Templates API](https://apis.io/apis/textmaster/textmaster-api-templates-api/) — The API Templates API from TextMaster — 2 operation(s) for api templates.
+- [TextMaster Authors API](https://apis.io/apis/textmaster/textmaster-authors-api/) — The Authors API from TextMaster — 1 operation(s) for authors.
+- [TextMaster Categories API](https://apis.io/apis/textmaster/textmaster-categories-api/) — The Categories API from TextMaster — 1 operation(s) for categories.
+- [TextMaster Countries API](https://apis.io/apis/textmaster/textmaster-countries-api/) — The Countries API from TextMaster — 1 operation(s) for countries.
+- [TextMaster Documents API](https://apis.io/apis/textmaster/textmaster-documents-api/) — The Documents API from TextMaster — 7 operation(s) for documents.
+- [TextMaster Expertises API](https://apis.io/apis/textmaster/textmaster-expertises-api/) — The Expertises API from TextMaster — 3 operation(s) for expertises.
+- [TextMaster Glossaries API](https://apis.io/apis/textmaster/textmaster-glossaries-api/) — The Glossaries API from TextMaster — 1 operation(s) for glossaries.
+- [TextMaster Invoices API](https://apis.io/apis/textmaster/textmaster-invoices-api/) — The Invoices API from TextMaster — 1 operation(s) for invoices.
+- [TextMaster Languages API](https://apis.io/apis/textmaster/textmaster-languages-api/) — The Languages API from TextMaster — 1 operation(s) for languages.
+- [TextMaster Locales API](https://apis.io/apis/textmaster/textmaster-locales-api/) — The Locales API from TextMaster — 1 operation(s) for locales.
+- [TextMaster My Authors API](https://apis.io/apis/textmaster/textmaster-my-authors-api/) — The My Authors API from TextMaster — 3 operation(s) for my authors.
+- [TextMaster Negotiated Contracts API](https://apis.io/apis/textmaster/textmaster-negotiated-contracts-api/) — The Negotiated Contracts API from TextMaster — 1 operation(s) for negotiated contracts.
+- [TextMaster Projects API](https://apis.io/apis/textmaster/textmaster-projects-api/) — The Projects API from TextMaster — 14 operation(s) for projects.
+- [TextMaster Receipts API](https://apis.io/apis/textmaster/textmaster-receipts-api/) — The Receipts API from TextMaster — 1 operation(s) for receipts.
+- [TextMaster Support Messages API](https://apis.io/apis/textmaster/textmaster-support-messages-api/) — The Support Messages API from TextMaster — 1 operation(s) for support messages.
+- [TextMaster Transactions API](https://apis.io/apis/textmaster/textmaster-transactions-api/) — The Transactions API from TextMaster — 1 operation(s) for transactions.
+- [TextMaster Upload Properties API](https://apis.io/apis/textmaster/textmaster-uploadproperties-api/) — The UploadProperties API from TextMaster — 1 operation(s) for uploadproperties.
+- [TextMaster Users API](https://apis.io/apis/textmaster/textmaster-users-api/) — The Users API from TextMaster — 2 operation(s) for users.
+- [TextMaster Work Templates API](https://apis.io/apis/textmaster/textmaster-work-templates-api/) — The Work Templates API from TextMaster — 2 operation(s) for work templates.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Textmaster Event Surface](https://apis.io/asyncapis/textmaster/textmaster-event-surface/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [textmaster](https://apis.io/servers/textmaster/textmaster/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Textmaster Api V1 Overlay](https://apis.io/overlays/textmaster/textmaster-api-v1-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Textmaster Authentication](https://apis.io/security/textmaster/textmaster-authentication/)
+- [Textmaster Domain Security](https://apis.io/security/textmaster/textmaster-domain-security/)
+- [Textmaster Vulnerability Disclosure](https://apis.io/security/textmaster/textmaster-vulnerability-disclosure/)
+
+#### OAuth scopes (1)
+
+The permissions the API asks for.
+
+- [Textmaster Scopes](https://apis.io/scopes/textmaster/textmaster-scopes/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Textmaster Plans Pricing](https://apis.io/plans/textmaster/textmaster-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Textmaster Rate Limits](https://apis.io/rate-limits/textmaster/textmaster-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.textmaster.com/)
+- [Documentation](https://developer.textmaster.com/)
+- [Getting started](https://developer.textmaster.com/quick-start)
+- [API reference](https://developer.textmaster.com/reference/abilities)
+- [Sign up](https://app.textmaster.com/sign_up)
+- [Security](https://github.com/textmaster/bugbounty/blob/main/SECURITY.md)
+- [Compliance](https://docs.textmaster.com/client/policies/subprocessors)
+- [Privacy policy](https://www.acolad.com/en/legal-notices/website-privacy-policy)
+- [GitHub](https://github.com/textmaster)
+- [Status](https://status.textmaster.com/)
+
+## API Evangelist rating
+
+**Kin Score 49.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 53.2 |
+| Contract governance | 18.2 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 75.6 |
+| Access clarity | 25.0 |
+
+**Agent readiness 39.9** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | negotiable (partial credit) |
+| Idempotency | — |
+| Error Semantics | documented (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | yes |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | documented (partial credit) |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 41.2** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/textmaster/](https://apis.io/providers/textmaster/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for TextMaster: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/textmaster/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
